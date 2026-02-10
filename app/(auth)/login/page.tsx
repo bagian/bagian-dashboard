@@ -3,6 +3,8 @@
 import {useState} from "react";
 import {supabase} from "@/lib/supabase/client";
 import {useRouter} from "next/navigation";
+import Link from "next/link";
+import {toast} from "sonner";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -20,12 +22,19 @@ export default function LoginPage() {
     });
 
     if (error) {
-      alert(error.message);
+      toast.error("Login gagal!", {
+        description: error.message,
+      });
       setLoading(false);
     } else {
-      // Gunakan window.location.href agar browser melakukan full reload
-      // untuk memastikan cookie terbaca sempurna oleh middleware/server
-      window.location.href = "/customer";
+      toast.success("Login berhasil!", {
+        description: "Mengalihkan ke dashboard...",
+      });
+
+      // Delay sedikit agar toast terlihat
+      setTimeout(() => {
+        window.location.href = "/customer";
+      }, 500);
     }
   };
 
@@ -50,6 +59,7 @@ export default function LoginPage() {
               required
               className="mt-1 w-full border-b border-gray-200 py-2 text-sm focus:border-black focus:outline-none transition-colors"
               placeholder="nama@email.com"
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -63,6 +73,7 @@ export default function LoginPage() {
               required
               className="mt-1 w-full border-b border-gray-200 py-2 text-sm focus:border-black focus:outline-none transition-colors"
               placeholder="••••••••"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
@@ -70,18 +81,21 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-black py-3 text-sm font-medium text-white transition-all hover:bg-zinc-800 disabled:bg-gray-400"
+            className="w-full bg-black py-3 text-sm font-medium text-white transition-all hover:bg-zinc-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             {loading ? "AUTHENTICATING..." : "SIGN IN"}
           </button>
         </form>
 
-        <p className="text-center text-xs text-gray-400">
-          Belum punya akun?{" "}
-          <span className="text-black cursor-pointer underline">
-            Hubungi Admin
-          </span>
-        </p>
+        <div className="space-y-3">
+          <p className="text-center text-xs text-gray-400">Belum punya akun?</p>
+          <Link
+            href="/register"
+            className="block w-full border border-black py-3 text-center text-sm font-medium text-black transition-all hover:bg-black hover:text-white"
+          >
+            BUAT AKUN BARU
+          </Link>
+        </div>
       </div>
     </div>
   );

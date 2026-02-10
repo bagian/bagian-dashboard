@@ -1,6 +1,7 @@
 "use client";
 
 import {useState} from "react";
+import {createInvoice} from "@/app/actions/invoice-actions";
 import {Button} from "@/components/ui/button";
 import {
   Dialog,
@@ -13,29 +14,52 @@ import {
 } from "@/components/ui/dialog";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
-import {createInvoice} from "@/app/actions/invoice-actions";
+import {useRouter} from "next/navigation";
 import {toast} from "sonner";
 
-export function CreateInvoiceModal({
-  clients,
-}: {
-  clients: {id: string; email: string}[];
-}) {
+interface Client {
+  id: string;
+  email: string;
+  role?: string; // Tambahkan role
+}
+
+export function CreateInvoiceModal({clients}: {clients: Client[]}) {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
-  async function handleAction(formData: FormData) {
+  // Filter hanya client dengan role customer (bukan admin/superadmin)
+  const customerOnly = clients.filter(
+    (client) =>
+      client.role?.toLowerCase() !== "admin" &&
+      client.role?.toLowerCase() !== "superadmin",
+  );
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
     const result = await createInvoice(formData);
 
-    if (result?.error) {
-      toast.error("Gagal", {description: result.error});
+    if (result.error) {
+      toast.error("Gagal membuat invoice!", {
+        description: result.error,
+      });
+      setLoading(false);
     } else {
-      toast.success("Berhasil", {description: "Tagihan telah dikirim."});
+      toast.success("Invoice berhasil dibuat! 🎉", {
+        description: "Tagihan telah dikirim ke client.",
+      });
       setOpen(false);
+      setLoading(false);
+
+      // Reset form
+      e.currentTarget.reset();
+
+      router.refresh();
     }
-    setLoading(false);
-  }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -49,11 +73,11 @@ export function CreateInvoiceModal({
           <DialogTitle className="font-semibold text-xl tracking-tight">
             Kirim Tagihan
           </DialogTitle>
-          <DialogDescription className="text-xs text-zinc-500 font-medium italic">
+          <DialogDescription className="text-xs text-zinc-500 font-medium">
             Pilih client dan masukkan detail tagihan.
           </DialogDescription>
         </DialogHeader>
-        <form action={handleAction} className="space-y-5 py-4">
+        <form onSubmit={handleSubmit} className="space-y-5 py-4">
           <div className="space-y-2 flex flex-col">
             <Label
               htmlFor="client_id"
@@ -66,16 +90,20 @@ export function CreateInvoiceModal({
               name="client_id"
               required
               defaultValue=""
-              className="flex h-11 w-full rounded-xl border border-zinc-100 bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-zinc-200 cursor-pointer appearance-none"
+              className="flex h-11 w-full rounded-xl border border-zinc-100 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-200 transition-all appearance-none cursor-pointer"
             >
               <option value="" disabled>
                 -- Pilih Client --
               </option>
-              {clients.map((c) => (
-                <option key={c.id} value={c.id}>
-                  {c.email}
-                </option>
-              ))}
+              {customerOnly.length === 0 ? (
+                <option disabled>Tidak ada client tersedia</option>
+              ) : (
+                customerOnly.map((client) => (
+                  <option key={client.id} value={client.id}>
+                    {client.email}
+                  </option>
+                ))
+              )}
             </select>
           </div>
           <div className="space-y-2">
@@ -104,6 +132,7 @@ export function CreateInvoiceModal({
               id="amount"
               name="amount"
               type="number"
+              placeholder="5000000"
               required
               className="rounded-xl border-zinc-100 h-11"
             />
@@ -126,8 +155,8 @@ export function CreateInvoiceModal({
           <DialogFooter className="pt-2">
             <Button
               type="submit"
-              disabled={loading}
-              className="w-full bg-zinc-900 text-white rounded-xl py-6 font-bold uppercase tracking-widest text-[10px] shadow-lg hover:bg-zinc-800 transition-all cursor-pointer"
+              disabled={loading || customerOnly.length === 0}
+              className="w-full bg-zinc-900 text-white rounded-xl py-6 font-bold uppercase tracking-widest text-[10px] shadow-lg hover:bg-zinc-800 transition-all cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {loading ? "MENGIRIM..." : "KONFIRMASI & KIRIM"}
             </Button>

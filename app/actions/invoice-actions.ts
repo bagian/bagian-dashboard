@@ -1,65 +1,75 @@
 "use server";
 
-import {createClient} from "@supabase/supabase-js";
+import {supabaseAdmin} from "@/lib/supabase/admin";
 import {revalidatePath} from "next/cache";
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  {
-    auth: {
-      autoRefreshToken: false,
-      persistSession: false,
-    },
-  },
-);
 
 export async function createInvoice(formData: FormData) {
   try {
-    const {error} = await supabaseAdmin.from("invoices").insert({
+    const invoiceData = {
       invoice_number: formData.get("invoice_number") as string,
       amount: Number(formData.get("amount")),
       client_id: formData.get("client_id") as string,
       status: "unpaid",
       due_date: formData.get("due_date") as string,
-    });
+    };
 
-    if (error) return {error: error.message};
+    console.log("Creating invoice:", invoiceData);
+
+    const {data, error} = await supabaseAdmin
+      .from("invoices")
+      .insert(invoiceData)
+      .select();
+
+    if (error) {
+      console.error("Supabase error:", error);
+      return {error: error.message};
+    }
+
+    console.log("Invoice created successfully:", data);
     revalidatePath("/customer/invoices");
-    return {success: true};
+    return {success: true, data};
   } catch (err) {
+    console.error("Unexpected error:", err);
     return {error: "Terjadi kesalahan sistem"};
   }
 }
 
-// FIX: Pastikan hanya menerima SATU argumen (id)
-export async function updateInvoiceStatus(id: string) {
+export async function updateInvoiceStatus(
+  id: number,
+  status: "paid" | "unpaid",
+) {
   try {
     const {error} = await supabaseAdmin
       .from("invoices")
-      .update({status: "paid"})
+      .update({status})
       .eq("id", id);
 
-    if (error) throw new Error(error.message);
+    if (error) {
+      console.error("Update error:", error);
+      return {error: error.message};
+    }
 
     revalidatePath("/customer/invoices");
     return {success: true};
   } catch (err) {
-    return {
-      error: err instanceof Error ? err.message : "Terjadi kesalahan sistem",
-    };
+    console.error("Unexpected error:", err);
+    return {error: "Terjadi kesalahan sistem"};
   }
 }
 
-export async function deleteInvoice(id: string) {
+export async function deleteInvoice(id: number) {
   try {
     const {error} = await supabaseAdmin.from("invoices").delete().eq("id", id);
-    if (error) throw new Error(error.message);
+
+    if (error) {
+      console.error("Delete error:", error);
+      return {error: error.message};
+    }
+
     revalidatePath("/customer/invoices");
     return {success: true};
   } catch (err) {
-    return {
-      error: err instanceof Error ? err.message : "Terjadi kesalahan sistem",
-    };
+    console.error("Unexpected error:", err);
+    return {error: "Terjadi kesalahan sistem"};
   }
 }

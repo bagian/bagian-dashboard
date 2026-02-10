@@ -1,7 +1,8 @@
-import {Sidebar} from "@/components/dashboard/sidebar"; // Sesuaikan path-nya
+import {Sidebar} from "@/components/dashboard/sidebar";
 import {createSupabaseServer} from "@/lib/supabase/server";
 import {redirect} from "next/navigation";
 import {Topbar} from "@/components/dashboard/topbar";
+
 export default async function DashboardLayout({
   children,
 }: {
@@ -19,16 +20,23 @@ export default async function DashboardLayout({
   // Ambil role user (asumsi role ada di tabel profiles)
   const {data: profile} = await supabase
     .from("profiles")
-    .select("role")
+    .select("role, full_name, email")
     .eq("id", user.id)
     .single();
 
-  const role = profile?.role || "admin";
+  // Debugging - hapus setelah selesai
+  console.log("Layout - User ID:", user.id);
+  console.log("Layout - Profile:", profile);
+  console.log("Layout - Role:", profile?.role);
+
+  // Pastikan role selalu ada nilainya
+  const userRole = profile?.role || "customer";
 
   return (
     <div className="flex h-screen w-full bg-white overflow-hidden">
       <aside className="hidden md:block h-full">
-        <Sidebar role={profile?.role} />
+        {/* Kirim role sebagai string yang pasti ada nilainya */}
+        <Sidebar role={userRole} />
       </aside>
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         <Topbar user={user} profile={profile} />

@@ -1,75 +1,155 @@
 "use client";
 
 import {useState} from "react";
-import {Button} from "@/components/ui/button";
-import {Trash2, CheckCircle2, Loader2} from "lucide-react";
 import {
   updateInvoiceStatus,
   deleteInvoice,
 } from "@/app/actions/invoice-actions";
+import {Button} from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {MoreVertical, Check, X, Trash2} from "lucide-react";
+import {useRouter} from "next/navigation";
 import {toast} from "sonner";
 
-export function InvoiceActions({id, status}: {id: string; status: string}) {
+interface InvoiceActionsProps {
+  id: number;
+  status: string;
+}
+
+export function InvoiceActions({id, status}: InvoiceActionsProps) {
   const [loading, setLoading] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const router = useRouter();
 
-  const handleUpdate = async () => {
+  const handleStatusChange = async (newStatus: "paid" | "unpaid") => {
+    if (loading) return;
     setLoading(true);
-    // Panggil dengan 1 argumen sesuai file actions di atas
-    const result = await updateInvoiceStatus(id);
 
-    if (result?.success) {
-      toast.success("Status diperbarui", {
-        description: "Tagihan telah ditandai sebagai lunas.",
+    const result = await updateInvoiceStatus(id, newStatus);
+
+    if (result.error) {
+      toast.error("Gagal update status!", {
+        description: result.error,
       });
     } else {
-      toast.error("Gagal update status", {
-        description: result?.error,
+      toast.success("Status berhasil diperbarui!", {
+        description: `Invoice ditandai sebagai ${newStatus === "paid" ? "Lunas" : "Belum Lunas"}`,
       });
+      router.refresh();
     }
     setLoading(false);
   };
 
   const handleDelete = async () => {
-    if (!confirm("Hapus tagihan ini?")) return;
     setLoading(true);
+
     const result = await deleteInvoice(id);
 
-    if (result?.success) {
-      toast.success("Tagihan dihapus");
-    } else {
-      toast.error("Gagal menghapus", {
-        description: result?.error,
+    if (result.error) {
+      toast.error("Gagal menghapus invoice!", {
+        description: result.error,
       });
+      setLoading(false);
+    } else {
+      toast.success("Invoice berhasil dihapus!", {
+        description: "Data invoice telah dihapus dari sistem.",
+      });
+      setShowDeleteDialog(false);
+      router.refresh();
     }
-    setLoading(false);
   };
 
   return (
-    <div className="flex items-center justify-end gap-1">
-      {status === "unpaid" && (
-        <Button
-          onClick={handleUpdate}
-          disabled={loading}
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 text-emerald-600 hover:bg-emerald-50 rounded-full cursor-pointer"
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <div className="w-full flex items-center justify-center">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 w-8 p-0 hover:bg-zinc-100 rounded-lg ml-auto cursor-pointer"
+              disabled={loading}
+            >
+              <MoreVertical className="h-4 w-4 text-zinc-400" />
+            </Button>
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          align="end"
+          className="w-48 rounded-xl bg-white border border-zinc-200 shadow-lg"
         >
-          {loading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
+          {status === "unpaid" ? (
+            <DropdownMenuItem
+              onClick={() => handleStatusChange("paid")}
+              className="cursor-pointer rounded-lg"
+              disabled={loading}
+            >
+              <Check className="h-4 w-4 mr-2 text-emerald-600" />
+              <span className="text-sm">Tandai Lunas</span>
+            </DropdownMenuItem>
           ) : (
-            <CheckCircle2 className="h-4 w-4" />
+            <DropdownMenuItem
+              onClick={() => handleStatusChange("unpaid")}
+              className="cursor-pointer rounded-lg"
+              disabled={loading}
+            >
+              <X className="h-4 w-4 mr-2 text-orange-600" />
+              <span className="text-sm">Tandai Belum Lunas</span>
+            </DropdownMenuItem>
           )}
-        </Button>
-      )}
-      <Button
-        onClick={handleDelete}
-        disabled={loading}
-        variant="ghost"
-        size="icon"
-        className="h-8 w-8 text-rose-600 hover:bg-rose-50 rounded-full cursor-pointer"
-      >
-        <Trash2 className="h-4 w-4" />
-      </Button>
-    </div>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            onClick={() => setShowDeleteDialog(true)}
+            className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50 rounded-lg"
+            disabled={loading}
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            <span className="text-sm">Hapus Invoice</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent className="rounded-2xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-xl font-bold">
+              Hapus Invoice?
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-sm text-zinc-500">
+              Tindakan ini tidak dapat dibatalkan. Invoice akan dihapus permanen
+              dari sistem.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="rounded-xl" disabled={loading}>
+              Batal
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              disabled={loading}
+              className="bg-red-600 hover:bg-red-700 rounded-xl"
+            >
+              {loading ? "Menghapus..." : "Ya, Hapus"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

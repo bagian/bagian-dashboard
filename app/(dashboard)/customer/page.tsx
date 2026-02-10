@@ -1,20 +1,105 @@
 import {createSupabaseServer} from "@/lib/supabase/server";
-import {AlternativeDashboard} from "@/components/dashboard/main-content";
+import {supabaseAdmin} from "@/lib/supabase/admin";
+import {redirect} from "next/navigation";
+import {CustomerDashboard} from "@/components/dashboard/CustomerDashboard";
+import {AdminDashboard} from "@/components/dashboard/AdminDashboard";
 
-export default async function Page() {
+export const dynamic = "force-dynamic";
+
+export default async function DashboardPage() {
   const supabase = await createSupabaseServer();
-
-  // Mengambil data user langsung dari sesi autentikasi Supabase
   const {
     data: {user},
   } = await supabase.auth.getUser();
 
-  // Mengambil data tambahan dari tabel profiles
-  const {data: profile} = await supabase
+  if (!user) {
+    redirect("/login");
+  }
+
+  // Ambil profile
+  const {data: profile} = await supabaseAdmin
     .from("profiles")
-    .select("email, role")
-    .eq("id", user?.id)
+    .select("*")
+    .eq("id", user.id)
     .single();
 
-  return <AlternativeDashboard profile={profile} userAuth={user} />;
+  const userRole = profile?.role?.toLowerCase() || "customer";
+  const isAdmin = userRole === "admin" || userRole === "superadmin";
+
+  if (isAdmin) {
+    // Admin Dashboard - Fetch admin stats
+    const [clientsRes, invoicesRes, ticketsRes] = await Promise.all([
+      supabaseAdmin
+        .from("profiles")
+        .select("id, email, role, created_at")
+        .neq("role", "admin")
+        .neq("role", "superadmin"),
+      supabaseAdmin.from("invoices").select("*"),
+      supabaseAdmin.from("tickets").select("*"),
+    ]);
+
+    const clients = clientsRes.data || [];
+    const invoices = invoicesRes.data || [];
+    const tickets = ticketsRes.data || [];
+
+    const stats = {
+      totalClients: clients.length,
+      totalInvoices: invoices.length,
+      totalRevenue: invoices.reduce((sum, inv) => sum + Number(inv.amount), 0),
+      paidInvoices: invoices.filter((inv) => inv.status === "paid").length,
+      unpaidInvoices: invoices.filter((inv) => inv.status === "unpaid").length,
+      openTickets: tickets.filter((t) => t.status === "open").length,
+      closedTickets: tickets.filter((t) => t.status === "closed").length,
+      recentClients: clients
+        .sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+        )
+        .slice(0, 5),
+      recentInvoices: invoices
+        .sort(
+          (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+        )
+        .slice(0, 5),
+    };
+
+    return <AdminDashboard profile={profile} stats={stats} />;
+  } else {
+    // Customer Dashboard - Fetch customer stats
+    const [invoicesRes, ticketsRes] = await Promise.all([
+      supabaseAdmin
+        .from("invoices")
+        .select("*")
+        .eq("client_id", user.id)
+        .order("created_at", {ascending: false}),
+      supabaseAdmin
+        .from("tickets")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", {ascending: false}),
+    ]);
+
+    const invoices = invoicesRes.data || [];
+    const tickets = ticketsRes.data || [];
+
+    const stats = {
+      totalInvoices: invoices.length,
+      paidInvoices: invoices.filter((inv) => inv.status === "paid").length,
+      unpaidInvoices: invoices.filter((inv) => inv.status === "unpaid").length,
+      totalAmount: invoices.reduce((sum, inv) => sum + Number(inv.amount), 0),
+      paidAmount: invoices
+        .filter((inv) => inv.status === "paid")
+        .reduce((sum, inv) => sum + Number(inv.amount), 0),
+      unpaidAmount: invoices
+        .filter((inv) => inv.status === "unpaid")
+        .reduce((sum, inv) => sum + Number(inv.amount), 0),
+      openTickets: tickets.filter((t) => t.status === "open").length,
+      closedTickets: tickets.filter((t) => t.status === "closed").length,
+      recentInvoices: invoices.slice(0, 3),
+      recentTickets: tickets.slice(0, 3),
+    };
+
+    return <CustomerDashboard profile={profile} stats={stats} />;
+  }
 }

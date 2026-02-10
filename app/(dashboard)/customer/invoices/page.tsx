@@ -1,4 +1,5 @@
 import {createSupabaseServer} from "@/lib/supabase/server";
+import {supabaseAdmin} from "@/lib/supabase/admin";
 import {
   Table,
   TableBody,
@@ -23,13 +24,16 @@ export default async function InvoicesPage() {
     data: {user},
   } = await supabase.auth.getUser();
 
-  if (!user)
-    return <div className="p-8 text-center">Silahkan login kembali.</div>;
+  if (!user) {
+    return (
+      <div className="p-8 text-center font-medium">Silahkan login kembali.</div>
+    );
+  }
 
-  // 1. Ambil Data Profil & Invoices secara paralel
+  // 1. Ambil Data menggunakan supabaseAdmin untuk bypass RLS
   const [profilesRes, invoicesRes] = await Promise.all([
-    supabase.from("profiles").select("id, email, role"),
-    supabase
+    supabaseAdmin.from("profiles").select("id, email, role"),
+    supabaseAdmin
       .from("invoices")
       .select("*")
       .order("created_at", {ascending: false}),
@@ -38,9 +42,15 @@ export default async function InvoicesPage() {
   const allProfiles = profilesRes.data || [];
   const allInvoices = invoicesRes.data || [];
 
+  console.log("Profiles count:", allProfiles.length);
+  console.log("Invoices count:", allInvoices.length);
+
   // 2. Cek Role & Jaring Pengaman Tombol
   const myProfile = allProfiles.find((p) => p.id === user.id);
   const userRole = myProfile?.role?.toLowerCase() || "";
+
+  console.log("Current user role:", userRole);
+  console.log("Current user email:", user.email);
 
   // TOMBOL TETAP ADA jika role admin/superadmin ATAU email cocok
   const isManagementEmail =
@@ -49,6 +59,8 @@ export default async function InvoicesPage() {
     user.email === "gilang@bagian.web.id";
   const hasManagementAccess =
     userRole === "admin" || userRole === "superadmin" || isManagementEmail;
+
+  console.log("Has management access:", hasManagementAccess);
 
   // 3. Gabungkan Data (Join Manual) agar Email Klien muncul
   const displayData = allInvoices.map((inv) => ({
@@ -62,6 +74,8 @@ export default async function InvoicesPage() {
   const finalData = hasManagementAccess
     ? displayData
     : displayData.filter((i) => i.client_id === user.id);
+
+  console.log("Final data count:", finalData.length);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
@@ -83,7 +97,7 @@ export default async function InvoicesPage() {
 
       <Card className="border-zinc-100 shadow-sm rounded-2xl overflow-hidden bg-white">
         <CardHeader className="bg-zinc-50/50 border-b border-zinc-100 py-4 px-6">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pt-4">
             <Receipt className="h-4 w-4 text-zinc-400" />
             <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">
               Riwayat Tagihan {hasManagementAccess && "Semua Klien"}
@@ -119,7 +133,7 @@ export default async function InvoicesPage() {
               {finalData.length === 0 ? (
                 <TableRow>
                   <TableCell
-                    colSpan={hasManagementAccess ? 5 : 4}
+                    colSpan={hasManagementAccess ? 5 : 3}
                     className="h-48 text-center italic text-zinc-400 text-sm"
                   >
                     Data masih kosong. Silahkan buat tagihan baru.
@@ -156,7 +170,7 @@ export default async function InvoicesPage() {
                       Rp {new Intl.NumberFormat("id-ID").format(inv.amount)}
                     </TableCell>
                     {hasManagementAccess && (
-                      <TableCell className="pr-8">
+                      <TableCell className="pr-8 text-right">
                         <InvoiceActions id={inv.id} status={inv.status} />
                       </TableCell>
                     )}

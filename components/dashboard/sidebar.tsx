@@ -1,5 +1,4 @@
 "use client";
-
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 import {
@@ -10,26 +9,99 @@ import {
   ChevronRight,
   Receipt,
   UserCircle,
+  Settings,
 } from "lucide-react";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {supabase} from "@/lib/supabase/client";
+import {useEffect, useState} from "react";
 
-export function Sidebar({role, className}: {role: string; className?: string}) {
+interface SidebarProps {
+  role?: string;
+  className?: string;
+}
+
+export function Sidebar({
+  role: initialRole = "customer",
+  className,
+}: SidebarProps) {
   const pathname = usePathname();
 
+  // Initialize state with initialRole to avoid synchronous setState in useEffect
+  const [userRole, setUserRole] = useState<string>(initialRole.toLowerCase());
+  const [hasFetched, setHasFetched] = useState(false);
+
+  // Fetch role dari database jika initialRole adalah "customer" atau undefined
+  useEffect(() => {
+    const fetchRole = async () => {
+      try {
+        const {
+          data: {user},
+        } = await supabase.auth.getUser();
+
+        if (user) {
+          const {data: profile} = await supabase
+            .from("profiles")
+            .select("role")
+            .eq("id", user.id)
+            .single();
+
+          if (profile?.role) {
+            console.log("✅ Role fetched from client:", profile.role);
+            setUserRole(profile.role.toLowerCase());
+            setHasFetched(true);
+          } else {
+            console.warn("⚠️ Profile not found, using default role");
+            setUserRole("customer");
+          }
+        }
+      } catch (error) {
+        console.error("❌ Error fetching role:", error);
+        setUserRole("customer");
+      }
+    };
+
+    // Only fetch if we haven't fetched yet and the initial role is the default "customer"
+    if (!hasFetched && (initialRole === "customer" || !initialRole)) {
+      fetchRole();
+    }
+  }, [initialRole, hasFetched]);
+
+  // Debugging
+  console.log("🔍 Sidebar - Initial role:", initialRole);
+  console.log("🔍 Sidebar - Current role:", userRole);
+
   const routes = [
-    {label: "Overview", icon: LayoutDashboard, href: "/customer"},
-    {label: "Support Tickets", icon: Ticket, href: "/customer/tickets"},
+    {
+      label: "Overview",
+      icon: LayoutDashboard,
+      href: "/customer",
+      adminOnly: false,
+    },
+    {
+      label: "Support Tickets",
+      icon: Ticket,
+      href: "/customer/tickets",
+      adminOnly: false,
+    },
     {
       label: "Keuangan",
       icon: Receipt,
       href: "/customer/invoices",
+      adminOnly: false,
     },
     {
       label: "Akun User",
       icon: UserCircle,
       href: "/customer/profile",
+      adminOnly: false,
+    },
+    // MENU BARU: User Management
+    {
+      label: "User Management",
+      icon: Settings,
+      href: "/customer/users",
+      adminOnly: true,
     },
     {
       label: "Clients",
@@ -55,9 +127,24 @@ export function Sidebar({role, className}: {role: string; className?: string}) {
         <h1 className="text-xl font-black tracking-tighter italic">BAGIAN.</h1>
       </div>
 
-      <div className="flex-1 px-4 py-6 space-y-1">
+      <div className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
         {routes.map((route) => {
-          if (route.adminOnly && role !== "admin") return null;
+          // Cek apakah user adalah admin atau superadmin
+          const isAdmin = userRole === "admin" || userRole === "superadmin";
+
+          // Jaring Pengaman Akses
+          const isAllowed = !route.adminOnly || isAdmin;
+
+          // Debugging untuk menu admin
+          if (route.adminOnly) {
+            console.log(`📋 Menu: ${route.label}`);
+            console.log(`   - User Role: ${userRole}`);
+            console.log(`   - Is Admin: ${isAdmin}`);
+            console.log(`   - Is Allowed: ${isAllowed}`);
+          }
+
+          if (!isAllowed) return null;
+
           const isActive = pathname === route.href;
 
           return (
@@ -92,7 +179,7 @@ export function Sidebar({role, className}: {role: string; className?: string}) {
       <div className="p-4 border-t border-zinc-100 mt-auto">
         <Button
           variant="ghost"
-          className="w-full justify-start text-zinc-500 hover:text-red-600 hover:bg-red-50 transition-all group"
+          className="w-full justify-start text-zinc-500 hover:text-red-600 hover:bg-red-50 transition-all group cursor-pointer"
           onClick={onLogout}
         >
           <LogOut className="h-4 w-4 mr-3 group-hover:translate-x-1 transition-transform" />
