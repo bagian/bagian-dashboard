@@ -72,7 +72,7 @@ export default function RegisterPage() {
       {/* SISI KIRI: VISUAL BRANDING - TIDAK DIUBAH */}
       <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-16 overflow-hidden">
         <Image
-          src="/img/banner/bn-mcp.png"
+          src="/img/banner/bn-mcp.webp"
           alt="Workspace Background"
           fill
           priority
