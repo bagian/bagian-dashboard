@@ -13,7 +13,9 @@ import {Badge} from "@/components/ui/badge";
 import {Receipt} from "lucide-react";
 import {cn} from "@/lib/utils";
 import {CreateInvoiceModal} from "@/components/dashboard/CreateInvoiceModal";
-import {InvoiceActions} from "@/components/dashboard/InvoiceActions";
+
+// KUNCI PERUBAHAN: Import GlobalActions alih-alih InvoiceActions
+import {GlobalActions} from "@/components/dashboard/GlobalActions";
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
@@ -171,7 +173,13 @@ export default async function InvoicesPage() {
                     </TableCell>
                     {hasManagementAccess && (
                       <TableCell className="pr-8 text-right">
-                        <InvoiceActions id={inv.id} status={inv.status} />
+                        {/* KUNCI PERUBAHAN: Pemanggilan komponen GlobalActions */}
+                        <GlobalActions
+                          id={inv.id}
+                          status={inv.status}
+                          type="invoice"
+                          tableName="invoices"
+                        />
                       </TableCell>
                     )}
                   </TableRow>

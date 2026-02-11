@@ -17,7 +17,6 @@ export default async function DashboardLayout({
     redirect("/login");
   }
 
-  // Ambil role user (asumsi role ada di tabel profiles)
   const {data: profile} = await supabase
     .from("profiles")
     .select("role, full_name, email")
@@ -25,9 +24,9 @@ export default async function DashboardLayout({
     .single();
 
   // Debugging - hapus setelah selesai
-  console.log("Layout - User ID:", user.id);
-  console.log("Layout - Profile:", profile);
-  console.log("Layout - Role:", profile?.role);
+  // console.log("Layout - User ID:", user.id);
+  // console.log("Layout - Profile:", profile);
+  // console.log("Layout - Role:", profile?.role);
 
   // Pastikan role selalu ada nilainya
   const userRole = profile?.role || "customer";

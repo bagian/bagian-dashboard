@@ -13,7 +13,7 @@ export async function createInvoice(formData: FormData) {
       due_date: formData.get("due_date") as string,
     };
 
-    console.log("Creating invoice:", invoiceData);
+    // console.log("Creating invoice:", invoiceData);
 
     const {data, error} = await supabaseAdmin
       .from("invoices")
@@ -25,7 +25,7 @@ export async function createInvoice(formData: FormData) {
       return {error: error.message};
     }
 
-    console.log("Invoice created successfully:", data);
+    // console.log("Invoice created successfully:", data);
     revalidatePath("/customer/invoices");
     return {success: true, data};
   } catch (err) {

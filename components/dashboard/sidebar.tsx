@@ -10,6 +10,7 @@ import {
   Receipt,
   UserCircle,
   Settings,
+  FolderKanban, // Ikon untuk Projects
 } from "lucide-react";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
@@ -27,19 +28,22 @@ export function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
 
-  // Initialize state with initialRole to avoid synchronous setState in useEffect
   const [userRole, setUserRole] = useState<string>(initialRole.toLowerCase());
-  const [hasFetched, setHasFetched] = useState(false);
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [isInitializing, setIsInitializing] = useState(true); // State loading baru agar sidebar menunggu data
 
-  // Fetch role dari database jika initialRole adalah "customer" atau undefined
   useEffect(() => {
-    const fetchRole = async () => {
+    let isMounted = true;
+
+    const fetchUserAndRole = async () => {
       try {
         const {
           data: {user},
         } = await supabase.auth.getUser();
 
-        if (user) {
+        if (user && isMounted) {
+          setUserEmail(user.email || "");
+
           const {data: profile} = await supabase
             .from("profiles")
             .select("role")
@@ -47,29 +51,25 @@ export function Sidebar({
             .single();
 
           if (profile?.role) {
-            console.log("✅ Role fetched from client:", profile.role);
             setUserRole(profile.role.toLowerCase());
-            setHasFetched(true);
           } else {
-            console.warn("⚠️ Profile not found, using default role");
             setUserRole("customer");
           }
         }
       } catch (error) {
         console.error("❌ Error fetching role:", error);
-        setUserRole("customer");
+        if (isMounted) setUserRole("customer");
+      } finally {
+        if (isMounted) setIsInitializing(false); // Selesai loading
       }
     };
 
-    // Only fetch if we haven't fetched yet and the initial role is the default "customer"
-    if (!hasFetched && (initialRole === "customer" || !initialRole)) {
-      fetchRole();
-    }
-  }, [initialRole, hasFetched]);
+    fetchUserAndRole();
 
-  // Debugging
-  console.log("🔍 Sidebar - Initial role:", initialRole);
-  console.log("🔍 Sidebar - Current role:", userRole);
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const routes = [
     {
@@ -96,7 +96,13 @@ export function Sidebar({
       href: "/customer/profile",
       adminOnly: false,
     },
-    // MENU BARU: User Management
+    // Rute Projects diletakkan sebagai adminOnly
+    {
+      label: "Projects",
+      icon: FolderKanban,
+      href: "/admin/projects",
+      adminOnly: true,
+    },
     {
       label: "User Management",
       icon: Settings,
@@ -128,52 +134,63 @@ export function Sidebar({
       </div>
 
       <div className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-        {routes.map((route) => {
-          // Cek apakah user adalah admin atau superadmin
-          const isAdmin = userRole === "admin" || userRole === "superadmin";
+        {/* Opsional: Render kerangka/loading state kecil saat mengecek akses agar tidak tiba-tiba muncul */}
+        {isInitializing ? (
+          <div className="animate-pulse space-y-3">
+            <div className="h-8 bg-zinc-100 rounded w-full"></div>
+            <div className="h-8 bg-zinc-100 rounded w-full"></div>
+            <div className="h-8 bg-zinc-100 rounded w-full"></div>
+          </div>
+        ) : (
+          routes.map((route) => {
+            // 1. Cek dari Role Database
+            const isRoleAdmin =
+              userRole === "admin" || userRole === "superadmin";
 
-          // Jaring Pengaman Akses
-          const isAllowed = !route.adminOnly || isAdmin;
+            // 2. Cek dari Jalur Pintas Email
+            const isManagementEmail =
+              userEmail === "superadmin@bagian.web.id" ||
+              userEmail === "admin@bagian.web.id" ||
+              userEmail === "gilang@bagian.web.id";
 
-          // Debugging untuk menu admin
-          if (route.adminOnly) {
-            console.log(`📋 Menu: ${route.label}`);
-            console.log(`   - User Role: ${userRole}`);
-            console.log(`   - Is Admin: ${isAdmin}`);
-            console.log(`   - Is Allowed: ${isAllowed}`);
-          }
+            // 3. Gabungkan aksesnya (Hanya muncul jika admin)
+            const isAdmin = isRoleAdmin || isManagementEmail;
 
-          if (!isAllowed) return null;
+            // Jika rute ini adminOnly tapi user BUKAN admin, jangan dirender (disembunyikan dari user biasa)
+            const isAllowed = !route.adminOnly || isAdmin;
 
-          const isActive = pathname === route.href;
+            if (!isAllowed) return null;
 
-          return (
-            <Link key={route.href} href={route.href} className="py-1 block">
-              <Button
-                variant="ghost"
-                className={cn(
-                  "w-full justify-between group px-3 h-10 transition-all cursor-pointer",
-                  isActive
-                    ? "bg-zinc-900 text-white hover:bg-zinc-800 hover:text-white"
-                    : "text-zinc-500 hover:text-zinc-900",
-                )}
-              >
-                <div className="flex items-center gap-3">
-                  <route.icon
-                    className={cn(
-                      "h-4 w-4",
-                      isActive
-                        ? "text-white"
-                        : "text-zinc-400 group-hover:text-zinc-900",
-                    )}
-                  />
-                  <span className="text-sm font-medium">{route.label}</span>
-                </div>
-                {isActive && <ChevronRight className="h-3 w-3" />}
-              </Button>
-            </Link>
-          );
-        })}
+            const isActive = pathname === route.href;
+
+            return (
+              <Link key={route.href} href={route.href} className="py-1 block">
+                <Button
+                  variant="ghost"
+                  className={cn(
+                    "w-full justify-between group px-3 h-10 transition-all cursor-pointer",
+                    isActive
+                      ? "bg-zinc-900 text-white hover:bg-zinc-800 hover:text-white"
+                      : "text-zinc-500 hover:text-zinc-900",
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <route.icon
+                      className={cn(
+                        "h-4 w-4",
+                        isActive
+                          ? "text-white"
+                          : "text-zinc-400 group-hover:text-zinc-900",
+                      )}
+                    />
+                    <span className="text-sm font-medium">{route.label}</span>
+                  </div>
+                  {isActive && <ChevronRight className="h-3 w-3" />}
+                </Button>
+              </Link>
+            );
+          })
+        )}
       </div>
 
       <div className="p-4 border-t border-zinc-100 mt-auto">

@@ -19,8 +19,7 @@ export default function InvoiceCetak({data}: {data: InvoiceData}) {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-50/50 p-4 md:p-12 font-sans">
-      {/* Tombol Navigasi & Cetak - Tidak akan ikut tercetak */}
+    <div className="min-h-screen p-4 md:p-12 font-sans print:bg-white print:absolute print:top-4 print:left-0 print:w-full print:m-0 print:p-0">
       <div className="max-w-4xl mx-auto mb-8 flex justify-between items-center print:hidden">
         <Link
           href="/customer/invoices"
@@ -36,8 +35,8 @@ export default function InvoiceCetak({data}: {data: InvoiceData}) {
         </button>
       </div>
 
-      {/* Area Kertas Invoice */}
-      <div className="max-w-4xl mx-auto bg-white p-12 md:p-20 shadow-sm border border-zinc-100 print:shadow-none print:border-none print:p-0">
+      {/* Area Kertas Invoice - Tambahkan class 'print-area' di sini */}
+      <div className="print-area max-w-4xl mx-auto bg-white p-12 md:p-20 shadow-sm border border-zinc-100">
         {/* Header Invoice */}
         <div className="flex justify-between items-start mb-20">
           <div>
@@ -52,7 +51,9 @@ export default function InvoiceCetak({data}: {data: InvoiceData}) {
             <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">
               Invoice Number
             </p>
-            <p className="text-sm font-black uppercase">{data.invoice_number}</p>
+            <p className="text-sm font-black uppercase">
+              {data.invoice_number}
+            </p>
           </div>
         </div>
 
@@ -65,7 +66,9 @@ export default function InvoiceCetak({data}: {data: InvoiceData}) {
             <p className="font-black text-zinc-900 leading-relaxed text-sm">
               {data.full_name || "Client"}
             </p>
-            <p className="text-zinc-500 font-medium lowercase">{data.client_email}</p>
+            <p className="text-zinc-500 font-medium lowercase">
+              {data.client_email}
+            </p>
           </div>
           <div className="text-right">
             <p className="font-bold text-zinc-400 mb-4 tracking-[0.3em]">
@@ -73,7 +76,9 @@ export default function InvoiceCetak({data}: {data: InvoiceData}) {
             </p>
             <p className="font-black text-zinc-900 text-sm">
               {new Date(data.created_at).toLocaleDateString("id-ID", {
-                day: "numeric", month: "long", year: "numeric"
+                day: "numeric",
+                month: "long",
+                year: "numeric",
               })}
             </p>
           </div>
@@ -118,19 +123,44 @@ export default function InvoiceCetak({data}: {data: InvoiceData}) {
         </div>
       </div>
 
-      {/* Style CSS Khusus Print */}
       <style jsx global>{`
         @media print {
-          body {
-            background: white !important;
+          html,
+          body,
+          main,
+          div#__next {
+            background-color: #ffffff !important;
+            background: #ffffff !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            height: auto !important;
+            min-height: 0 !important;
+            position: relative !important; /* Agar elemen absolute bisa pas di atas */
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
-          .print\:hidden {
+
+          nav,
+          aside,
+          header,
+          footer,
+          .no-print {
             display: none !important;
           }
-          @page {
-            size: A4;
-            margin: 2cm;
+
+          .print-area {
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 5mm 10mm !important;
+            box-shadow: none !important;
+            border: none !important;
           }
+        }
+
+        @page {
+          size: A4;
+          margin: 0;
         }
       `}</style>
     </div>
