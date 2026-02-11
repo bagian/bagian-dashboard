@@ -80,14 +80,14 @@ export default function CreateTicketModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-zinc-900 text-white font-medium rounded-xl text-[11px] uppercase tracking-[0.2em] px-6 py-5 shadow-sm hover:bg-zinc-800 transition-all cursor-pointer">
+        <Button className="bg-zinc-900 text-white font-medium rounded-xl text-xs px-6 py-5 shadow-sm hover:bg-zinc-800 transition-all cursor-pointer">
           <Plus className="h-4 w-4 mr-2" />
           Buat Tiket Baru
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] rounded-2xl border-none shadow-2xl bg-white">
         <DialogHeader>
-          <DialogTitle className=" text-xl tracking-tighter  text-zinc-900">
+          <DialogTitle className="text-xl tracking-tighter  text-zinc-900">
             Support Ticket
           </DialogTitle>
           <DialogDescription className="text-xs text-zinc-500 font-medium italic">

@@ -87,7 +87,7 @@ export default async function ProjectsPage() {
           <h1 className="text-2xl font-black tracking-tight text-zinc-900 uppercase">
             Projects
           </h1>
-          <p className="text-sm text-zinc-400 font-medium">
+          <p className="text-sm text-zinc-500 mt-1">
             Manajemen proyek, klien, dan rincian pekerjaan.
           </p>
         </div>

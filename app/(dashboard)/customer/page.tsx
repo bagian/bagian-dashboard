@@ -28,19 +28,25 @@ export default async function DashboardPage() {
 
   if (isAdmin) {
     // Admin Dashboard - Fetch admin stats
-    const [clientsRes, invoicesRes, ticketsRes] = await Promise.all([
-      supabaseAdmin
-        .from("profiles")
-        .select("id, email, role, created_at")
-        .neq("role", "admin")
-        .neq("role", "superadmin"),
-      supabaseAdmin.from("invoices").select("*"),
-      supabaseAdmin.from("tickets").select("*"),
-    ]);
+    const [clientsRes, invoicesRes, ticketsRes, projectsRes] =
+      await Promise.all([
+        supabaseAdmin
+          .from("profiles")
+          .select("id, email, role, created_at")
+          .neq("role", "admin")
+          .neq("role", "superadmin"),
+        supabaseAdmin.from("invoices").select("*"),
+        supabaseAdmin.from("tickets").select("*"),
+        supabaseAdmin
+          .from("projects")
+          .select("*")
+          .order("deadline", {ascending: true}),
+      ]);
 
     const clients = clientsRes.data || [];
     const invoices = invoicesRes.data || [];
     const tickets = ticketsRes.data || [];
+    const projects = projectsRes.data || [];
 
     const stats = {
       totalClients: clients.length,
@@ -61,6 +67,9 @@ export default async function DashboardPage() {
           (a, b) =>
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
         )
+        .slice(0, 5),
+      upcomingProjects: projects
+        .filter((p) => p.status !== "completed")
         .slice(0, 5),
     };
 

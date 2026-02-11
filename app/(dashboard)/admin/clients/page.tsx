@@ -45,25 +45,25 @@ export default async function ClientsPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
       <header className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 uppercase italic">
+        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 uppercase">
           Daftar Klien
         </h1>
-        <p className="text-sm text-zinc-400 font-medium italic">
-          Kelola informasi dan akses semua klien Bagian Projects.
+        <p className="text-sm text-zinc-500 mt-1">
+          Kelola informasi dan akses semua klien Bagian Corps.
         </p>
       </header>
 
       {/* Stats Mini */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border-zinc-100 shadow-sm rounded-2xl p-6 flex items-center gap-4">
-          <div className="h-12 w-12 rounded-xl bg-zinc-900 flex items-center justify-center">
-            <Users className="h-6 w-6 text-white" />
+        <Card className="shadow-sm rounded-2xl p-6 flex items-center gap-4 flex-row bg-zinc-900 border-0">
+          <div className="h-12 w-12 rounded-xl bg-white flex items-center justify-center">
+            <Users className="h-6 w-6 text-zinc-900" />
           </div>
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
               Total Klien
             </p>
-            <p className="text-2xl font-bold text-zinc-900">
+            <p className="text-2xl font-bold text-zinc-200">
               {clients?.length || 0}
             </p>
           </div>
@@ -72,7 +72,7 @@ export default async function ClientsPage() {
 
       <Card className="border-zinc-100 shadow-sm rounded-2xl overflow-hidden bg-white">
         <CardHeader className="bg-zinc-50/50 border-b border-zinc-100 py-4 px-6">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 pt-4">
             <Building2 className="h-4 w-4 text-zinc-400" />
             <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">
               Database Klien Aktif

@@ -1,7 +1,7 @@
-import {Sidebar} from "@/components/dashboard/sidebar";
+import {Sidebar} from "@/components/dashboard/Sidebar";
 import {createSupabaseServer} from "@/lib/supabase/server";
 import {redirect} from "next/navigation";
-import {Topbar} from "@/components/dashboard/topbar";
+import {Topbar} from "@/components/dashboard/Topbar";
 
 export default async function DashboardLayout({
   children,

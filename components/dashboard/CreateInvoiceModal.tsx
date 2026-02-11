@@ -16,6 +16,7 @@ import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
 import {useRouter} from "next/navigation";
 import {toast} from "sonner";
+import {Plus} from "lucide-react";
 
 interface Client {
   id: string;
@@ -65,6 +66,7 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="bg-zinc-900 text-white font-medium rounded-xl text-xs px-6 py-5 shadow-sm hover:bg-zinc-800 transition-all cursor-pointer">
+          <Plus className="h-4 w-4 mr-2" />
           Buat Tagihan Baru
         </Button>
       </DialogTrigger>

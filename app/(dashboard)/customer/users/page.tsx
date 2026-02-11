@@ -28,7 +28,7 @@ export default async function UsersManagementPage() {
   const isAdmin =
     myProfile?.role === "admin" ||
     myProfile?.role === "superadmin" ||
-    user?.email === "gilang@bagian.web.id";
+    user?.email === "superadmin@bagian.web.id";
 
   if (!isAdmin) redirect("/customer/dashboard");
 
@@ -40,8 +40,8 @@ export default async function UsersManagementPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold uppercase italic">User Management</h1>
-        <p className="text-xs text-zinc-400 italic font-medium text-zinc-400">
+        <h1 className="text-2xl font-bold uppercase">User Management</h1>
+        <p className="text-xs text-zinc-400 font-medium text-zinc-400">
           Kelola akses dan role pengguna Bagian Projects.
         </p>
       </div>

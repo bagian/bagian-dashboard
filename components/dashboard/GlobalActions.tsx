@@ -381,10 +381,10 @@ export function GlobalActions({
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <AlertDialogContent className="rounded-2xl border-none">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-xl font-bold italic uppercase tracking-tight">
+            <AlertDialogTitle className="text-xl font-bold uppercase tracking-tight">
               Hapus Data?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-sm text-zinc-500 italic">
+            <AlertDialogDescription className="text-sm text-zinc-500">
               Tindakan ini bersifat permanen dan tidak dapat dibatalkan.
             </AlertDialogDescription>
           </AlertDialogHeader>

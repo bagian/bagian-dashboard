@@ -57,8 +57,8 @@ export default async function InvoicesPage() {
   // TOMBOL TETAP ADA jika role admin/superadmin ATAU email cocok
   const isManagementEmail =
     user.email === "superadmin@bagian.web.id" ||
-    user.email === "admin@bagian.web.id" ||
-    user.email === "gilang@bagian.web.id";
+    user.email === "admin@bagian.web.id";
+  // user.email === "gilang@bagian.web.id";
   const hasManagementAccess =
     userRole === "admin" || userRole === "superadmin" || isManagementEmail;
 
@@ -83,10 +83,10 @@ export default async function InvoicesPage() {
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 uppercase italic">
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 uppercase">
             Invoices
           </h1>
-          <p className="text-sm text-zinc-400 font-medium italic">
+          <p className="text-sm text-zinc-500 mt-1">
             {hasManagementAccess
               ? `Management Console (${userRole || "Admin"})`
               : "Ringkasan tagihan proyek Anda."}
