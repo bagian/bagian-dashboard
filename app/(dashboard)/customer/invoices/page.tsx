@@ -78,11 +78,11 @@ export default async function InvoicesPage() {
   console.log("Final data count:", finalData.length);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
           <h1 className="text-2xl font-bold tracking-tight text-zinc-900 uppercase italic">
-            Keuangan
+            Invoices
           </h1>
           <p className="text-sm text-zinc-400 font-medium italic">
             {hasManagementAccess

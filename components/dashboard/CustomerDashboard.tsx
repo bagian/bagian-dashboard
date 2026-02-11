@@ -56,7 +56,7 @@ export function CustomerDashboard({profile, stats}: CustomerDashboardProps) {
     profile?.full_name || profile?.email?.split("@")[0] || "User";
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-10">
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-10">
       {/* Welcome Section */}
       <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 border-b border-zinc-100 pb-8">
         <div className="space-y-2">
@@ -82,7 +82,7 @@ export function CustomerDashboard({profile, stats}: CustomerDashboardProps) {
             <Button
               variant="outline"
               size="sm"
-              className="rounded-lg font-medium border-zinc-200 text-xs shadow-sm"
+              className="rounded-lg font-medium border-zinc-200 text-xs shadow-sm cursor-pointer"
             >
               <MessageSquare className="mr-2 h-3 w-3" />
               Buka Ticket

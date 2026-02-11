@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 import {Sidebar} from "./sidebar";
 import {supabase} from "@/lib/supabase/client";
@@ -104,30 +105,40 @@ export function Topbar({user, profile}: TopbarProps) {
         </div>
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="focus:outline-none">
+          <DropdownMenuTrigger className="focus:outline-none cursor-pointer">
             <Avatar className="h-9 w-9 border-2 border-zinc-50 ring-2 ring-zinc-100 transition-all hover:ring-zinc-900">
               <AvatarFallback className="bg-zinc-950 text-white text-[10px] font-bold">
-                {profile?.email?.substring(0, 2).toUpperCase()}
+                {profile?.email?.substring(0, 2).toUpperCase() || "US"}
               </AvatarFallback>
             </Avatar>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="w-56 mt-2 shadow-xl border-zinc-100"
+            className="w-56 mt-2 shadow-xl border-zinc-100 rounded-xl"
           >
-            <DropdownMenuLabel className="font-bold">
+            <DropdownMenuLabel className="font-bold text-zinc-900">
               My Account
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer text-sm py-2">
-              Settings
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer text-sm py-2">
-              Support
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-zinc-100" />
+
+            {/* Mengarah ke Profil/Settings */}
+            <Link href="/customer/profile">
+              <DropdownMenuItem className="cursor-pointer text-sm py-2 text-zinc-600 focus:text-zinc-900 focus:bg-zinc-50">
+                Settings
+              </DropdownMenuItem>
+            </Link>
+
+            {/* Mengarah ke Support Tickets */}
+            <Link href="/customer/tickets">
+              <DropdownMenuItem className="cursor-pointer text-sm py-2 text-zinc-600 focus:text-zinc-900 focus:bg-zinc-50">
+                Support
+              </DropdownMenuItem>
+            </Link>
+
+            <DropdownMenuSeparator className="bg-zinc-100" />
+
             <DropdownMenuItem
-              className="text-red-600 font-medium cursor-pointer py-2"
+              className="text-red-600 font-medium cursor-pointer py-2 focus:bg-red-50 focus:text-red-600"
               onClick={async () => {
                 await supabase.auth.signOut();
                 window.location.href = "/login";

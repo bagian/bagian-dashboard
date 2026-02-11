@@ -23,6 +23,13 @@ export function ProfileForm({profile}: ProfileFormProps) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  const [phone, setPhone] = useState(profile?.phone || "");
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.replace(/\D/g, "");
+    setPhone(value);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -97,11 +104,14 @@ export function ProfileForm({profile}: ProfileFormProps) {
             <Input
               id="phone"
               name="phone"
-              type="tel"
-              defaultValue={profile.phone || ""}
+              type="text"
+              value={phone}
+              onChange={handlePhoneChange}
               placeholder="08xxxxxxxxxx"
               disabled={loading}
-              className="rounded-lg h-11"
+              className="rounded-xl border-zinc-100 h-11 focus:ring-zinc-900"
+              maxLength={15}
+              required
             />
           </div>
 

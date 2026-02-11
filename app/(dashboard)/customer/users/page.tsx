@@ -38,7 +38,7 @@ export default async function UsersManagementPage() {
     .order("created_at", {ascending: false});
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
       <div className="space-y-1">
         <h1 className="text-2xl font-bold uppercase italic">User Management</h1>
         <p className="text-xs text-zinc-400 italic font-medium text-zinc-400">

@@ -85,7 +85,7 @@ export function Sidebar({
       adminOnly: false,
     },
     {
-      label: "Keuangan",
+      label: "Invoices",
       icon: Receipt,
       href: "/customer/invoices",
       adminOnly: false,
