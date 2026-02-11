@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 
-import { Sidebar } from "./Sidebar";
+import { Sidebar } from "./SidebarComp";
 import { supabase } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import {
