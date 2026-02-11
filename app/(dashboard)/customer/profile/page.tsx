@@ -1,18 +1,18 @@
-import {createSupabaseServer} from "@/lib/supabase/server";
-import {supabaseAdmin} from "@/lib/supabase/admin";
-import {redirect} from "next/navigation";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {Badge} from "@/components/ui/badge";
-import {ProfileForm} from "@/components/dashboard/ProfileForm";
-import {PasswordForm} from "@/components/dashboard/PasswordForm";
-import {UserCircle, Calendar, Mail, Building2, Phone} from "lucide-react"; // Tambah Phone icon
+import { createSupabaseServer } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import { redirect } from "next/navigation";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ProfileForm } from "@/components/dashboard/ProfileForm";
+import { PasswordForm } from "@/components/dashboard/PasswordForm";
+import { UserCircle, Calendar, Mail, Building2, Phone } from "lucide-react"; // Tambah Phone icon
 
 export const dynamic = "force-dynamic";
 
 export default async function ProfilePage() {
   const supabase = await createSupabaseServer();
   const {
-    data: {user},
+    data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
@@ -20,7 +20,7 @@ export default async function ProfilePage() {
   }
 
   // Ambil profile dari database
-  const {data: profile} = await supabaseAdmin
+  const { data: profile } = await supabaseAdmin
     .from("profiles")
     .select("*")
     .eq("id", user.id)
@@ -35,13 +35,11 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header */}
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold uppercase italic leading-none">
-          Akun User
-        </h1>
-        <p className="text-xs text-zinc-400 italic font-medium">
+        <h1 className="text-2xl font-bold uppercase leading-none">Akun User</h1>
+        <p className="text-xs text-zinc-400 font-medium">
           Kelola informasi profil dan keamanan akun Anda.
         </p>
       </div>
@@ -58,13 +56,13 @@ export default async function ProfilePage() {
                 <CardTitle className="text-lg font-bold">
                   {profile.full_name || "No Name"}
                 </CardTitle>
-                <p className="text-xs text-zinc-400 font-mono italic">
+                <p className="text-xs text-zinc-400 font-mono">
                   {profile.email}
                 </p>
               </div>
             </div>
             {/* Badge sekarang menampilkan Nomor Telepon */}
-            <Badge className="rounded-full px-4 py-1 text-[10px] font-bold uppercase bg-zinc-100 text-zinc-500 border-none">
+            <Badge className="rounded-full px-4 py-1 text-[10px] font-bold uppercase bg-zinc-100 text-zinc-500 border-none hidden md:*">
               {profile.phone || "No Phone Number"}
             </Badge>
           </div>

@@ -1,5 +1,5 @@
-import {createSupabaseServer} from "@/lib/supabase/server";
-import {supabaseAdmin} from "@/lib/supabase/admin";
+import { createSupabaseServer } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import {
   Card,
   CardContent,
@@ -16,8 +16,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import CreateTicketModal from "@/components/dashboard/CreateTicketsModal";
-import {GlobalActions} from "@/components/dashboard/GlobalActions";
-import {Pagination} from "@/components/dashboard/Pagination";
+import { GlobalActions } from "@/components/dashboard/GlobalActions";
+import { Pagination } from "@/components/dashboard/Pagination";
 
 export const revalidate = 0;
 
@@ -29,11 +29,11 @@ const statusVariant = {
 export default async function TicketsPage({
   searchParams,
 }: {
-  searchParams: {page?: string};
+  searchParams: Promise<{ page?: string }>;
 }) {
   const supabase = await createSupabaseServer();
   const {
-    data: {user},
+    data: { user },
   } = await supabase.auth.getUser();
 
   if (!user)
@@ -61,7 +61,8 @@ export default async function TicketsPage({
   });
 
   // 2. Logika Pagination
-  const currentPage = Number(searchParams?.page) || 1;
+  const { page } = await searchParams;
+  const currentPage = Number(page) || 1;
   const itemsPerPage = 10;
   const from = (currentPage - 1) * itemsPerPage;
   const to = from + itemsPerPage - 1;
@@ -69,20 +70,20 @@ export default async function TicketsPage({
   // 3. Fetch Tickets (Admin lihat semua, User lihat miliknya sendiri)
   let query = supabaseAdmin
     .from("tickets")
-    .select("*", {count: "exact"})
-    .order("created_at", {ascending: false})
+    .select("*", { count: "exact" })
+    .order("created_at", { ascending: false })
     .range(from, to);
 
   if (!isAdmin) {
     query = query.eq("user_id", user.id);
   }
 
-  const {data: tickets, count} = await query;
+  const { data: tickets, count } = await query;
   const allTickets = tickets || [];
   const totalPages = Math.ceil((count || 0) / itemsPerPage);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8 space-y-8">
       {/* HEADER SECTION */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
@@ -172,7 +173,7 @@ export default async function TicketsPage({
 
                       <TableCell className="text-sm text-zinc-500 font-medium">
                         {new Date(ticket.created_at).toLocaleDateString(
-                          "id-ID",
+                          "id-ID"
                         )}
                       </TableCell>
 

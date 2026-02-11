@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import {usePathname} from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Ticket,
@@ -12,19 +12,21 @@ import {
   Settings,
   FolderKanban, // Ikon untuk Projects
 } from "lucide-react";
-import {cn} from "@/lib/utils";
-import {Button} from "@/components/ui/button";
-import {supabase} from "@/lib/supabase/client";
-import {useEffect, useState} from "react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/lib/supabase/client";
+import { useEffect, useState } from "react";
 
 interface SidebarProps {
   role?: string;
   className?: string;
+  onNavigate?: () => void;
 }
 
 export function Sidebar({
   role: initialRole = "customer",
   className,
+  onNavigate,
 }: SidebarProps) {
   const pathname = usePathname();
 
@@ -38,13 +40,13 @@ export function Sidebar({
     const fetchUserAndRole = async () => {
       try {
         const {
-          data: {user},
+          data: { user },
         } = await supabase.auth.getUser();
 
         if (user && isMounted) {
           setUserEmail(user.email || "");
 
-          const {data: profile} = await supabase
+          const { data: profile } = await supabase
             .from("profiles")
             .select("role")
             .eq("id", user.id)
@@ -126,11 +128,13 @@ export function Sidebar({
     <div
       className={cn(
         "flex flex-col h-full bg-white border-r border-zinc-200 w-64",
-        className,
+        className
       )}
     >
       <div className="p-6 h-16 flex items-center border-b border-zinc-50">
-        <h1 className="text-xl font-black tracking-tighter italic">BAGIAN.</h1>
+        <h1 className="text-xl font-black tracking-tighter italic text-black">
+          BAGIAN.
+        </h1>
       </div>
 
       <div className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
@@ -171,8 +175,9 @@ export function Sidebar({
                     "w-full justify-between group px-3 h-10 transition-all cursor-pointer",
                     isActive
                       ? "bg-zinc-900 text-white hover:bg-zinc-800 hover:text-white"
-                      : "text-zinc-500 hover:text-zinc-900",
+                      : "text-zinc-500 hover:text-zinc-900"
                   )}
+                  onClick={onNavigate}
                 >
                   <div className="flex items-center gap-3">
                     <route.icon
@@ -180,7 +185,7 @@ export function Sidebar({
                         "h-4 w-4",
                         isActive
                           ? "text-white"
-                          : "text-zinc-400 group-hover:text-zinc-900",
+                          : "text-zinc-400 group-hover:text-zinc-900"
                       )}
                     />
                     <span className="text-sm font-medium">{route.label}</span>

@@ -32,6 +32,7 @@ import {
   SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {useState} from "react";
 
 // 1. Tambahkan full_name ke dalam Interface props
 interface TopbarProps {
@@ -46,12 +47,13 @@ interface TopbarProps {
 export function Topbar({user, profile}: TopbarProps) {
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <header className="h-16 border-b border-zinc-200 bg-white/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-4 md:px-8">
       <div className="flex items-center gap-4">
         {/* Mobile Menu */}
-        <Sheet>
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
           <SheetTrigger asChild>
             <button className="md:hidden p-2 hover:bg-zinc-100 rounded-md transition-colors">
               <Menu className="h-5 w-5" />
@@ -68,6 +70,7 @@ export function Topbar({user, profile}: TopbarProps) {
             <Sidebar
               role={profile?.role || "customer"}
               className="border-none w-full"
+              onNavigate={() => setIsMobileMenuOpen(false)}
             />
           </SheetContent>
         </Sheet>
