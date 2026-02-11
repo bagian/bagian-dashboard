@@ -23,27 +23,21 @@ export default function ResetPasswordPage() {
       if (typeof window !== "undefined") {
         // 1. Deteksi token dari URL
         const searchParams = new URLSearchParams(window.location.search);
-        const hasCode = searchParams.has("code"); // Token versi PKCE (terbaru)
+        const hasCode = searchParams.has("code");
         const hash = window.location.hash || "";
         const hasRecoveryHash =
-          hash.includes("type=recovery") || hash.includes("access_token="); // Token versi Implicit (lama)
+          hash.includes("type=recovery") || hash.includes("access_token=");
 
-        // 2. Jika tidak ada parameter keamanan sama sekali, berarti link diketik manual
         if (!hasCode && !hasRecoveryHash) {
           router.replace("/forgot-password");
           return;
         }
-
-        // 3. Validasi session recovery di Supabase
-        // Kita gunakan setTimeout 1 detik karena jika URL menggunakan '?code=',
-        // Supabase JS Client di background butuh sepersekian detik untuk menukarnya menjadi session aktif.
         setTimeout(async () => {
           const { data, error } = await supabase.auth.getUser();
 
           if (error || !data.user) {
-            // Kemungkinan besar token invalid / expired
             setTokenError(
-              "Link reset password sudah tidak valid atau telah kedaluwarsa. Silakan minta link baru."
+              "Link reset password sudah tidak valid atau telah kedaluwarsa. Silakan minta link baru.",
             );
           }
         }, 1000);
@@ -69,7 +63,7 @@ export default function ResetPasswordPage() {
 
       if (message.includes("expired") || message.includes("invalid")) {
         setTokenError(
-          "Link reset password ini sudah tidak berlaku. Silakan minta link baru melalui halaman Forgot Password."
+          "Link reset password ini sudah tidak berlaku. Silakan minta link baru melalui halaman Forgot Password.",
         );
         toast.error("Link reset sudah kadaluarsa", {
           description: "Silakan minta link baru dan coba lagi.",
@@ -80,23 +74,15 @@ export default function ResetPasswordPage() {
         });
       }
     } else {
-      // 1. Hancurkan session recovery
       await supabase.auth.signOut();
-
-      // 2. Munculkan pesan sukses
-      toast.success("Password diperbarui! 🎉", {
+      toast.success("Password diperbarui!", {
         description: "Mengarahkan ke halaman login...",
       });
 
-      // 3. PERBAIKAN: Beri jeda 1.5 detik agar user bisa membaca pesan,
-      // sekaligus memberi waktu browser untuk membuang cookie.
-      // Gunakan window.location.href (Hard Reload) agar Middleware mereset statusnya.
       setTimeout(() => {
         window.location.href = "/login";
       }, 1500);
     }
-
-    // Pindahkan setLoading ke luar timeout agar tombol tidak terus berputar jika error
     if (error) {
       setLoading(false);
     }

@@ -12,19 +12,14 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (!error) {
-      // ✅ PERBAIKAN KRUSIAL 2:
-      // User sudah terverifikasi emailnya dan otomatis mendapat session.
-      // Kita hapus session tersebut agar mereka HARUS memasukkan password di halaman /login
       await supabase.auth.signOut();
 
       return NextResponse.redirect(
-        `${origin}${next}?message=account_confirmed`
+        `${origin}${next}?message=account_confirmed`,
       );
     }
   }
-
-  // Jika gagal, kembali ke login dengan error
   return NextResponse.redirect(
-    `${origin}/login?error=Could not authenticate user`
+    `${origin}/login?error=Could not authenticate user`,
   );
 }

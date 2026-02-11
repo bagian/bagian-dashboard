@@ -19,7 +19,7 @@ export default function ForgotPasswordPage() {
     try {
       const res = await fetch("/api/auth/check-email", {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
 
@@ -44,8 +44,12 @@ export default function ForgotPasswordPage() {
 
     // 2. Jika email valid, kirim link reset password Supabase
     //    Arahkan LANGSUNG ke halaman /reset-password (tanpa /auth/callback)
+    const redirectTo = process.env.NEXT_PUBLIC_SITE_URL
+      ? `${process.env.NEXT_PUBLIC_SITE_URL}/reset-password`
+      : `${window.location.origin}/reset-password`;
+
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: redirectTo,
     });
 
     if (error) {
