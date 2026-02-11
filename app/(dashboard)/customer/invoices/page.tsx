@@ -1,5 +1,5 @@
-import {createSupabaseServer} from "@/lib/supabase/server";
-import {supabaseAdmin} from "@/lib/supabase/admin";
+import { createSupabaseServer } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
 import {
   Table,
   TableBody,
@@ -8,12 +8,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {Badge} from "@/components/ui/badge";
-import {Receipt, Calendar, DollarSign, Package} from "lucide-react";
-import {cn} from "@/lib/utils";
-import {CreateInvoiceModal} from "@/components/dashboard/CreateInvoiceModal";
-import {GlobalActions} from "@/components/dashboard/GlobalActions";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Receipt, Calendar, DollarSign, Package } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { CreateInvoiceModal } from "@/components/dashboard/CreateInvoiceModal";
+import { GlobalActions } from "@/components/dashboard/GlobalActions";
 import Link from "next/link";
 
 export const revalidate = 0;
@@ -56,7 +56,7 @@ interface DisplayInvoice extends Invoice {
 export default async function InvoicesPage() {
   const supabase = await createSupabaseServer();
   const {
-    data: {user},
+    data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
@@ -79,7 +79,7 @@ export default async function InvoicesPage() {
       invoice_items (*)
     `,
       )
-      .order("created_at", {ascending: false}),
+      .order("created_at", { ascending: false }),
   ]);
 
   const allProfiles = profilesRes.data || [];
@@ -283,7 +283,7 @@ export default async function InvoicesPage() {
               key={inv.id}
               className="border-zinc-100 shadow-sm rounded-2xl bg-white overflow-hidden hover:shadow-md transition-shadow"
             >
-              <Link href={`/customer/invoices/${inv.id}`}>
+              <Link href={`/customer/invoices/${inv.id}/print`}>
                 <CardContent className="p-5 space-y-4">
                   {/* Header: Invoice Number & Status */}
                   <div className="flex items-start justify-between gap-3">
@@ -395,7 +395,7 @@ export default async function InvoicesPage() {
 
                   {/* Actions - Only for Management */}
                   {hasManagementAccess && (
-                    <div className="pt-3 border-t border-zinc-100 flex justify-end">
+                    <div className="p-2 flex justify-end bg-zinc-50/50  rounded-md border border-zinc-100">
                       <div>
                         <span className="text-[12px] uppercase font-semibold">
                           Aksi
