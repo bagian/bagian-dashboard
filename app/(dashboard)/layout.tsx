@@ -1,7 +1,7 @@
-import {Sidebar} from "@/components/dashboard/Sidebar";
-import {createSupabaseServer} from "@/lib/supabase/server";
-import {redirect} from "next/navigation";
-import {Topbar} from "@/components/dashboard/Topbar";
+import { Sidebar } from "@/components/dashboard/Sidebar";
+import { createSupabaseServer } from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
+import { Topbar } from "@/components/dashboard/Topbar";
 
 export default async function DashboardLayout({
   children,
@@ -10,14 +10,14 @@ export default async function DashboardLayout({
 }) {
   const supabase = await createSupabaseServer();
   const {
-    data: {user},
+    data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
     redirect("/login");
   }
 
-  const {data: profile} = await supabase
+  const { data: profile } = await supabase
     .from("profiles")
     .select("role, full_name, email")
     .eq("id", user.id)
