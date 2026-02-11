@@ -1,7 +1,7 @@
 "use client";
 
-import {Menu} from "lucide-react";
-import {usePathname} from "next/navigation";
+import { Menu } from "lucide-react";
+import { usePathname } from "next/navigation";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -10,7 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {Avatar, AvatarFallback} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,9 +21,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
 
-import {Sidebar} from "./Sidebar";
-import {supabase} from "@/lib/supabase/client";
-import {User} from "@supabase/supabase-js";
+import { Sidebar } from "./Sidebar";
+import { supabase } from "@/lib/supabase/client";
+import { User } from "@supabase/supabase-js";
 import {
   Sheet,
   SheetContent,
@@ -32,7 +32,7 @@ import {
   SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {useState} from "react";
+import { useState } from "react";
 
 // 1. Tambahkan full_name ke dalam Interface props
 interface TopbarProps {
@@ -44,7 +44,7 @@ interface TopbarProps {
   } | null;
 }
 
-export function Topbar({user, profile}: TopbarProps) {
+export function Topbar({ user, profile }: TopbarProps) {
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -83,7 +83,7 @@ export function Topbar({user, profile}: TopbarProps) {
                 href="/customer"
                 className="text-[11px] font-bold uppercase tracking-widest text-zinc-400"
               >
-                BAGIAN
+                Dashboard
               </BreadcrumbLink>
             </BreadcrumbItem>
             {pathSegments.map(
@@ -97,7 +97,7 @@ export function Topbar({user, profile}: TopbarProps) {
                       </BreadcrumbPage>
                     </BreadcrumbItem>
                   </div>
-                ),
+                )
             )}
           </BreadcrumbList>
         </Breadcrumb>

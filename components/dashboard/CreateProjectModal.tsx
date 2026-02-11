@@ -1,7 +1,7 @@
 "use client";
 
-import {useState} from "react";
-import {Button} from "@/components/ui/button";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -11,12 +11,12 @@ import {
   DialogFooter,
   DialogDescription,
 } from "@/components/ui/dialog";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import {useRouter} from "next/navigation";
-import {toast} from "sonner";
-import {Plus, ChevronDown} from "lucide-react"; // Tambah ChevronDown
-import {supabase} from "@/lib/supabase/client";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Plus, ChevronDown } from "lucide-react";
+import { supabase } from "@/lib/supabase/client";
 
 interface Client {
   id: string;
@@ -25,7 +25,7 @@ interface Client {
   role?: string;
 }
 
-export function CreateProjectModal({clients}: {clients: Client[]}) {
+export function CreateProjectModal({ clients }: { clients: Client[] }) {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -36,17 +36,19 @@ export function CreateProjectModal({clients}: {clients: Client[]}) {
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    // 1. Simpan referensi form di awal
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     e.preventDefault();
     setLoading(true);
 
-    const formData = new FormData(e.currentTarget);
     const client_id = formData.get("client_id") as string;
     const name = formData.get("name") as string;
     const status = formData.get("status") as string;
     const deadline = formData.get("deadline") as string;
 
     try {
-      const {error} = await supabase.from("projects").insert([
+      const { error } = await supabase.from("projects").insert([
         {
           name: name,
           client_id: client_id,
@@ -67,8 +69,13 @@ export function CreateProjectModal({clients}: {clients: Client[]}) {
         description: "Data proyek baru telah ditambahkan ke tabel.",
       });
 
+      // 2. Gunakan referensi 'form' yang sudah disimpan untuk mereset
+      form.reset();
+
       setOpen(false);
-      e.currentTarget.reset();
+
+      // ❌ e.currentTarget.reset(); <-- BARIS INI SUDAH SAYA HAPUS
+
       router.refresh();
     } catch (error) {
       toast.error("Terjadi kesalahan sistem!", {

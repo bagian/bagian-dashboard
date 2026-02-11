@@ -1,10 +1,10 @@
 "use client";
 
-import {useEffect, useState} from "react";
-import {supabase} from "@/lib/supabase/client";
-import {useRouter} from "next/navigation";
-import {toast} from "sonner";
-import {Eye, EyeOff, ChevronLeft} from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Eye, EyeOff, ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,34 +13,40 @@ export default function ResetPasswordPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [tokenError, setTokenError] = useState<string | null>(null);
   const router = useRouter();
 
   // Cek validitas token recovery saat halaman dibuka
   useEffect(() => {
     const checkRecoverySession = async () => {
-      // 1. Paksa hanya bisa diakses dari link email (ada hash token recovery)
       if (typeof window !== "undefined") {
+        // 1. Deteksi token dari URL
+        const searchParams = new URLSearchParams(window.location.search);
+        const hasCode = searchParams.has("code"); // Token versi PKCE (terbaru)
         const hash = window.location.hash || "";
-        const fromRecoveryLink =
-          hash.includes("type=recovery") || hash.includes("access_token=");
+        const hasRecoveryHash =
+          hash.includes("type=recovery") || hash.includes("access_token="); // Token versi Implicit (lama)
 
-        // Jika tidak ada parameter recovery di URL, redirect ke forgot-password
-        if (!fromRecoveryLink) {
+        // 2. Jika tidak ada parameter keamanan sama sekali, berarti link diketik manual
+        if (!hasCode && !hasRecoveryHash) {
           router.replace("/forgot-password");
           return;
         }
-      }
 
-      // 2. Validasi session recovery di Supabase
-      const {data, error} = await supabase.auth.getUser();
+        // 3. Validasi session recovery di Supabase
+        // Kita gunakan setTimeout 1 detik karena jika URL menggunakan '?code=',
+        // Supabase JS Client di background butuh sepersekian detik untuk menukarnya menjadi session aktif.
+        setTimeout(async () => {
+          const { data, error } = await supabase.auth.getUser();
 
-      if (error || !data.user) {
-        // Kemungkinan besar token invalid / expired
-        setTokenError(
-          "Link reset password sudah tidak valid atau telah kedaluwarsa. Silakan minta link baru.",
-        );
-        return;
+          if (error || !data.user) {
+            // Kemungkinan besar token invalid / expired
+            setTokenError(
+              "Link reset password sudah tidak valid atau telah kedaluwarsa. Silakan minta link baru."
+            );
+          }
+        }, 1000);
       }
     };
 
@@ -56,14 +62,14 @@ export default function ResetPasswordPage() {
     }
 
     setLoading(true);
-    const {error} = await supabase.auth.updateUser({password});
+    const { error } = await supabase.auth.updateUser({ password });
 
     if (error) {
       const message = error.message.toLowerCase();
 
       if (message.includes("expired") || message.includes("invalid")) {
         setTokenError(
-          "Link reset password ini sudah tidak berlaku. Silakan minta link baru melalui halaman Forgot Password.",
+          "Link reset password ini sudah tidak berlaku. Silakan minta link baru melalui halaman Forgot Password."
         );
         toast.error("Link reset sudah kadaluarsa", {
           description: "Silakan minta link baru dan coba lagi.",
@@ -74,12 +80,26 @@ export default function ResetPasswordPage() {
         });
       }
     } else {
+      // 1. Hancurkan session recovery
+      await supabase.auth.signOut();
+
+      // 2. Munculkan pesan sukses
       toast.success("Password diperbarui! 🎉", {
-        description: "Silakan masuk dengan password baru Anda.",
+        description: "Mengarahkan ke halaman login...",
       });
-      router.push("/login");
+
+      // 3. PERBAIKAN: Beri jeda 1.5 detik agar user bisa membaca pesan,
+      // sekaligus memberi waktu browser untuk membuang cookie.
+      // Gunakan window.location.href (Hard Reload) agar Middleware mereset statusnya.
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 1500);
     }
-    setLoading(false);
+
+    // Pindahkan setLoading ke luar timeout agar tombol tidak terus berputar jika error
+    if (error) {
+      setLoading(false);
+    }
   };
 
   return (
@@ -108,7 +128,8 @@ export default function ResetPasswordPage() {
 
         <div className="relative z-10 space-y-8">
           <p className="text-5xl font-bold tracking-tight text-white leading-[1.1]">
-            &quot;Atur Password Baru <br />dan Amankan Akses Anda.&quot;
+            &quot;Atur Password Baru <br />
+            dan Amankan Akses Anda.&quot;
           </p>
         </div>
       </div>
@@ -117,13 +138,17 @@ export default function ResetPasswordPage() {
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-white">
         <div className="w-full max-w-[400px] space-y-12">
           <div className="space-y-3">
-            <Link
-              href="/login"
-              className="flex items-center text-xs font-bold text-zinc-400 hover:text-zinc-900 transition-all uppercase tracking-widest gap-1 group pb-10"
+            <button
+              onClick={async () => {
+                await supabase.auth.signOut();
+                window.location.href = "/login";
+              }}
+              type="button"
+              className="flex items-center text-xs font-bold text-zinc-400 hover:text-zinc-900 transition-all uppercase tracking-widest gap-1 group pb-10 cursor-pointer"
             >
               <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
               <span>Back to Login</span>
-            </Link>
+            </button>
             <h2 className="text-4xl font-black tracking-tighter text-zinc-900">
               Reset Password
             </h2>
@@ -182,15 +207,28 @@ export default function ResetPasswordPage() {
                 <label className="text-[11px] uppercase tracking-widest text-zinc-500">
                   Konfirmasi Password
                 </label>
-                <input
-                  type="password"
-                  required
-                  minLength={8}
-                  className="w-full border-b border-zinc-100 py-3 text-sm focus:border-zinc-900 focus:outline-none transition-all font-medium"
-                  placeholder="Ulangi password baru"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    required
+                    minLength={8}
+                    className="w-full border-b border-zinc-100 py-3 pr-10 text-sm focus:border-zinc-900 focus:outline-none transition-all font-medium"
+                    placeholder="Ulangi password baru"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-zinc-300 hover:text-zinc-900 transition-colors cursor-pointer"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
               </div>
 
               <button

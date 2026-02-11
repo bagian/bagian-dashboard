@@ -126,7 +126,7 @@ export default function RegisterPage() {
 
           <form onSubmit={handleRegister} className="space-y-6">
             <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-[0.3em] text-zinc-400">
+              <label className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 font-bold">
                 Nama Lengkap
               </label>
               <input
@@ -140,7 +140,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-[0.3em] text-zinc-400">
+              <label className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 font-bold">
                 Nama Perusahaan
               </label>
               <input
@@ -154,7 +154,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-[0.3em] text-zinc-400">
+              <label className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 font-bold">
                 Email Address
               </label>
               <input
@@ -168,7 +168,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-[0.3em] text-zinc-400">
+              <label className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 font-bold">
                 Password
               </label>
               <div className="relative">
@@ -195,7 +195,7 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-[0.3em] text-zinc-400">
+              <label className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 font-bold">
                 Konfirmasi Password
               </label>
               <div className="relative">

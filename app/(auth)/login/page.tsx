@@ -132,7 +132,7 @@ export default function LoginPage() {
         <div className="w-full max-w-[400px] space-y-12">
           <div className="space-y-3">
             <h2 className="text-4xl font-black tracking-tighter text-zinc-900">
-              Welcome back
+              Welcome Back !
             </h2>
             <p className="text-zinc-400 text-xs">
               Akses dashboard client area Anda sekarang.
@@ -141,7 +141,7 @@ export default function LoginPage() {
 
           <form onSubmit={handleLogin} className="space-y-8">
             <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-widest text-zinc-500">
+              <label className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold">
                 Email Address
               </label>
               <input
@@ -156,7 +156,7 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-[11px] uppercase tracking-widest text-zinc-500">
+                <label className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold">
                   Password
                 </label>
                 <Link
@@ -216,12 +216,12 @@ export default function LoginPage() {
 
           <div className="pt-8 border-t border-zinc-50">
             <p className="text-center text-[10px] text-zinc-400 font-bold uppercase tracking-widest">
-              Don&apos;t have an account?{" "}
+              Belum memiliki akun?{" "}
               <Link
                 href="/register"
                 className="text-zinc-950 border-b border-zinc-950 pb-0.5 ml-2 transition-all cursor-pointer"
               >
-                Sign up
+                Daftar Sekarang
               </Link>
             </p>
           </div>
