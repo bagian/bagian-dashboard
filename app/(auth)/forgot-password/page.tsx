@@ -99,7 +99,7 @@ export default function ForgotPasswordPage() {
           <div className="space-y-3">
             <Link
               href="/login"
-              className="flex items-center text-xs font-bold text-zinc-400 hover:text-zinc-900 transition-all uppercase tracking-widest gap-1 group pb-10"
+              className="flex items-center text-xs font-bold text-zinc-400 hover:text-zinc-900 transition-all uppercase tracking-widest gap-1 group mb-10"
             >
               <ChevronLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
               <span>Back to Login</span>
