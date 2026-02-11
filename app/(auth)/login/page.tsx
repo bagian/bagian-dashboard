@@ -1,11 +1,11 @@
 "use client";
 
-import {useState, useEffect} from "react"; // Tambahkan useEffect
-import {supabase} from "@/lib/supabase/client";
-import {useRouter} from "next/navigation";
+import { useState, useEffect } from "react";
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {toast} from "sonner";
-import {Eye, EyeOff} from "lucide-react";
+import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 
 export default function LoginPage() {
@@ -38,13 +38,13 @@ export default function LoginPage() {
       localStorage.removeItem("rememberedEmail");
     }
 
-    const {error} = await supabase.auth.signInWithPassword({
+    const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
     if (error) {
-      toast.error("Login gagal!", {description: error.message});
+      toast.error("Login gagal!", { description: error.message });
       setLoading(false);
     } else {
       toast.success("Login berhasil!", {
@@ -55,6 +55,31 @@ export default function LoginPage() {
       }, 500);
     }
   };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const message = urlParams.get("message");
+    const error = urlParams.get("error");
+
+    if (message === "register_success") {
+      toast.success("Akun berhasil dibuat!", {
+        id: "register-success-toast",
+        description: "Silakan login dengan email dan password Anda.",
+      });
+    }
+
+    if (message === "account_confirmed") {
+      toast.success("Email berhasil dikonfirmasi!", {
+        description: "Silakan login dengan akun Anda.",
+      });
+    }
+
+    if (error) {
+      toast.error("Terjadi kesalahan", {
+        description: error,
+      });
+    }
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-white font-sans">
@@ -68,7 +93,7 @@ export default function LoginPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent z-1" />
         <div className="relative z-10">
-          <div className="relative h-10 w-full">
+          <div className="relative h-10 w-40">
             <Image
               src="/img/logo/bagian-logo.png"
               alt="Bagian Projects Logo"

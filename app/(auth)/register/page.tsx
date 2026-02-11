@@ -1,11 +1,11 @@
 "use client";
 
-import {useState} from "react";
-import {supabase} from "@/lib/supabase/client";
-import {useRouter} from "next/navigation";
+import { useState } from "react";
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
-import {toast} from "sonner";
-import {Eye, EyeOff} from "lucide-react";
+import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 import Image from "next/image";
 
 export default function RegisterPage() {
@@ -16,7 +16,6 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // State untuk visibilitas password
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -41,7 +40,9 @@ export default function RegisterPage() {
 
     setLoading(true);
 
-    const {data: authData, error: signUpError} = await supabase.auth.signUp({
+    const origin = window.location.origin;
+
+    const { data: authData, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -49,6 +50,7 @@ export default function RegisterPage() {
           full_name: fullName,
           company_name: companyName,
         },
+        emailRedirectTo: `${origin}/auth/callback?next=/login`,
       },
     });
 
@@ -59,36 +61,16 @@ export default function RegisterPage() {
       setLoading(false);
       return;
     }
+    await supabase.auth.signOut();
+    setLoading(false);
 
-    if (authData.user) {
-      const {error: profileError} = await supabase
-        .from("profiles")
-        .update({
-          full_name: fullName,
-          company_name: companyName,
-          role: "user",
-        })
-        .eq("id", authData.user.id);
-
-      if (profileError) {
-        console.error("Profile update error:", profileError);
-      }
-    }
-
-    toast.success("Registrasi berhasil! 🎉", {
-      description: "Silakan login dengan akun Anda.",
-    });
-
-    setTimeout(() => {
-      router.push("/login");
-    }, 1000);
+    router.push("/login?message=register_success");
   };
 
   return (
     <div className="flex min-h-screen bg-white font-sans">
-      {/* SISI KIRI: VISUAL BRANDING */}
+      {/* SISI KIRI: VISUAL BRANDING - TIDAK DIUBAH */}
       <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-16 overflow-hidden">
-        {/* Layer 1: Background Image */}
         <Image
           src="/img/banner/bn-mcp.png"
           alt="Workspace Background"
@@ -96,11 +78,7 @@ export default function RegisterPage() {
           priority
           className="object-cover"
         />
-
-        {/* Layer 2: Gradient Fade */}
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent z-1" />
-
-        {/* Layer 3: Branding Content */}
         <div className="relative z-10">
           <div className="relative h-10 w-48">
             <Image
@@ -111,7 +89,6 @@ export default function RegisterPage() {
             />
           </div>
         </div>
-
         <div className="relative z-10 space-y-8">
           <p className="text-5xl font-bold tracking-tight text-white leading-[1.1]">
             &quot;Kembangkan Bisnis Anda <br /> bersama Bagian Corps.&quot;
@@ -127,7 +104,7 @@ export default function RegisterPage() {
             </div>
             <div>
               <p className="text-lg font-bold text-white">Gilang Ramadhan</p>
-              <p className="text-xs text-zinc-300 font-medium  mt-1 tracking-tighter">
+              <p className="text-xs text-zinc-300 font-medium mt-1 tracking-tighter">
                 Owner & Founder, Bagian Corps
               </p>
             </div>
@@ -135,7 +112,7 @@ export default function RegisterPage() {
         </div>
       </div>
 
-      {/* SISI KANAN: FORM REGISTER */}
+      {/* SISI KANAN: FORM REGISTER - TIDAK DIUBAH */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-white">
         <div className="w-full max-w-[400px] space-y-10">
           <div className="space-y-3">
@@ -258,7 +235,7 @@ export default function RegisterPage() {
               Sudah punya akun?{" "}
               <Link
                 href="/login"
-                className="text-zinc-950 border-b border-zinc-950 pb-0.5 ml-2cursor-pointer"
+                className="text-zinc-950 border-b border-zinc-950 pb-0.5 ml-2 cursor-pointer"
               >
                 Login di sini
               </Link>

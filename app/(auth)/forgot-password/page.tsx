@@ -1,11 +1,11 @@
 "use client";
 
-import {useState} from "react";
-import {supabase} from "@/lib/supabase/client";
+import { useState } from "react";
+import { supabase } from "@/lib/supabase/client";
 import Link from "next/link";
-import {toast} from "sonner";
+import { toast } from "sonner";
 import Image from "next/image";
-import {ChevronLeft} from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -15,14 +15,43 @@ export default function ForgotPasswordPage() {
     e.preventDefault();
     setLoading(true);
 
-    const {error} = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/auth/callback?next=/dashboard/reset-password`,
+    // 1. Cek dulu ke API server apakah email sudah terdaftar
+    try {
+      const res = await fetch("/api/auth/check-email", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.exists) {
+        toast.error("Email tidak ditemukan", {
+          description:
+            "Email ini belum terdaftar di sistem kami. Silakan cek kembali atau daftar akun baru.",
+        });
+        setLoading(false);
+        return;
+      }
+    } catch (err) {
+      console.error("Error checking email existence:", err);
+      toast.error("Terjadi kesalahan saat memeriksa email", {
+        description: "Silakan coba lagi beberapa saat lagi.",
+      });
+      setLoading(false);
+      return;
+    }
+
+    // 2. Jika email valid, kirim link reset password Supabase
+    //    Arahkan LANGSUNG ke halaman /reset-password (tanpa /auth/callback)
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
     });
 
     if (error) {
-      toast.error("Gagal mengirim email", {description: error.message});
+      toast.error("Gagal mengirim email", { description: error.message });
     } else {
-      toast.success("Email terkirim! 📧", {
+      toast.success("Email terkirim!", {
         description:
           "Silakan cek kotak masuk email Anda untuk instruksi reset.",
       });
@@ -43,7 +72,7 @@ export default function ForgotPasswordPage() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent z-1" />
         <div className="relative z-10">
-          <div className="relative h-10 w-full">
+          <div className="relative h-10 w-40">
             <Image
               src="/img/logo/bagian-logo.png"
               alt="Bagian Projects Logo"
