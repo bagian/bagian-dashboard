@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Nonaktifkan LightningCSS agar CSS hanya lewat PostCSS (plugin kita ganti color() → hex)
+    useLightningcss: false,
+  },
   images: {
     remotePatterns: [
       {

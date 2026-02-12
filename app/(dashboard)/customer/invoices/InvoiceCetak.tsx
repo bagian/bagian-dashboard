@@ -94,12 +94,12 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
           Kembali
         </Link>
         <div className="flex gap-3 w-full sm:w-auto">
-          <button
+          {/* <button
             onClick={handlePrint} // Menggunakan print bawaan untuk Save as PDF
             className="flex-1 sm:flex-none bg-white border-2 border-zinc-200 text-zinc-700 px-6 py-3 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-zinc-50 transition-all rounded-xl flex items-center justify-center gap-3 cursor-pointer"
           >
             <Download className="h-4 w-4" /> Download PDF
-          </button>
+          </button> */}
           <button
             onClick={handlePrint}
             className="flex-1 sm:flex-none bg-zinc-900 text-white px-6 py-3 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all rounded-xl shadow-lg flex items-center justify-center gap-3 cursor-pointer"
