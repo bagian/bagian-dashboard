@@ -45,11 +45,8 @@ interface InvoiceData {
 }
 
 export default function InvoiceCetak({ data }: { data: InvoiceData }) {
+  // Fungsi Print Bawaan Browser (Paling Stabil)
   const handlePrint = () => {
-    window.print();
-  };
-
-  const handleDownload = () => {
     window.print();
   };
 
@@ -98,10 +95,10 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
         </Link>
         <div className="flex gap-3 w-full sm:w-auto">
           <button
-            onClick={handleDownload}
+            onClick={handlePrint} // Menggunakan print bawaan untuk Save as PDF
             className="flex-1 sm:flex-none bg-white border-2 border-zinc-200 text-zinc-700 px-6 py-3 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-zinc-50 transition-all rounded-xl flex items-center justify-center gap-3 cursor-pointer"
           >
-            <Download className="h-4 w-4" /> Download
+            <Download className="h-4 w-4" /> Download PDF
           </button>
           <button
             onClick={handlePrint}
@@ -114,12 +111,13 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
 
       {/* Invoice Paper */}
       <div className="print-area max-w-4xl mx-auto bg-white p-6 sm:p-8 lg:p-12 shadow-sm border border-zinc-200 rounded-2xl print:rounded-none print:shadow-none print:border-0">
-        {/* Header with Status Badge */}
+        {/* HEADER SECTION (Sudah Dirapikan & Sejajar) */}
         <div className="flex flex-col sm:flex-row justify-between items-start gap-6 mb-8 pb-6 border-b-2 border-zinc-100">
           <div className="flex-1">
-            <div className="flex items-start gap-4 mb-4">
-              <div className="h-12 w-12 rounded-xl bg-zinc-900 flex items-center justify-center print:bg-zinc-900">
-                <div className="relative h-6 w-full">
+            <div className="flex items-start gap-4">
+              {/* Logo Container - Fixed size agar tidak gepeng */}
+              <div className="h-12 w-12 rounded-xl bg-zinc-900 flex items-center justify-center print:bg-zinc-900 flex-shrink-0">
+                <div className="relative h-7 w-7">
                   <Image
                     src="/img/logo/bagian-logo-non-t.png"
                     alt="Bagian Projects Logo"
@@ -127,65 +125,83 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
                     priority
                     quality={100}
                     className="object-contain"
+                    unoptimized // Penting agar tercetak rapi
                   />
                 </div>
               </div>
-              <div>
-                <h1 className="text-2xl sm:text-3xl font-black tracking-tighter uppercase mb-1">
+
+              {/* Text Container - Badge sudah masuk di sini agar sejajar */}
+              <div className="flex flex-col items-start">
+                <h1 className="text-2xl sm:text-3xl font-black tracking-tighter uppercase mb-4 leading-none">
                   Invoice
                 </h1>
-                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
+                <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">
                   Bagian Corps
                 </p>
+                <div
+                  className={`inline-flex items-center gap-2 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border-2 ${getStatusStyle()}`}
+                >
+                  <span
+                    className={`h-1.5 w-1.5 rounded-full ${
+                      data.status?.toLowerCase() === "paid"
+                        ? "bg-emerald-500"
+                        : data.status?.toLowerCase() === "unpaid"
+                          ? "bg-orange-500"
+                          : "bg-red-500"
+                    }`}
+                  ></span>
+                  {data.status || "UNPAID"}
+                </div>
               </div>
             </div>
-            <div
-              className={`inline-flex items-center gap-2 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border-2 ${getStatusStyle()}`}
-            >
-              <span
-                className={`h-2 w-2 rounded-full ${data.status?.toLowerCase() === "paid" ? "bg-emerald-500" : data.status?.toLowerCase() === "unpaid" ? "bg-orange-500" : "bg-red-500"}`}
-              ></span>
-              {data.status || "UNPAID"}
-            </div>
           </div>
-          <div className="text-left sm:text-right w-full sm:w-auto">
-            <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest mb-1">
-              Invoice Number
-            </p>
-            <p className="text-base sm:text-lg font-black uppercase text-zinc-900 break-all">
-              {data.invoice_number}
-            </p>
-            <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest mt-3 mb-1">
-              Issue Date
-            </p>
-            <p className="text-xs font-bold text-zinc-700">
-              {new Date(data.created_at).toLocaleDateString("id-ID", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              })}
-            </p>
-            {data.due_date && (
-              <>
-                <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest mt-3 mb-1">
-                  Due Date
+
+          <div className="text-left sm:text-right w-full sm:w-auto mt-4 sm:mt-0">
+            <div className="space-y-4">
+              <div>
+                <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest mb-1">
+                  Invoice Number
                 </p>
-                <p className="text-xs font-bold text-red-600">
-                  {new Date(data.due_date).toLocaleDateString("id-ID", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
+                <p className="text-base sm:text-lg font-black uppercase text-zinc-900 break-all">
+                  {data.invoice_number}
                 </p>
-              </>
-            )}
+              </div>
+              <div className="flex sm:justify-end gap-8">
+                <div>
+                  <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest mb-1">
+                    Issue Date
+                  </p>
+                  <p className="text-xs font-bold text-zinc-700">
+                    {new Date(data.created_at).toLocaleDateString("id-ID", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </p>
+                </div>
+                {data.due_date && (
+                  <div>
+                    <p className="text-[9px] font-bold text-zinc-400 uppercase tracking-widest mb-1">
+                      Due Date
+                    </p>
+                    <p className="text-xs font-bold text-red-600">
+                      {new Date(data.due_date).toLocaleDateString("id-ID", {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Bill From & Bill To */}
         <div className="grid grid-cols-1 sm:grid-cols-2 print:grid-cols-2 gap-6 sm:gap-8 mb-8">
           <div>
-            <p className="font-bold text-zinc-400 mb-3 tracking-[0.3em] text-[9px] uppercase">
+            <p className="font-bold text-zinc-400 mb-3 tracking-[0.3em] text-[9px] uppercase border-b border-zinc-100 pb-2 inline-block">
               From
             </p>
             <div className="space-y-2">
@@ -222,7 +238,7 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
           </div>
 
           <div>
-            <p className="font-bold text-zinc-400 mb-3 tracking-[0.3em] text-[9px] uppercase">
+            <p className="font-bold text-zinc-400 mb-3 tracking-[0.3em] text-[9px] uppercase border-b border-zinc-100 pb-2 inline-block">
               Bill To
             </p>
             <div className="space-y-2">
