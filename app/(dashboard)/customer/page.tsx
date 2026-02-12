@@ -32,10 +32,12 @@ export default async function DashboardPage() {
       await Promise.all([
         supabaseAdmin
           .from("profiles")
-          .select("id, email, role, created_at")
+          .select("id, email, full_name, role, created_at")
           .neq("role", "admin")
           .neq("role", "superadmin"),
-        supabaseAdmin.from("invoices").select("*"),
+        supabaseAdmin
+          .from("invoices")
+          .select("*, profiles!client_id(full_name, email)"),
         supabaseAdmin.from("tickets").select("*"),
         supabaseAdmin
           .from("projects")

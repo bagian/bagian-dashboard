@@ -44,7 +44,7 @@ interface InvoiceData {
   payment_info?: PaymentInfo;
 }
 
-export default function InvoiceCetak({data}: {data: InvoiceData}) {
+export default function InvoiceCetak({ data }: { data: InvoiceData }) {
   const handlePrint = () => {
     window.print();
   };
@@ -285,7 +285,7 @@ export default function InvoiceCetak({data}: {data: InvoiceData}) {
                     <tr
                       key={item.id || index}
                       className="border-b border-zinc-100"
-                      style={{pageBreakInside: "avoid"}}
+                      style={{ pageBreakInside: "avoid" }}
                     >
                       <td className="py-4 font-medium text-zinc-700 text-xs">
                         <div className="flex flex-col">
@@ -338,7 +338,7 @@ export default function InvoiceCetak({data}: {data: InvoiceData}) {
         {/* Summary Section */}
         <div
           className="flex flex-col sm:flex-row justify-between gap-6 mb-6"
-          style={{pageBreakInside: "avoid"}}
+          style={{ pageBreakInside: "avoid" }}
         >
           {data.notes ? (
             <div className="flex-1 bg-zinc-50 p-4 rounded-xl border border-zinc-100 print:bg-zinc-50">
@@ -403,7 +403,7 @@ export default function InvoiceCetak({data}: {data: InvoiceData}) {
         {/* Payment Information */}
         <div
           className="bg-zinc-50 p-5 rounded-2xl border border-zinc-100 mb-6 print:bg-zinc-50 payment-info-block"
-          style={{pageBreakInside: "avoid", breakInside: "avoid"}}
+          style={{ pageBreakInside: "avoid", breakInside: "avoid" }}
         >
           <p className="text-[9px] font-black text-zinc-400 uppercase tracking-widest mb-3">
             Payment Information
@@ -431,7 +431,7 @@ export default function InvoiceCetak({data}: {data: InvoiceData}) {
         {/* Footer */}
         <div
           className="pt-6 border-t border-zinc-100 text-center sm:text-left"
-          style={{pageBreakInside: "avoid"}}
+          style={{ pageBreakInside: "avoid" }}
         >
           <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-[0.2em] leading-relaxed">
             Authorized by <span className="text-zinc-900">Bagian Corps</span>

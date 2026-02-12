@@ -1,7 +1,6 @@
-import {createSupabaseServer} from "@/lib/supabase/server";
-import {supabaseAdmin} from "@/lib/supabase/admin";
-// KUNCI PERUBAHAN 1: Hapus import ProjectActions, ganti dengan GlobalActions
-import {GlobalActions} from "@/components/dashboard/GlobalActions";
+import { createSupabaseServer } from "@/lib/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import { GlobalActions } from "@/components/dashboard/GlobalActions"; // ✅ Menggunakan GlobalActions
 import {
   Table,
   TableBody,
@@ -10,13 +9,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {Badge} from "@/components/ui/badge";
-import {Button} from "@/components/ui/button";
-import {FolderKanban, MoreVertical} from "lucide-react";
-import {cn} from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { FolderKanban } from "lucide-react";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
-import {CreateProjectModal} from "@/components/dashboard/CreateProjectModal";
+import { CreateProjectModal } from "@/components/dashboard/CreateProjectModal"; // ✅ Import Modal
 
 export const revalidate = 0;
 export const dynamic = "force-dynamic";
@@ -41,7 +39,7 @@ interface Profile {
 export default async function ProjectsPage() {
   const supabase = await createSupabaseServer();
   const {
-    data: {user},
+    data: { user },
   } = await supabase.auth.getUser();
 
   if (!user) {
@@ -50,7 +48,7 @@ export default async function ProjectsPage() {
     );
   }
 
-  // 1. Ambil data
+  // 1. Ambil data Profiles dan Projects secara paralel
   let allProfiles: Profile[] = [];
   let allProjects: Project[] = [];
 
@@ -60,16 +58,16 @@ export default async function ProjectsPage() {
       supabaseAdmin
         .from("projects")
         .select("*")
-        .order("created_at", {ascending: false}),
+        .order("created_at", { ascending: false }),
     ]);
 
     allProfiles = profilesRes.data || [];
     allProjects = projectsRes.data || [];
   } catch (error) {
-    console.error("Tabel projects mungkin belum dibuat:", error);
+    console.error("Gagal mengambil data:", error);
   }
 
-  // 2. Gabungkan data
+  // 2. Gabungkan data (Mapping manual karena fetch terpisah)
   const displayData = allProjects.map((proj) => {
     const client = allProfiles.find((p) => p.id === proj.client_id);
     return {
@@ -92,7 +90,7 @@ export default async function ProjectsPage() {
           </p>
         </div>
 
-        {/* PANGGIL MODAL DI SINI */}
+        {/* ✅ MODAL CREATE PROJECT */}
         <CreateProjectModal clients={allProfiles} />
       </header>
 
@@ -178,7 +176,7 @@ export default async function ProjectsPage() {
                         : "-"}
                     </TableCell>
 
-                    {/* KUNCI PERUBAHAN 2: Pemanggilan GlobalActions */}
+                    {/* ✅ AKSI: Menggunakan GlobalActions */}
                     <TableCell className="pr-8 text-right">
                       <GlobalActions
                         id={proj.id}

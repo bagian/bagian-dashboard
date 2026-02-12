@@ -1,19 +1,9 @@
-import {redirect} from "next/navigation";
-import {createSupabaseServer} from "@/lib/supabase/server";
+import { redirect } from "next/navigation";
 
-export default async function PrivateLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const supabase = await createSupabaseServer();
-  const {data, error} = await supabase.auth.getUser();
-  if (error || !data?.user) {
-    redirect("/login");
-  }
-  return (
-    <div className="min-h-screen">
-      <main>{children}</main>
-    </div>
-  );
+/**
+ * Halaman root segment (dashboard). Auth sudah di-handle oleh layout.
+ * Redirect ke dashboard customer sebagai default.
+ */
+export default async function DashboardRootPage() {
+  redirect("/customer");
 }
