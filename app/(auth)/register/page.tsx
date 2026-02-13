@@ -31,9 +31,27 @@ export default function RegisterPage() {
       return;
     }
 
-    if (password.length < 6) {
+    if (password.length < 8) {
       toast.error("Password terlalu pendek!", {
-        description: "Password minimal harus 6 karakter.",
+        description: "Password minimal harus 8 karakter.",
+      });
+      return;
+    }
+
+    const strongPasswordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#^()_\-+=]).{8,}$/;
+
+    if (!strongPasswordRegex.test(password)) {
+      toast.error("Password belum cukup kuat!", {
+        description:
+          "Gunakan minimal 8 karakter dengan kombinasi huruf besar, huruf kecil, angka, dan simbol.",
+      });
+      return;
+    }
+
+    if (password.toLowerCase().includes(email.toLowerCase())) {
+      toast.error("Password tidak boleh mengandung email!", {
+        description: "Gunakan password yang berbeda dari email Anda.",
       });
       return;
     }
