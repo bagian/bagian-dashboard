@@ -32,7 +32,7 @@ import {
   SheetDescription,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // 1. Tambahkan full_name ke dalam Interface props
 interface TopbarProps {
@@ -48,6 +48,28 @@ export function Topbar({ user, profile }: TopbarProps) {
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [invoiceTitle, setInvoiceTitle] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchInvoice = async () => {
+      const invoiceId = pathSegments[2];
+      // contoh: customer / invoices / {id} / print
+
+      if (pathSegments[1] === "invoices" && invoiceId) {
+        const { data, error } = await supabase
+          .from("invoices")
+          .select("invoice_number") // atau name / title
+          .eq("id", invoiceId)
+          .single();
+
+        if (!error && data) {
+          setInvoiceTitle(data.invoice_number);
+        }
+      }
+    };
+
+    fetchInvoice();
+  }, [pathname]);
 
   return (
     <header className="h-16 border-b border-zinc-200 bg-white/80 backdrop-blur-md sticky top-0 z-30 flex items-center justify-between px-4 md:px-8">
@@ -93,7 +115,11 @@ export function Topbar({ user, profile }: TopbarProps) {
                     <BreadcrumbSeparator className="text-zinc-300" />
                     <BreadcrumbItem>
                       <BreadcrumbPage className="capitalize text-[11px] font-bold tracking-widest text-zinc-900">
-                        {segment}
+                        {pathSegments[1] === "invoices" &&
+                        pathSegments[2] === segment &&
+                        invoiceTitle
+                          ? invoiceTitle
+                          : segment}
                       </BreadcrumbPage>
                     </BreadcrumbItem>
                   </div>

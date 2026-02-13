@@ -108,7 +108,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
       (holiday) =>
         holiday.date.getDate() === date.getDate() &&
         holiday.date.getMonth() === date.getMonth() &&
-        holiday.date.getFullYear() === date.getFullYear(),
+        holiday.date.getFullYear() === date.getFullYear()
     );
   };
 
@@ -118,7 +118,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
       (h) =>
         h.date.getDate() === date.getDate() &&
         h.date.getMonth() === date.getMonth() &&
-        h.date.getFullYear() === date.getFullYear(),
+        h.date.getFullYear() === date.getFullYear()
     );
     return holiday?.name || "";
   };
@@ -384,272 +384,272 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
               </div>
             </CardHeader>
 
-          <CardContent className="p-5">
-            {/* Custom Calendar Header */}
-            <div className="flex items-center justify-between mb-6">
-              <button
-                onClick={() =>
-                  setCurrentMonth(
-                    new Date(
-                      currentMonth.getFullYear(),
-                      currentMonth.getMonth() - 1,
-                    ),
-                  )
-                }
-                className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
-              >
-                <ChevronLeft className="h-4 w-4 text-zinc-600" />
-              </button>
-              <h3 className="text-base font-bold text-zinc-900">
-                {currentMonth.toLocaleString("en-US", {
-                  month: "long",
-                  year: "numeric",
-                })}
-              </h3>
-              <button
-                onClick={() =>
-                  setCurrentMonth(
-                    new Date(
-                      currentMonth.getFullYear(),
-                      currentMonth.getMonth() + 1,
-                    ),
-                  )
-                }
-                className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
-              >
-                <ChevronRight className="h-4 w-4 text-zinc-600" />
-              </button>
-            </div>
-
-            {/* Calendar Grid */}
-            <div className="space-y-2">
-              {/* Day Headers */}
-              <div className="grid grid-cols-7 gap-1 mb-2">
-                {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-                  <div
-                    key={day}
-                    className="text-center text-xs font-medium text-zinc-400 py-1"
-                  >
-                    {day}
-                  </div>
-                ))}
+            <CardContent className="p-5">
+              {/* Custom Calendar Header */}
+              <div className="flex items-center justify-between mb-6">
+                <button
+                  onClick={() =>
+                    setCurrentMonth(
+                      new Date(
+                        currentMonth.getFullYear(),
+                        currentMonth.getMonth() - 1
+                      )
+                    )
+                  }
+                  className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
+                >
+                  <ChevronLeft className="h-4 w-4 text-zinc-600" />
+                </button>
+                <h3 className="text-base font-bold text-zinc-900">
+                  {currentMonth.toLocaleString("en-US", {
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </h3>
+                <button
+                  onClick={() =>
+                    setCurrentMonth(
+                      new Date(
+                        currentMonth.getFullYear(),
+                        currentMonth.getMonth() + 1
+                      )
+                    )
+                  }
+                  className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
+                >
+                  <ChevronRight className="h-4 w-4 text-zinc-600" />
+                </button>
               </div>
 
-              {/* Calendar Days */}
-              {(() => {
-                const year = currentMonth.getFullYear();
-                const month = currentMonth.getMonth();
-                const firstDay = new Date(year, month, 1).getDay();
-                const daysInMonth = new Date(year, month + 1, 0).getDate();
-                const today = new Date();
+              {/* Calendar Grid */}
+              <div className="space-y-2">
+                {/* Day Headers */}
+                <div className="grid grid-cols-7 gap-1 mb-2">
+                  {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+                    <div
+                      key={day}
+                      className="text-center text-xs font-medium text-zinc-400 py-1"
+                    >
+                      {day}
+                    </div>
+                  ))}
+                </div>
 
-                const days = [];
-                const weeks = [];
+                {/* Calendar Days */}
+                {(() => {
+                  const year = currentMonth.getFullYear();
+                  const month = currentMonth.getMonth();
+                  const firstDay = new Date(year, month, 1).getDay();
+                  const daysInMonth = new Date(year, month + 1, 0).getDate();
+                  const today = new Date();
 
-                // Empty cells for days before month starts
-                for (let i = 0; i < firstDay; i++) {
-                  days.push(<div key={`empty-${i}`} className="h-9"></div>);
-                }
+                  const days = [];
+                  const weeks = [];
 
-                // Days of the month
-                for (let day = 1; day <= daysInMonth; day++) {
-                  const date = new Date(year, month, day);
-                  const isToday =
-                    today.getDate() === day &&
-                    today.getMonth() === month &&
-                    today.getFullYear() === year;
-                  const isSunday = date.getDay() === 0;
-                  const isNationalHoliday = isHoliday(date);
-                  const holidayName = getHolidayName(date);
-
-                  const invoiceAtDate = stats.recentInvoices.find(
-                    (inv) =>
-                      inv.due_date &&
-                      new Date(inv.due_date).toDateString() ===
-                        date.toDateString() &&
-                      inv.status === "unpaid",
-                  );
-
-                  let dayClass =
-                    "h-9 w-9 flex items-center justify-center text-sm font-medium rounded-full transition-colors relative ";
-
-                  if (isToday) {
-                    dayClass += "bg-emerald-500 text-white font-bold ";
-                  } else if (isSunday || isNationalHoliday) {
-                    dayClass += "text-red-500 hover:bg-red-50 ";
-                  } else {
-                    dayClass += "text-zinc-700 hover:bg-zinc-100 ";
+                  // Empty cells for days before month starts
+                  for (let i = 0; i < firstDay; i++) {
+                    days.push(<div key={`empty-${i}`} className="h-9"></div>);
                   }
 
-                  const element = (
-                    <div key={day} className="relative">
-                      {invoiceAtDate || isNationalHoliday ? (
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <button className={dayClass + " cursor-pointer"}>
-                              {day}
-                              {invoiceAtDate && (
-                                <span
-                                  className={`absolute bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full ${
-                                    isToday ? "bg-white" : "bg-blue-500"
-                                  }`}
-                                ></span>
-                              )}
-                            </button>
-                          </PopoverTrigger>
-                          <PopoverContent
-                            className="w-72 p-0 rounded-xl shadow-xl border-zinc-200 z-50 overflow-hidden right-2 relative"
-                            align="center"
-                          >
-                            {isNationalHoliday ? (
-                              <>
-                                <div className="bg-gradient-to-br from-red-500 to-red-600 p-4 text-white">
-                                  <p className="text-[10px] uppercase tracking-widest font-bold opacity-90 mb-1">
-                                    Hari Libur Nasional
-                                  </p>
-                                  <p className="text-base font-bold">
-                                    {date.toLocaleDateString("id-ID", {
-                                      day: "numeric",
-                                      month: "long",
-                                      year: "numeric",
-                                    })}
-                                  </p>
-                                </div>
-                                <div className="p-4">
-                                  <p className="text-sm text-zinc-900">
-                                    {holidayName}
-                                  </p>
-                                  {invoiceAtDate && (
-                                    <>
-                                      <div className="mt-4 pt-4 border-t border-zinc-100">
-                                        <p className="text-xs font-semibold text-zinc-500 mb-2">
-                                          Invoice Jatuh Tempo
-                                        </p>
-                                        <div className="flex items-center justify-between">
-                                          <div>
-                                            <p className="text-sm font-bold text-zinc-900">
-                                              {invoiceAtDate.profiles
-                                                ?.full_name || "Klien"}
-                                            </p>
-                                            <p className="text-xs text-zinc-500">
-                                              {invoiceAtDate.invoice_number}
-                                            </p>
+                  // Days of the month
+                  for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month, day);
+                    const isToday =
+                      today.getDate() === day &&
+                      today.getMonth() === month &&
+                      today.getFullYear() === year;
+                    const isSunday = date.getDay() === 0;
+                    const isNationalHoliday = isHoliday(date);
+                    const holidayName = getHolidayName(date);
+
+                    const invoiceAtDate = stats.recentInvoices.find(
+                      (inv) =>
+                        inv.due_date &&
+                        new Date(inv.due_date).toDateString() ===
+                          date.toDateString() &&
+                        inv.status === "unpaid"
+                    );
+
+                    let dayClass =
+                      "h-9 w-9 flex items-center justify-center text-sm font-medium rounded-full transition-colors relative ";
+
+                    if (isToday) {
+                      dayClass += "bg-emerald-500 text-white font-bold ";
+                    } else if (isSunday || isNationalHoliday) {
+                      dayClass += "text-red-500 hover:bg-red-50 ";
+                    } else {
+                      dayClass += "text-zinc-700 hover:bg-zinc-100 ";
+                    }
+
+                    const element = (
+                      <div key={day} className="relative">
+                        {invoiceAtDate || isNationalHoliday ? (
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <button className={dayClass + " cursor-pointer"}>
+                                {day}
+                                {invoiceAtDate && (
+                                  <span
+                                    className={`absolute bottom-1 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full ${
+                                      isToday ? "bg-white" : "bg-blue-500"
+                                    }`}
+                                  ></span>
+                                )}
+                              </button>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-72 p-0 rounded-xl shadow-xl border-zinc-200 z-50 overflow-hidden right-2 relative"
+                              align="center"
+                            >
+                              {isNationalHoliday ? (
+                                <>
+                                  <div className="bg-gradient-to-br from-red-500 to-red-600 p-4 text-white">
+                                    <p className="text-[10px] uppercase tracking-widest font-bold opacity-90 mb-1">
+                                      Hari Libur Nasional
+                                    </p>
+                                    <p className="text-base font-bold">
+                                      {date.toLocaleDateString("id-ID", {
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric",
+                                      })}
+                                    </p>
+                                  </div>
+                                  <div className="p-4">
+                                    <p className="text-sm text-zinc-900">
+                                      {holidayName}
+                                    </p>
+                                    {invoiceAtDate && (
+                                      <>
+                                        <div className="mt-4 pt-4 border-t border-zinc-100">
+                                          <p className="text-xs font-semibold text-zinc-500 mb-2">
+                                            Invoice Jatuh Tempo
+                                          </p>
+                                          <div className="flex items-center justify-between">
+                                            <div>
+                                              <p className="text-sm font-bold text-zinc-900">
+                                                {invoiceAtDate.profiles
+                                                  ?.full_name || "Klien"}
+                                              </p>
+                                              <p className="text-xs text-zinc-500">
+                                                {invoiceAtDate.invoice_number}
+                                              </p>
+                                            </div>
                                           </div>
+                                          <p className="text-base font-bold text-zinc-900 mt-2">
+                                            Rp{" "}
+                                            {new Intl.NumberFormat(
+                                              "id-ID"
+                                            ).format(invoiceAtDate.amount)}
+                                          </p>
                                         </div>
-                                        <p className="text-base font-bold text-zinc-900 mt-2">
-                                          Rp{" "}
-                                          {new Intl.NumberFormat(
-                                            "id-ID",
-                                          ).format(invoiceAtDate.amount)}
+                                      </>
+                                    )}
+                                  </div>
+                                </>
+                              ) : invoiceAtDate ? (
+                                <>
+                                  <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 text-white">
+                                    <p className="text-[10px] uppercase tracking-widest font-bold opacity-90 mb-1">
+                                      Invoice Jatuh Tempo
+                                    </p>
+                                    <p className="text-base font-bold">
+                                      {date.toLocaleDateString("id-ID", {
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric",
+                                      })}
+                                    </p>
+                                  </div>
+                                  <div className="p-4 space-y-3">
+                                    <div className="flex items-center gap-3">
+                                      <div className="h-10 w-10 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-700 font-bold text-sm">
+                                        {(
+                                          invoiceAtDate.profiles?.full_name ||
+                                          "Klien"
+                                        )
+                                          .charAt(0)
+                                          .toUpperCase()}
+                                      </div>
+                                      <div>
+                                        <p className="text-sm font-bold text-zinc-900">
+                                          {invoiceAtDate.profiles?.full_name ||
+                                            "Klien"}
+                                        </p>
+                                        <p className="text-xs text-zinc-500">
+                                          {invoiceAtDate.invoice_number}
                                         </p>
                                       </div>
-                                    </>
-                                  )}
-                                </div>
-                              </>
-                            ) : invoiceAtDate ? (
-                              <>
-                                <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-4 text-white">
-                                  <p className="text-[10px] uppercase tracking-widest font-bold opacity-90 mb-1">
-                                    Invoice Jatuh Tempo
-                                  </p>
-                                  <p className="text-base font-bold">
-                                    {date.toLocaleDateString("id-ID", {
-                                      day: "numeric",
-                                      month: "long",
-                                      year: "numeric",
-                                    })}
-                                  </p>
-                                </div>
-                                <div className="p-4 space-y-3">
-                                  <div className="flex items-center gap-3">
-                                    <div className="h-10 w-10 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-700 font-bold text-sm">
-                                      {(
-                                        invoiceAtDate.profiles?.full_name ||
-                                        "Klien"
-                                      )
-                                        .charAt(0)
-                                        .toUpperCase()}
                                     </div>
-                                    <div>
-                                      <p className="text-sm font-bold text-zinc-900">
-                                        {invoiceAtDate.profiles?.full_name ||
-                                          "Klien"}
+                                    <div className="pt-3 border-t border-zinc-100">
+                                      <p className="text-[10px] uppercase tracking-wider text-zinc-400 mb-1">
+                                        Jumlah Tagihan
                                       </p>
-                                      <p className="text-xs text-zinc-500">
-                                        {invoiceAtDate.invoice_number}
+                                      <p className="text-xl font-bold text-zinc-900">
+                                        Rp{" "}
+                                        {new Intl.NumberFormat("id-ID").format(
+                                          invoiceAtDate.amount
+                                        )}
                                       </p>
                                     </div>
+                                    <Badge className="bg-orange-100 text-orange-700 text-[10px] font-bold uppercase border-none px-3 py-1 w-full justify-center">
+                                      Belum Dibayar
+                                    </Badge>
                                   </div>
-                                  <div className="pt-3 border-t border-zinc-100">
-                                    <p className="text-[10px] uppercase tracking-wider text-zinc-400 mb-1">
-                                      Jumlah Tagihan
-                                    </p>
-                                    <p className="text-xl font-bold text-zinc-900">
-                                      Rp{" "}
-                                      {new Intl.NumberFormat("id-ID").format(
-                                        invoiceAtDate.amount,
-                                      )}
-                                    </p>
-                                  </div>
-                                  <Badge className="bg-orange-100 text-orange-700 text-[10px] font-bold uppercase border-none px-3 py-1 w-full justify-center">
-                                    Belum Dibayar
-                                  </Badge>
-                                </div>
-                              </>
-                            ) : null}
-                          </PopoverContent>
-                        </Popover>
-                      ) : (
-                        <button className={dayClass}>{day}</button>
-                      )}
-                    </div>
-                  );
+                                </>
+                              ) : null}
+                            </PopoverContent>
+                          </Popover>
+                        ) : (
+                          <button className={dayClass}>{day}</button>
+                        )}
+                      </div>
+                    );
 
-                  days.push(element);
-                }
+                    days.push(element);
+                  }
 
-                // Create weeks
-                for (let i = 0; i < days.length; i += 7) {
-                  weeks.push(
-                    <div key={`week-${i}`} className="grid grid-cols-7 gap-1">
-                      {days.slice(i, i + 7)}
-                    </div>,
-                  );
-                }
+                  // Create weeks
+                  for (let i = 0; i < days.length; i += 7) {
+                    weeks.push(
+                      <div key={`week-${i}`} className="grid grid-cols-7 gap-1">
+                        {days.slice(i, i + 7)}
+                      </div>
+                    );
+                  }
 
-                return weeks;
-              })()}
-            </div>
+                  return weeks;
+                })()}
+              </div>
 
-            {/* Legend */}
-            <div className="mt-6 pt-5 border-t border-zinc-100">
-              <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-zinc-400 mb-3">
-                Legenda
-              </p>
-              <div className="flex md:flex-row flex-col md:items-center gap-4 md:justify-center">
-                <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full bg-emerald-500"></span>
-                  <span className="text-xs font-medium text-zinc-600">
-                    Hari Ini
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full bg-red-500"></span>
-                  <span className="text-xs font-medium text-zinc-600">
-                    Hari Libur
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="h-3 w-3 rounded-full bg-blue-500"></span>
-                  <span className="text-xs font-medium text-zinc-600">
-                    Tagihan Jatuh Tempo
-                  </span>
+              {/* Legend */}
+              <div className="mt-6 pt-5 border-t border-zinc-100">
+                <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-zinc-400 mb-3">
+                  Legenda
+                </p>
+                <div className="flex md:flex-row flex-col md:items-center gap-4 md:justify-center">
+                  <div className="flex items-center gap-2">
+                    <span className="h-3 w-3 rounded-full bg-emerald-500"></span>
+                    <span className="text-xs font-medium text-zinc-600">
+                      Hari Ini
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="h-3 w-3 rounded-full bg-red-500"></span>
+                    <span className="text-xs font-medium text-zinc-600">
+                      Hari Libur
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="h-3 w-3 rounded-full bg-blue-500"></span>
+                    <span className="text-xs font-medium text-zinc-600">
+                      Tagihan Jatuh Tempo
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
 
           <Card className="border-0 shadow-xl rounded-2xl lg:col-span-2 overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white">
             <CardHeader className="bg-gradient-to-r from-zinc-50 to-zinc-50/30 border-b border-zinc-100/50 px-6 pt-6 pb-5">
@@ -670,74 +670,76 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                 </div>
               </div>
             </CardHeader>
-          <CardContent className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 pb-2">
-                  <Target className="h-4 w-4 text-zinc-900" />
-                  <p className="text-xs font-bold text-zinc-900 uppercase tracking-wider">
-                    Proyek Aktif
-                  </p>
-                </div>
-                {stats.upcomingProjects?.slice(0, 3).map((pj) => (
-                  <div
-                    key={pj.id}
-                    className="p-4 rounded-xl bg-gradient-to-br from-zinc-50 to-white border border-zinc-100 hover:shadow-md transition-all group"
-                  >
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <p className="text-sm font-bold text-zinc-900 mb-1 group-hover:text-zinc-700 transition-colors">
-                          {pj.name}
-                        </p>
-                        <p className="text-[10px] text-zinc-500 font-medium flex items-center gap-1.5">
-                          <Clock className="h-3 w-3" />
-                          Deadline:{" "}
-                          {new Date(pj.deadline).toLocaleDateString("id-ID")}
-                        </p>
-                      </div>
-                      <div className="h-8 w-8 rounded-lg bg-zinc-100 flex items-center justify-center group-hover:bg-zinc-900 transition-colors">
-                        <Briefcase className="h-4 w-4 text-zinc-500 group-hover:text-white transition-colors" />
-                      </div>
-                    </div>
+            <CardContent className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 pb-2">
+                    <Target className="h-4 w-4 text-zinc-900" />
+                    <p className="text-xs font-bold text-zinc-900 uppercase tracking-wider">
+                      Proyek Aktif
+                    </p>
                   </div>
-                ))}
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 pb-2">
-                  <CreditCard className="h-4 w-4 text-blue-600" />
-                  <p className="text-xs font-bold text-zinc-900 uppercase tracking-wider">
-                    Menunggu Pembayaran
-                  </p>
-                </div>
-                {stats.recentInvoices
-                  .filter((i) => i.status === "unpaid")
-                  .slice(0, 3)
-                  .map((inv) => (
+                  {stats.upcomingProjects?.slice(0, 3).map((pj) => (
                     <div
-                      key={inv.id}
-                      className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-white border border-blue-100 hover:shadow-md transition-all group"
+                      key={pj.id}
+                      className="p-4 rounded-xl bg-gradient-to-br from-zinc-50 to-white border border-zinc-100 hover:shadow-md transition-all group"
                     >
-                      <div className="flex items-start justify-between">
+                      <div className="flex justify-between items-start">
                         <div className="flex-1">
-                          <p className="text-sm font-bold text-zinc-900 mb-1">
-                            {inv.profiles?.full_name || "Klien"}
+                          <p className="text-sm font-bold text-zinc-900 mb-1 group-hover:text-zinc-700 transition-colors">
+                            {pj.name}
                           </p>
-                          <p className="text-xs text-blue-600 font-bold flex items-center gap-1.5">
-                            <DollarSign className="h-3 w-3" />
-                            Rp{" "}
-                            {new Intl.NumberFormat("id-ID").format(inv.amount)}
+                          <p className="text-[10px] text-zinc-500 font-medium flex items-center gap-1.5">
+                            <Clock className="h-3 w-3" />
+                            Deadline:{" "}
+                            {new Date(pj.deadline).toLocaleDateString("id-ID")}
                           </p>
                         </div>
-                        <Badge className="bg-orange-100 text-orange-700 text-[9px] font-bold uppercase px-2 py-1">
-                          Unpaid
-                        </Badge>
+                        <div className="h-8 w-8 rounded-lg bg-zinc-100 flex items-center justify-center group-hover:bg-zinc-900 transition-colors">
+                          <Briefcase className="h-4 w-4 text-zinc-500 group-hover:text-white transition-colors" />
+                        </div>
                       </div>
                     </div>
                   ))}
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 pb-2">
+                    <CreditCard className="h-4 w-4 text-blue-600" />
+                    <p className="text-xs font-bold text-zinc-900 uppercase tracking-wider">
+                      Menunggu Pembayaran
+                    </p>
+                  </div>
+                  {stats.recentInvoices
+                    .filter((i) => i.status === "unpaid")
+                    .slice(0, 3)
+                    .map((inv) => (
+                      <div
+                        key={inv.id}
+                        className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-white border border-blue-100 hover:shadow-md transition-all group"
+                      >
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <p className="text-sm font-bold text-zinc-900 mb-1">
+                              {inv.profiles?.full_name || "Klien"}
+                            </p>
+                            <p className="text-xs text-blue-600 font-bold flex items-center gap-1.5">
+                              <DollarSign className="h-3 w-3" />
+                              Rp{" "}
+                              {new Intl.NumberFormat("id-ID").format(
+                                inv.amount
+                              )}
+                            </p>
+                          </div>
+                          <Badge className="bg-orange-100 text-orange-700 text-[9px] font-bold uppercase px-2 py-1">
+                            Unpaid
+                          </Badge>
+                        </div>
+                      </div>
+                    ))}
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
         </section>
 
         {/* Klien Terbaru & Invoice Terbaru - gaya CustomerDashboard */}
@@ -785,7 +787,9 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                     className="flex items-center gap-4 p-5 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-transparent transition-all duration-200 group cursor-pointer"
                   >
                     <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center shadow-sm border border-blue-200/50 font-bold text-blue-700 text-lg flex-shrink-0">
-                      {(client.full_name || client.email).charAt(0).toUpperCase()}
+                      {(client.full_name || client.email)
+                        .charAt(0)
+                        .toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold text-zinc-900 group-hover:text-blue-700 transition-colors truncate">
@@ -868,19 +872,25 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                           <p className="text-xs font-medium text-zinc-600 truncate flex items-center gap-1.5">
                             <CalendarIcon className="h-3 w-3 text-zinc-400" />
                             {invoice.due_date
-                              ? `Tempo: ${new Date(invoice.due_date).toLocaleDateString("id-ID", {
+                              ? `Tempo: ${new Date(
+                                  invoice.due_date
+                                ).toLocaleDateString("id-ID", {
                                   day: "numeric",
                                   month: "short",
                                   year: "numeric",
                                 })}`
-                              : `Rp ${new Intl.NumberFormat("id-ID").format(invoice.amount)}`}
+                              : `Rp ${new Intl.NumberFormat("id-ID").format(
+                                  invoice.amount
+                                )}`}
                           </p>
                         </div>
                       </div>
                       <div className="text-right space-y-1.5 flex-shrink-0">
                         <p className="text-sm font-bold text-zinc-900 tabular-nums">
                           Rp{" "}
-                          {new Intl.NumberFormat("id-ID").format(invoice.amount)}
+                          {new Intl.NumberFormat("id-ID").format(
+                            invoice.amount
+                          )}
                         </p>
                         <Badge
                           className={`px-3 py-0.5 text-[9px] font-bold uppercase rounded-full border shadow-sm ${

@@ -146,8 +146,8 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
                       data.status?.toLowerCase() === "paid"
                         ? "bg-emerald-500"
                         : data.status?.toLowerCase() === "unpaid"
-                          ? "bg-orange-500"
-                          : "bg-red-500"
+                        ? "bg-orange-500"
+                        : "bg-red-500"
                     }`}
                   ></span>
                   {data.status || "UNPAID"}
@@ -219,13 +219,13 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
               <div className="flex items-start gap-2">
                 <MapPin className="h-3 w-3 text-zinc-400 mt-0.5 flex-shrink-0" />
                 <p className="text-[11px] text-zinc-600 font-medium">
-                  Sruabaya, East Java, Indonesia
+                  Surabaya, East Java, Indonesia
                 </p>
               </div>
               <div className="flex items-start gap-2">
                 <Mail className="h-3 w-3 text-zinc-400 mt-0.5 flex-shrink-0" />
                 <p className="text-[11px] text-zinc-600 font-medium lowercase">
-                  hello@bagian.web.id
+                  support@bagian.web.id
                 </p>
               </div>
               <div className="flex items-start gap-2">
@@ -309,7 +309,7 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
                           <span className="text-[10px] text-zinc-400 mt-1 sm:hidden">
                             {item.quantity} × Rp{" "}
                             {new Intl.NumberFormat("id-ID").format(
-                              Number(item.unit_price) || 0,
+                              Number(item.unit_price) || 0
                             )}
                           </span>
                         </div>
@@ -320,7 +320,7 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
                       <td className="py-4 text-right font-semibold text-zinc-600 text-xs hidden sm:table-cell">
                         Rp{" "}
                         {new Intl.NumberFormat("id-ID").format(
-                          Number(item.unit_price) || 0,
+                          Number(item.unit_price) || 0
                         )}
                       </td>
                       <td className="py-4 text-right font-black text-zinc-900 text-xs">
@@ -342,7 +342,7 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
                   <td className="py-4 text-right font-black text-zinc-900 text-xs">
                     Rp{" "}
                     {new Intl.NumberFormat("id-ID").format(
-                      Number(data.amount) || 0,
+                      Number(data.amount) || 0
                     )}
                   </td>
                 </tr>
@@ -452,15 +452,19 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
           <p className="text-[9px] text-zinc-400 font-bold uppercase tracking-[0.2em] leading-relaxed">
             Authorized by <span className="text-zinc-900">Bagian Corps</span>
           </p>
-          <p className="text-[9px] text-zinc-400 font-medium mt-1">
-            This is a computer-generated document. No signature required.
-          </p>
+          <div className="flex justify-between">
+            <p className="text-[9px] text-zinc-400 font-medium mt-1">
+              This is a computer-generated document. No signature required.
+            </p>
+            <p className="text-[9px] text-zinc-400 font-medium mt-1">
+              Thank you for choosing us.
+            </p>
+          </div>
         </div>
       </div>
 
       <style jsx global>{`
         @media print {
-          /* Memaksa semua elemen root agar tidak memiliki tinggi minimum */
           html,
           body,
           main,
@@ -476,7 +480,6 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
             print-color-adjust: exact !important;
           }
 
-          /* Sembunyikan navigasi dashboard / sidebar jika masih bocor */
           nav,
           aside,
           header,
@@ -504,7 +507,6 @@ export default function InvoiceCetak({ data }: { data: InvoiceData }) {
           }
         }
 
-        /* Kurangi margin keliling agar tidak mudah tumpah ke halaman 2 */
         @page {
           size: A4;
           margin: 10mm;
