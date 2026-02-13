@@ -79,48 +79,102 @@ interface AdminDashboardProps {
   };
 }
 
-// Database hari libur nasional Indonesia 2026
-const INDONESIAN_HOLIDAYS_2026 = [
-  { date: new Date(2026, 0, 1), name: "Tahun Baru 2026" },
-  { date: new Date(2026, 1, 17), name: "Isra Miraj Nabi Muhammad SAW" },
-  { date: new Date(2026, 1, 28), name: "Imlek 2577 Kongzili" },
-  { date: new Date(2026, 2, 3), name: "Hari Suci Nyepi Tahun Baru Saka 1948" },
-  { date: new Date(2026, 2, 31), name: "Hari Raya Idul Fitri 1447 H" },
-  { date: new Date(2026, 3, 1), name: "Hari Raya Idul Fitri 1447 H" },
-  { date: new Date(2026, 3, 3), name: "Wafat Isa Al Masih" },
+const RAW_HOLIDAYS_2026 = [
+  { date: new Date(2026, 0, 1), name: "Tahun Baru 2026 Masehi" },
+  { date: new Date(2026, 0, 16), name: "Isra Mikraj Nabi Muhammad SAW" },
+  { date: new Date(2026, 3, 3), name: "Wafat Yesus Kristus" },
+  { date: new Date(2026, 3, 5), name: "Kebangkitan Yesus Kristus (Paskah)" },
   { date: new Date(2026, 4, 1), name: "Hari Buruh Internasional" },
-  { date: new Date(2026, 4, 14), name: "Kenaikan Isa Al Masih" },
-  { date: new Date(2026, 4, 26), name: "Hari Raya Waisak 2570" },
+  { date: new Date(2026, 4, 31), name: "Hari Raya Waisak 2570 BE" },
   { date: new Date(2026, 5, 1), name: "Hari Lahir Pancasila" },
-  { date: new Date(2026, 5, 7), name: "Hari Raya Idul Adha 1447 H" },
-  { date: new Date(2026, 5, 27), name: "Tahun Baru Islam 1448 H" },
-  { date: new Date(2026, 7, 17), name: "Hari Kemerdekaan RI" },
-  { date: new Date(2026, 8, 5), name: "Maulid Nabi Muhammad SAW" },
-  { date: new Date(2026, 11, 25), name: "Hari Raya Natal" },
+  { date: new Date(2026, 5, 16), name: "Tahun Baru Islam 1448 Hijriah" },
+  { date: new Date(2026, 7, 17), name: "Hari Kemerdekaan Republik Indonesia" },
+  { date: new Date(2026, 7, 25), name: "Maulid Nabi Muhammad SAW" },
+
+  {
+    start: new Date(2026, 1, 16),
+    end: new Date(2026, 1, 17),
+    name: "Tahun Baru Imlek 2577 Kongzili",
+  },
+  {
+    start: new Date(2026, 2, 18),
+    end: new Date(2026, 2, 19),
+    name: "Hari Suci Nyepi (Tahun Baru Saka 1948)",
+  },
+  {
+    start: new Date(2026, 2, 20),
+    end: new Date(2026, 2, 24),
+    name: "Hari Raya Idul Fitri 1447 Hijriah",
+  },
+  {
+    start: new Date(2026, 4, 14),
+    end: new Date(2026, 4, 15),
+    name: "Kenaikan Yesus Kristus",
+  },
+  {
+    start: new Date(2026, 4, 27),
+    end: new Date(2026, 4, 28),
+    name: "Hari Raya Idul Adha 1447 Hijriah",
+  },
+  {
+    start: new Date(2026, 11, 24),
+    end: new Date(2026, 11, 25),
+    name: "Hari Raya Natal",
+  },
 ];
+
+function expandHolidays(
+  holidays: { date: Date; name: string; start?: Date; end?: Date }[],
+) {
+  const expanded: { date: Date; name: string }[] = [];
+
+  holidays.forEach((item) => {
+    if (item.date) {
+      expanded.push(item);
+    } else if (item.start && item.end) {
+      const startDate = new Date(item.start);
+      const endDate = new Date(item.end);
+      for (
+        let date = startDate;
+        date <= endDate;
+        date.setDate(date.getDate() + 1)
+      ) {
+        expanded.push({ date: new Date(date), name: item.name });
+      }
+    }
+  });
+  return expanded;
+}
 
 export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  // Helper untuk cek apakah tanggal adalah hari libur
   const isHoliday = (date: Date) => {
-    return INDONESIAN_HOLIDAYS_2026.some(
-      (holiday) =>
-        holiday.date.getDate() === date.getDate() &&
-        holiday.date.getMonth() === date.getMonth() &&
-        holiday.date.getFullYear() === date.getFullYear()
+    return (
+      expandHolidays(
+        RAW_HOLIDAYS_2026 as {
+          date: Date;
+          name: string;
+          start?: Date;
+          end?: Date;
+        }[],
+      ).some(
+        (holiday) => holiday.date.toDateString() === date.toDateString(),
+      ) || false
     );
   };
 
-  // Helper untuk get nama hari libur
   const getHolidayName = (date: Date) => {
-    const holiday = INDONESIAN_HOLIDAYS_2026.find(
-      (h) =>
-        h.date.getDate() === date.getDate() &&
-        h.date.getMonth() === date.getMonth() &&
-        h.date.getFullYear() === date.getFullYear()
+    return (
+      expandHolidays(
+        RAW_HOLIDAYS_2026 as {
+          date: Date;
+          name: string;
+          start?: Date;
+          end?: Date;
+        }[],
+      ).find((h) => h.date.toDateString() === date.toDateString())?.name || ""
     );
-    return holiday?.name || "";
   };
 
   const displayName =
@@ -129,7 +183,6 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Welcome Section dengan gradient accent - mirip CustomerDashboard */}
         <section className="space-y-4">
           <div className="flex items-center gap-2 pb-4 border-b border-zinc-100">
             <div className="h-1.5 w-1.5 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full animate-pulse shadow-sm shadow-emerald-500/50" />
@@ -186,7 +239,6 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
           </div>
         </section>
 
-        {/* Stats Grid - gaya CustomerDashboard */}
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="relative group">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
@@ -285,7 +337,6 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
           </div>
         </section>
 
-        {/* Revenue Card - gaya Ringkasan Keuangan CustomerDashboard */}
         <section>
           <Card className="border-0 shadow-xl rounded-2xl overflow-hidden bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white hover:shadow-2xl transition-all duration-300 relative">
             <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-emerald-500/20 to-blue-500/20 rounded-full blur-3xl animate-pulse" />
@@ -385,15 +436,14 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
             </CardHeader>
 
             <CardContent className="p-5">
-              {/* Custom Calendar Header */}
               <div className="flex items-center justify-between mb-6">
                 <button
                   onClick={() =>
                     setCurrentMonth(
                       new Date(
                         currentMonth.getFullYear(),
-                        currentMonth.getMonth() - 1
-                      )
+                        currentMonth.getMonth() - 1,
+                      ),
                     )
                   }
                   className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
@@ -411,8 +461,8 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                     setCurrentMonth(
                       new Date(
                         currentMonth.getFullYear(),
-                        currentMonth.getMonth() + 1
-                      )
+                        currentMonth.getMonth() + 1,
+                      ),
                     )
                   }
                   className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
@@ -435,7 +485,6 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                   ))}
                 </div>
 
-                {/* Calendar Days */}
                 {(() => {
                   const year = currentMonth.getFullYear();
                   const month = currentMonth.getMonth();
@@ -446,12 +495,10 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                   const days = [];
                   const weeks = [];
 
-                  // Empty cells for days before month starts
                   for (let i = 0; i < firstDay; i++) {
                     days.push(<div key={`empty-${i}`} className="h-9"></div>);
                   }
 
-                  // Days of the month
                   for (let day = 1; day <= daysInMonth; day++) {
                     const date = new Date(year, month, day);
                     const isToday =
@@ -467,17 +514,29 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                         inv.due_date &&
                         new Date(inv.due_date).toDateString() ===
                           date.toDateString() &&
-                        inv.status === "unpaid"
+                        inv.status === "unpaid",
                     );
 
                     let dayClass =
-                      "h-9 w-9 flex items-center justify-center text-sm font-medium rounded-full transition-colors relative ";
+                      "h-9 w-9 flex items-center justify-center text-sm font-medium rounded-lg transition-all relative "; // Ubah rounded-full jadi rounded-lg agar kotak lebih tegas
 
                     if (isToday) {
-                      dayClass += "bg-emerald-500 text-white font-bold ";
-                    } else if (isSunday || isNationalHoliday) {
+                      // Prioritas 1: Hari Ini (Hijau Solid)
+                      dayClass +=
+                        "bg-emerald-500 text-white font-bold shadow-md shadow-emerald-200 ";
+                    } else if (invoiceAtDate) {
+                      // Prioritas 2: Ada Invoice Jatuh Tempo (Biru Muda Background + Text Biru Tua)
+                      dayClass +=
+                        "bg-blue-100 text-blue-700 font-bold border border-blue-200 ";
+                    } else if (isNationalHoliday) {
+                      // Prioritas 3: Hari Libur (Merah Muda Background)
+                      dayClass +=
+                        "bg-red-50 text-red-600 font-semibold border border-red-100 ";
+                    } else if (isSunday) {
+                      // Prioritas 4: Hari Minggu (Text Merah)
                       dayClass += "text-red-500 hover:bg-red-50 ";
                     } else {
+                      // Prioritas 5: Hari Biasa
                       dayClass += "text-zinc-700 hover:bg-zinc-100 ";
                     }
 
@@ -539,7 +598,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                                           <p className="text-base font-bold text-zinc-900 mt-2">
                                             Rp{" "}
                                             {new Intl.NumberFormat(
-                                              "id-ID"
+                                              "id-ID",
                                             ).format(invoiceAtDate.amount)}
                                           </p>
                                         </div>
@@ -588,11 +647,11 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                                       <p className="text-xl font-bold text-zinc-900">
                                         Rp{" "}
                                         {new Intl.NumberFormat("id-ID").format(
-                                          invoiceAtDate.amount
+                                          invoiceAtDate.amount,
                                         )}
                                       </p>
                                     </div>
-                                    <Badge className="bg-orange-100 text-orange-700 text-[10px] font-bold uppercase border-none px-3 py-1 w-full justify-center">
+                                    <Badge className="bg-orange-100 text-orange-700 text-[10px] font-bold uppercase border-none px-3 py-2 w-full justify-center">
                                       Belum Dibayar
                                     </Badge>
                                   </div>
@@ -614,7 +673,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                     weeks.push(
                       <div key={`week-${i}`} className="grid grid-cols-7 gap-1">
                         {days.slice(i, i + 7)}
-                      </div>
+                      </div>,
                     );
                   }
 
@@ -726,7 +785,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                               <DollarSign className="h-3 w-3" />
                               Rp{" "}
                               {new Intl.NumberFormat("id-ID").format(
-                                inv.amount
+                                inv.amount,
                               )}
                             </p>
                           </div>
@@ -803,7 +862,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                             day: "numeric",
                             month: "short",
                             year: "numeric",
-                          }
+                          },
                         )}
                       </p>
                     </div>
@@ -873,14 +932,14 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                             <CalendarIcon className="h-3 w-3 text-zinc-400" />
                             {invoice.due_date
                               ? `Tempo: ${new Date(
-                                  invoice.due_date
+                                  invoice.due_date,
                                 ).toLocaleDateString("id-ID", {
                                   day: "numeric",
                                   month: "short",
                                   year: "numeric",
                                 })}`
                               : `Rp ${new Intl.NumberFormat("id-ID").format(
-                                  invoice.amount
+                                  invoice.amount,
                                 )}`}
                           </p>
                         </div>
@@ -889,7 +948,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                         <p className="text-sm font-bold text-zinc-900 tabular-nums">
                           Rp{" "}
                           {new Intl.NumberFormat("id-ID").format(
-                            invoice.amount
+                            invoice.amount,
                           )}
                         </p>
                         <Badge
