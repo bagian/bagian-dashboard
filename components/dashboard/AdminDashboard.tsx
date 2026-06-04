@@ -71,6 +71,8 @@ interface AdminDashboardProps {
     totalRevenue: number;
     paidInvoices: number;
     unpaidInvoices: number;
+    paidRevenue: number;
+    unpaidRevenue: number;
     openTickets: number;
     closedTickets: number;
     recentClients: RecentClient[];
@@ -184,15 +186,15 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8 space-y-8">
         <section className="space-y-4">
-          <div className="flex items-center gap-2 pb-4 border-b border-zinc-100">
+          <div className="flex items-center gap-2 pb-4 border-b border-zinc-100 dark:border-zinc-800">
             <div className="h-1.5 w-1.5 bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full animate-pulse shadow-sm shadow-emerald-500/50" />
-            <Badge className="px-3 py-1 border-zinc-200 text-[10px] font-bold uppercase tracking-wider text-zinc-600 bg-gradient-to-r from-zinc-50 to-blue-50/30 flex items-center gap-1.5 shadow-sm">
+            <Badge className="px-3 py-1 border-zinc-200 dark:border-zinc-800 text-[10px] font-bold uppercase tracking-wider text-zinc-600 dark:text-zinc-450 bg-gradient-to-r from-zinc-50 dark:from-zinc-900 to-blue-50/30 dark:to-blue-900/10 flex items-center gap-1.5 shadow-sm">
               <Sparkles className="h-3 w-3 text-blue-500" />
               Admin Console
             </Badge>
-            <div className="ml-auto flex items-center gap-1.5 px-3 py-1 bg-emerald-50 rounded-full border border-emerald-100">
-              <Activity className="h-3 w-3 text-emerald-600" />
-              <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wide">
+            <div className="ml-auto flex items-center gap-1.5 px-3 py-1 bg-emerald-50 dark:bg-emerald-950/30 rounded-full border border-emerald-100 dark:border-emerald-900/30">
+              <Activity className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-450 uppercase tracking-wide">
                 Active
               </span>
             </div>
@@ -202,16 +204,16 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
             <div className="space-y-3 max-w-2xl">
               <div className="flex items-center gap-3">
                 <div>
-                  <h1 className="text-2xl lg:text-3xl font-bold tracking-tight bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-900 bg-clip-text text-transparent">
+                  <h1 className="text-2xl lg:text-3xl font-bold tracking-tight bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-900 dark:from-white dark:via-zinc-200 dark:to-zinc-100 bg-clip-text text-transparent">
                     Welcome Back
                   </h1>
-                  <p className="text-base font-semibold text-zinc-700 mt-0.5">
+                  <p className="text-base font-semibold text-zinc-700 dark:text-zinc-300 mt-0.5">
                     {displayName}
                   </p>
                 </div>
               </div>
-              <p className="text-sm text-zinc-600 leading-relaxed flex md:items-center gap-2">
-                <Info className="h-4 w-4 text-zinc-400 mt-0.5 flex-shrink-0" />
+              <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed flex md:items-center gap-2">
+                <Info className="h-4 w-4 text-zinc-400 dark:text-zinc-500 mt-0.5 flex-shrink-0" />
                 <span>
                   Kelola klien, invoice, proyek, dan support tickets secara
                   efisien dari satu tempat terpusat.
@@ -221,7 +223,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
 
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
               <Link href="/customer/users" className="cursor-pointer">
-                <Button className="h-11 px-6 text-sm font-semibold shadow-lg hover:shadow-xl bg-gradient-to-r from-zinc-900 to-zinc-800 hover:from-zinc-800 hover:to-zinc-700 rounded-xl transition-all duration-200 cursor-pointer group w-full">
+                <Button className="h-11 px-6 text-sm font-semibold shadow-lg hover:shadow-xl bg-gradient-to-r from-zinc-900 to-zinc-800 hover:from-zinc-800 hover:to-zinc-700 dark:from-zinc-100 dark:to-zinc-200 dark:text-zinc-900 dark:hover:from-zinc-200 dark:hover:to-zinc-300 rounded-xl transition-all duration-200 cursor-pointer group w-full">
                   <Users className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
                   User Management
                 </Button>
@@ -229,7 +231,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
               <Link href="/admin/projects" className="cursor-pointer">
                 <Button
                   variant="outline"
-                  className="h-11 px-6 text-sm font-semibold shadow-lg hover:shadow-xl rounded-xl border-zinc-200 bg-white hover:bg-zinc-50 transition-all duration-200 cursor-pointer group w-full"
+                  className="h-11 px-6 text-sm font-semibold shadow-lg hover:shadow-xl rounded-xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:bg-zinc-50 dark:hover:bg-zinc-900 text-zinc-900 dark:text-zinc-100 transition-all duration-200 cursor-pointer group w-full"
                 >
                   <Briefcase className="mr-2 h-4 w-4 group-hover:scale-110 transition-transform" />
                   Projects
@@ -241,23 +243,23 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
 
         <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-100 to-blue-50 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
-            <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl border border-blue-100 shadow-lg hover:shadow-xl transition-all p-5">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-100 dark:from-blue-950/20 to-blue-50 dark:to-blue-900/10 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
+            <div className="relative bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm rounded-2xl border border-blue-100 dark:border-blue-900/30 shadow-lg hover:shadow-xl transition-all p-5">
               <div className="flex items-start justify-between mb-3">
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30">
                   <Users className="h-5 w-5 text-white" />
                 </div>
-                <Badge className="bg-blue-50 text-blue-700 border-blue-200 text-[9px] font-bold px-2 py-0.5">
+                <Badge className="bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-900/30 text-[9px] font-bold px-2 py-0.5">
                   Total
                 </Badge>
               </div>
-              <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">
+              <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-1">
                 Total Klien
               </p>
-              <p className="text-2xl font-black text-zinc-900 mb-1">
+              <p className="text-2xl font-black text-zinc-900 dark:text-white mb-1">
                 {stats.totalClients.toLocaleString()}
               </p>
-              <p className="text-xs text-zinc-600 font-medium flex items-center gap-1">
+              <p className="text-xs text-zinc-600 dark:text-zinc-300 font-medium flex items-center gap-1">
                 <FileText className="h-3 w-3" />
                 Klien terdaftar
               </p>
@@ -265,23 +267,23 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
           </div>
 
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-100 to-purple-50 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
-            <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl border border-purple-100 shadow-lg hover:shadow-xl transition-all p-5">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-100 dark:from-purple-950/20 to-purple-50 dark:to-purple-900/10 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
+            <div className="relative bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm rounded-2xl border border-purple-100 dark:border-purple-900/30 shadow-lg hover:shadow-xl transition-all p-5">
               <div className="flex items-start justify-between mb-3">
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center shadow-lg shadow-purple-500/30">
                   <Receipt className="h-5 w-5 text-white" />
                 </div>
-                <Badge className="bg-purple-50 text-purple-700 border-purple-200 text-[9px] font-bold px-2 py-0.5">
+                <Badge className="bg-purple-50 dark:bg-purple-950/50 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-900/30 text-[9px] font-bold px-2 py-0.5">
                   Total
                 </Badge>
               </div>
-              <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">
+              <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-1">
                 Total Invoice
               </p>
-              <p className="text-2xl font-black text-zinc-900 mb-1">
+              <p className="text-2xl font-black text-zinc-900 dark:text-white mb-1">
                 {stats.totalInvoices.toLocaleString()}
               </p>
-              <p className="text-xs text-zinc-600 font-medium flex items-center gap-1">
+              <p className="text-xs text-zinc-600 dark:text-zinc-300 font-medium flex items-center gap-1">
                 <Receipt className="h-3 w-3" />
                 Invoice keseluruhan
               </p>
@@ -289,23 +291,23 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
           </div>
 
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 to-emerald-50 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
-            <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl border border-emerald-100 shadow-lg hover:shadow-xl transition-all p-5">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-100 dark:from-emerald-950/20 to-emerald-50 dark:to-emerald-900/10 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
+            <div className="relative bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm rounded-2xl border border-emerald-100 dark:border-emerald-900/30 shadow-lg hover:shadow-xl transition-all p-5">
               <div className="flex items-start justify-between mb-3">
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/30">
                   <DollarSign className="h-5 w-5 text-white" />
                 </div>
-                <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 text-[9px] font-bold px-2 py-0.5 flex items-center gap-1">
+                <Badge className="bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-900/30 text-[9px] font-bold px-2 py-0.5 flex items-center gap-1">
                   <TrendingUp className="h-2.5 w-2.5" /> IDR
                 </Badge>
               </div>
-              <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">
+              <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-1">
                 Total Revenue
               </p>
-              <p className="text-2xl font-black text-emerald-700 mb-1">
+              <p className="text-2xl font-black text-emerald-700 dark:text-emerald-450 mb-1">
                 {(stats.totalRevenue / 1000000).toFixed(1)}Jt
               </p>
-              <p className="text-xs text-zinc-600 font-medium flex items-center gap-1">
+              <p className="text-xs text-zinc-600 dark:text-zinc-300 font-medium flex items-center gap-1">
                 <TrendingUp className="h-3 w-3 text-emerald-500" />
                 Pendapatan terakumulasi
               </p>
@@ -313,23 +315,23 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
           </div>
 
           <div className="relative group">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-100 to-orange-50 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
-            <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl border border-orange-100 shadow-lg hover:shadow-xl transition-all p-5">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-100 dark:from-orange-950/20 to-orange-50 dark:to-orange-900/10 rounded-2xl opacity-50 group-hover:opacity-100 transition-opacity" />
+            <div className="relative bg-white/80 dark:bg-zinc-950/80 backdrop-blur-sm rounded-2xl border border-orange-100 dark:border-orange-900/30 shadow-lg hover:shadow-xl transition-all p-5">
               <div className="flex items-start justify-between mb-3">
                 <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center shadow-lg shadow-orange-500/30">
                   <AlertCircle className="h-5 w-5 text-white" />
                 </div>
-                <Badge className="bg-orange-50 text-orange-700 border-orange-200 text-[9px] font-bold px-2 py-0.5">
+                <Badge className="bg-orange-50 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-900/30 text-[9px] font-bold px-2 py-0.5">
                   Active
                 </Badge>
               </div>
-              <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1">
+              <p className="text-[10px] font-bold text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mb-1">
                 Open Tickets
               </p>
-              <p className="text-2xl font-black text-orange-700 mb-1">
+              <p className="text-2xl font-black text-orange-700 dark:text-orange-450 mb-1">
                 {stats.openTickets.toLocaleString()}
               </p>
-              <p className="text-xs text-zinc-600 font-medium flex items-center gap-1">
+              <p className="text-xs text-zinc-600 dark:text-zinc-300 font-medium flex items-center gap-1">
                 <AlertCircle className="h-3 w-3 text-orange-500" />
                 Sedang diproses
               </p>
@@ -388,9 +390,14 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                       </p>
                     </div>
                   </div>
-                  <p className="text-base font-bold text-emerald-300 tabular-nums">
-                    {stats.paidInvoices} Invoice
-                  </p>
+                  <div className="text-right">
+                    <p className="text-sm font-black text-emerald-300 tabular-nums">
+                      Rp {new Intl.NumberFormat("id-ID").format(stats.paidRevenue)}
+                    </p>
+                    <p className="text-[10px] text-zinc-400 font-medium">
+                      {stats.paidInvoices} Invoice
+                    </p>
+                  </div>
                 </div>
                 <div className="flex items-center justify-between p-4 bg-white/5 backdrop-blur-sm rounded-xl border border-white/10 transition-all hover:bg-white/10 hover:border-orange-500/30 group">
                   <div className="flex items-center gap-2.5">
@@ -406,9 +413,14 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                       </p>
                     </div>
                   </div>
-                  <p className="text-base font-bold text-orange-300 tabular-nums">
-                    {stats.unpaidInvoices} Invoice
-                  </p>
+                  <div className="text-right">
+                    <p className="text-sm font-black text-orange-300 tabular-nums">
+                      Rp {new Intl.NumberFormat("id-ID").format(stats.unpaidRevenue)}
+                    </p>
+                    <p className="text-[10px] text-zinc-400 font-medium">
+                      {stats.unpaidInvoices} Invoice
+                    </p>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -417,17 +429,17 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
 
         {/* Interactive Calendar & Monitoring Section */}
         <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Card className="border-0 shadow-xl rounded-2xl lg:col-span-1 overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white">
-            <CardHeader className="bg-gradient-to-r from-zinc-50 to-zinc-50/30 border-b border-zinc-100/50 px-6 pt-6 pb-5">
+          <Card className="border-0 shadow-xl rounded-2xl lg:col-span-1 overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-zinc-950">
+            <CardHeader className="bg-gradient-to-r from-zinc-50 dark:from-zinc-900 to-zinc-50/30 dark:to-zinc-900/30 border-b border-zinc-100/50 dark:border-zinc-800/50 px-6 pt-6 pb-5">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 bg-gradient-to-br from-zinc-600 to-zinc-700 rounded-xl flex items-center justify-center shadow-lg shadow-zinc-500/30">
                   <CalendarIcon className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <CardTitle className="text-sm md:text-base font-bold text-zinc-900">
+                  <CardTitle className="text-sm md:text-base font-bold text-zinc-900 dark:text-zinc-100">
                     Kalender Proyek & Tagihan
                   </CardTitle>
-                  <p className="text-zinc-500 text-xs font-medium mt-0.5 flex items-center gap-1">
+                  <p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium mt-0.5 flex items-center gap-1">
                     <LayoutDashboard className="h-3 w-3 text-zinc-500" />
                     Jatuh tempo & libur
                   </p>
@@ -446,11 +458,11 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                       ),
                     )
                   }
-                  className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
+                  className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-md transition-colors cursor-pointer"
                 >
-                  <ChevronLeft className="h-4 w-4 text-zinc-600" />
+                  <ChevronLeft className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
                 </button>
-                <h3 className="text-base font-bold text-zinc-900">
+                <h3 className="text-base font-bold text-zinc-900 dark:text-zinc-100">
                   {currentMonth.toLocaleString("en-US", {
                     month: "long",
                     year: "numeric",
@@ -465,9 +477,9 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                       ),
                     )
                   }
-                  className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 rounded-md transition-colors cursor-pointer"
+                  className="h-8 w-8 flex items-center justify-center hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded-md transition-colors cursor-pointer"
                 >
-                  <ChevronRight className="h-4 w-4 text-zinc-600" />
+                  <ChevronRight className="h-4 w-4 text-zinc-600 dark:text-zinc-400" />
                 </button>
               </div>
 
@@ -478,7 +490,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                   {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
                     <div
                       key={day}
-                      className="text-center text-xs font-medium text-zinc-400 py-1"
+                      className="text-center text-xs font-medium text-zinc-400 dark:text-zinc-500 py-1"
                     >
                       {day}
                     </div>
@@ -523,21 +535,21 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                     if (isToday) {
                       // Prioritas 1: Hari Ini (Hijau Solid)
                       dayClass +=
-                        "bg-emerald-500 text-white font-bold shadow-md shadow-emerald-200 ";
+                        "bg-emerald-500 text-white font-bold shadow-md shadow-emerald-200 dark:shadow-emerald-950/20 ";
                     } else if (invoiceAtDate) {
                       // Prioritas 2: Ada Invoice Jatuh Tempo (Biru Muda Background + Text Biru Tua)
                       dayClass +=
-                        "bg-blue-100 text-blue-700 font-bold border border-blue-200 ";
+                        "bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 font-bold border border-blue-200 dark:border-blue-900/30 ";
                     } else if (isNationalHoliday) {
                       // Prioritas 3: Hari Libur (Merah Muda Background)
                       dayClass +=
-                        "bg-red-50 text-red-600 font-semibold border border-red-100 ";
+                        "bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 font-semibold border border-red-100 dark:border-red-900/30 ";
                     } else if (isSunday) {
                       // Prioritas 4: Hari Minggu (Text Merah)
-                      dayClass += "text-red-500 hover:bg-red-50 ";
+                      dayClass += "text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/20 ";
                     } else {
                       // Prioritas 5: Hari Biasa
-                      dayClass += "text-zinc-700 hover:bg-zinc-100 ";
+                      dayClass += "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 ";
                     }
 
                     const element = (
@@ -557,7 +569,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                               </button>
                             </PopoverTrigger>
                             <PopoverContent
-                              className="w-72 p-0 rounded-xl shadow-xl border-zinc-200 z-50 overflow-hidden right-2 relative"
+                              className="w-72 p-0 rounded-xl shadow-xl border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 z-50 overflow-hidden right-2 relative"
                               align="center"
                             >
                               {isNationalHoliday ? (
@@ -574,28 +586,28 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                                       })}
                                     </p>
                                   </div>
-                                  <div className="p-4">
-                                    <p className="text-sm text-zinc-900">
+                                  <div className="p-4 text-zinc-900 dark:text-zinc-100">
+                                    <p className="text-sm text-zinc-900 dark:text-zinc-100">
                                       {holidayName}
                                     </p>
                                     {invoiceAtDate && (
                                       <>
-                                        <div className="mt-4 pt-4 border-t border-zinc-100">
-                                          <p className="text-xs font-semibold text-zinc-500 mb-2">
+                                        <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                                          <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 mb-2">
                                             Invoice Jatuh Tempo
                                           </p>
                                           <div className="flex items-center justify-between">
                                             <div>
-                                              <p className="text-sm font-bold text-zinc-900">
+                                              <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
                                                 {invoiceAtDate.profiles
                                                   ?.full_name || "Klien"}
                                               </p>
-                                              <p className="text-xs text-zinc-500">
+                                              <p className="text-xs text-zinc-500 dark:text-zinc-400">
                                                 {invoiceAtDate.invoice_number}
                                               </p>
                                             </div>
                                           </div>
-                                          <p className="text-base font-bold text-zinc-900 mt-2">
+                                          <p className="text-base font-bold text-zinc-900 dark:text-zinc-100 mt-2">
                                             Rp{" "}
                                             {new Intl.NumberFormat(
                                               "id-ID",
@@ -620,9 +632,9 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                                       })}
                                     </p>
                                   </div>
-                                  <div className="p-4 space-y-3">
+                                  <div className="p-4 space-y-3 text-zinc-900 dark:text-zinc-100">
                                     <div className="flex items-center gap-3">
-                                      <div className="h-10 w-10 rounded-full bg-zinc-100 flex items-center justify-center text-zinc-700 font-bold text-sm">
+                                      <div className="h-10 w-10 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center text-zinc-700 dark:text-zinc-300 font-bold text-sm">
                                         {(
                                           invoiceAtDate.profiles?.full_name ||
                                           "Klien"
@@ -631,27 +643,27 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                                           .toUpperCase()}
                                       </div>
                                       <div>
-                                        <p className="text-sm font-bold text-zinc-900">
+                                        <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
                                           {invoiceAtDate.profiles?.full_name ||
                                             "Klien"}
                                         </p>
-                                        <p className="text-xs text-zinc-500">
+                                        <p className="text-xs text-zinc-500 dark:text-zinc-400">
                                           {invoiceAtDate.invoice_number}
                                         </p>
                                       </div>
                                     </div>
-                                    <div className="pt-3 border-t border-zinc-100">
-                                      <p className="text-[10px] uppercase tracking-wider text-zinc-400 mb-1">
+                                    <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800">
+                                      <p className="text-[10px] uppercase tracking-wider text-zinc-400 dark:text-zinc-500 mb-1">
                                         Jumlah Tagihan
                                       </p>
-                                      <p className="text-xl font-bold text-zinc-900">
+                                      <p className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
                                         Rp{" "}
                                         {new Intl.NumberFormat("id-ID").format(
                                           invoiceAtDate.amount,
                                         )}
                                       </p>
                                     </div>
-                                    <Badge className="bg-orange-100 text-orange-700 text-[10px] font-bold uppercase border-none px-3 py-2 w-full justify-center">
+                                    <Badge className="bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 text-[10px] font-bold uppercase border-none px-3 py-2 w-full justify-center">
                                       Belum Dibayar
                                     </Badge>
                                   </div>
@@ -682,26 +694,26 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
               </div>
 
               {/* Legend */}
-              <div className="mt-6 pt-5 border-t border-zinc-100">
-                <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-zinc-400 mb-3">
+              <div className="mt-6 pt-5 border-t border-zinc-100 dark:border-zinc-800">
+                <p className="text-[10px] uppercase tracking-[0.2em] font-semibold text-zinc-400 dark:text-zinc-500 mb-3">
                   Legenda
                 </p>
                 <div className="flex md:flex-row flex-col md:items-center gap-4 md:justify-center">
                   <div className="flex items-center gap-2">
                     <span className="h-3 w-3 rounded-full bg-emerald-500"></span>
-                    <span className="text-xs font-medium text-zinc-600">
+                    <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
                       Hari Ini
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="h-3 w-3 rounded-full bg-red-500"></span>
-                    <span className="text-xs font-medium text-zinc-600">
+                    <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
                       Hari Libur
                     </span>
                   </div>
                   <div className="flex items-center gap-2">
                     <span className="h-3 w-3 rounded-full bg-blue-500"></span>
-                    <span className="text-xs font-medium text-zinc-600">
+                    <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
                       Tagihan Jatuh Tempo
                     </span>
                   </div>
@@ -710,18 +722,18 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-xl rounded-2xl lg:col-span-2 overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white">
-            <CardHeader className="bg-gradient-to-r from-zinc-50 to-zinc-50/30 border-b border-zinc-100/50 px-6 pt-6 pb-5">
+          <Card className="border-0 shadow-xl rounded-2xl lg:col-span-2 overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-zinc-950">
+            <CardHeader className="bg-gradient-to-r from-zinc-50 dark:from-zinc-900 to-zinc-50/30 dark:to-zinc-900/30 border-b border-zinc-100/50 dark:border-zinc-800/50 px-6 pt-6 pb-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 bg-gradient-to-br from-zinc-600 to-zinc-700 rounded-xl flex items-center justify-center shadow-lg shadow-zinc-500/30">
                     <Briefcase className="h-5 w-5 text-white" />
                   </div>
                   <div>
-                    <CardTitle className="text-sm md:text-base font-bold text-zinc-900">
+                    <CardTitle className="text-sm md:text-base font-bold text-zinc-900 dark:text-zinc-100">
                       Monitoring Pengerjaan
                     </CardTitle>
-                    <p className="text-zinc-500 text-xs font-medium mt-0.5 flex items-center gap-1">
+                    <p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium mt-0.5 flex items-center gap-1">
                       <Target className="h-3 w-3 text-zinc-500" />
                       Proyek aktif & menunggu pembayaran
                     </p>
@@ -733,29 +745,29 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 pb-2">
-                    <Target className="h-4 w-4 text-zinc-900" />
-                    <p className="text-xs font-bold text-zinc-900 uppercase tracking-wider">
-                      Proyek Aktif
+                    <Target className="h-4 w-4 text-zinc-900 dark:text-zinc-100" />
+                    <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
+                      Proyek Progres
                     </p>
                   </div>
                   {stats.upcomingProjects?.slice(0, 3).map((pj) => (
                     <div
                       key={pj.id}
-                      className="p-4 rounded-xl bg-gradient-to-br from-zinc-50 to-white border border-zinc-100 hover:shadow-md transition-all group"
+                      className="p-4 rounded-xl bg-gradient-to-br from-zinc-50 dark:from-zinc-900 to-white dark:to-zinc-950 border border-zinc-100 dark:border-zinc-800 hover:shadow-md transition-all group"
                     >
                       <div className="flex justify-between items-start">
                         <div className="flex-1">
-                          <p className="text-sm font-bold text-zinc-900 mb-1 group-hover:text-zinc-700 transition-colors">
+                          <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 mb-1 group-hover:text-zinc-700 dark:group-hover:text-zinc-300 transition-colors">
                             {pj.name}
                           </p>
-                          <p className="text-[10px] text-zinc-500 font-medium flex items-center gap-1.5">
+                          <p className="text-[10px] text-zinc-500 dark:text-zinc-455 font-medium flex items-center gap-1.5">
                             <Clock className="h-3 w-3" />
                             Deadline:{" "}
                             {new Date(pj.deadline).toLocaleDateString("id-ID")}
                           </p>
                         </div>
-                        <div className="h-8 w-8 rounded-lg bg-zinc-100 flex items-center justify-center group-hover:bg-zinc-900 transition-colors">
-                          <Briefcase className="h-4 w-4 text-zinc-500 group-hover:text-white transition-colors" />
+                        <div className="h-8 w-8 rounded-lg bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center group-hover:bg-zinc-900 dark:group-hover:bg-zinc-100 transition-colors">
+                          <Briefcase className="h-4 w-4 text-zinc-500 dark:text-zinc-450 group-hover:text-white dark:group-hover:text-zinc-900 transition-colors" />
                         </div>
                       </div>
                     </div>
@@ -763,8 +775,8 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                 </div>
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 pb-2">
-                    <CreditCard className="h-4 w-4 text-blue-600" />
-                    <p className="text-xs font-bold text-zinc-900 uppercase tracking-wider">
+                    <CreditCard className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                    <p className="text-xs font-bold text-zinc-900 dark:text-zinc-100 uppercase tracking-wider">
                       Menunggu Pembayaran
                     </p>
                   </div>
@@ -774,14 +786,14 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                     .map((inv) => (
                       <div
                         key={inv.id}
-                        className="p-4 rounded-xl bg-gradient-to-br from-blue-50 to-white border border-blue-100 hover:shadow-md transition-all group"
+                        className="p-4 rounded-xl bg-gradient-to-br from-blue-50 dark:from-blue-950/20 to-white dark:to-zinc-950 border border-blue-100 dark:border-blue-900/30 hover:shadow-md transition-all group"
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <p className="text-sm font-bold text-zinc-900 mb-1">
+                            <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 mb-1">
                               {inv.profiles?.full_name || "Klien"}
                             </p>
-                            <p className="text-xs text-blue-600 font-bold flex items-center gap-1.5">
+                            <p className="text-xs text-blue-600 dark:text-blue-400 font-bold flex items-center gap-1.5">
                               <DollarSign className="h-3 w-3" />
                               Rp{" "}
                               {new Intl.NumberFormat("id-ID").format(
@@ -789,7 +801,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                               )}
                             </p>
                           </div>
-                          <Badge className="bg-orange-100 text-orange-700 text-[9px] font-bold uppercase px-2 py-1">
+                          <Badge className="bg-orange-100 dark:bg-orange-950/50 text-orange-700 dark:text-orange-300 text-[9px] font-bold uppercase px-2 py-1">
                             Unpaid
                           </Badge>
                         </div>
@@ -803,21 +815,21 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
 
         {/* Klien Terbaru & Invoice Terbaru - gaya CustomerDashboard */}
         <section className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          <Card className="border-0 shadow-xl rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white">
-            <CardHeader className="bg-gradient-to-r from-blue-50 to-blue-50/30 border-b border-blue-100/50 px-6 pt-6 pb-5">
+          <Card className="border-0 shadow-xl rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-zinc-950">
+            <CardHeader className="bg-gradient-to-r from-blue-50 dark:from-blue-950/20 to-blue-50/30 dark:to-blue-900/10 border-b border-blue-100/50 dark:border-blue-900/30 px-6 pt-6 pb-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/30">
                     <UserPlus className="h-5 w-5 text-white" />
                   </div>
                   <div>
-                    <CardTitle className="text-sm md:text-lg font-bold text-zinc-900 flex items-center gap-2">
+                    <CardTitle className="text-sm md:text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                       Klien Terbaru
-                      <Badge className="bg-blue-100 text-blue-700 text-[8px] font-bold px-2 py-0.5">
+                      <Badge className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-none text-[8px] font-bold px-2 py-0.5">
                         NEW
                       </Badge>
                     </CardTitle>
-                    <p className="text-zinc-500 text-xs font-medium mt-0.5 flex items-center gap-1">
+                    <p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium mt-0.5 flex items-center gap-1">
                       <LayoutDashboard className="h-3 w-3 text-blue-500" />
                       {stats.recentClients.length} klien terdaftar
                     </p>
@@ -829,7 +841,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                 >
                   <Button
                     variant="ghost"
-                    className="text-xs font-semibold text-zinc-600 hover:text-blue-700 px-4 h-9 rounded-xl hover:bg-blue-50 transition-all cursor-pointer"
+                    className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 hover:text-blue-700 dark:hover:text-blue-300 px-4 h-9 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all cursor-pointer"
                   >
                     Lihat Semua
                     <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -838,23 +850,23 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
               </div>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="divide-y divide-zinc-100">
+              <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
                 {stats.recentClients.slice(0, 5).map((client) => (
                   <Link
                     key={client.id}
                     href="/customer/users"
-                    className="flex items-center gap-4 p-5 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-transparent transition-all duration-200 group cursor-pointer"
+                    className="flex items-center gap-4 p-5 hover:bg-gradient-to-r hover:from-blue-50/50 dark:hover:from-blue-950/20 hover:to-transparent transition-all duration-200 group cursor-pointer"
                   >
-                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center shadow-sm border border-blue-200/50 font-bold text-blue-700 text-lg flex-shrink-0">
+                    <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-100 dark:from-blue-950/20 to-blue-50 dark:to-blue-900/10 flex items-center justify-center shadow-sm border border-blue-200/50 dark:border-blue-900/30 font-bold text-blue-700 dark:text-blue-300 text-lg flex-shrink-0">
                       {(client.full_name || client.email)
                         .charAt(0)
                         .toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-zinc-900 group-hover:text-blue-700 transition-colors truncate">
+                      <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-blue-700 dark:group-hover:text-blue-400 transition-colors truncate">
                         {client.full_name || client.email}
                       </p>
-                      <p className="text-xs font-medium text-zinc-600 flex items-center gap-1.5 mt-0.5">
+                      <p className="text-xs font-medium text-zinc-600 dark:text-zinc-400 flex items-center gap-1.5 mt-0.5">
                         <CalendarIcon className="h-3 w-3 text-zinc-400" />
                         {new Date(client.created_at).toLocaleDateString(
                           "id-ID",
@@ -866,31 +878,31 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                         )}
                       </p>
                     </div>
-                    <Badge className="bg-blue-100 text-blue-700 text-[9px] rounded-full font-bold uppercase px-2 py-0.5 border border-blue-200/50">
+                    <Badge className="bg-blue-100 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 text-[9px] rounded-full font-bold uppercase px-2 py-0.5 border border-blue-200/50 dark:border-blue-900/30">
                       {client.role}
                     </Badge>
-                    <ChevronRight className="h-4 w-4 text-zinc-300 group-hover:text-blue-500 group-hover:translate-x-1 transition-all flex-shrink-0" />
+                    <ChevronRight className="h-4 w-4 text-zinc-300 dark:text-zinc-600 group-hover:text-blue-500 dark:group-hover:text-blue-400 group-hover:translate-x-1 transition-all flex-shrink-0" />
                   </Link>
                 ))}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-xl rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white">
-            <CardHeader className="bg-gradient-to-r from-purple-50 to-purple-50/30 border-b border-purple-100/50 px-6 pt-6 pb-5">
+          <Card className="border-0 shadow-xl rounded-2xl overflow-hidden hover:shadow-2xl transition-all duration-300 bg-white dark:bg-zinc-950">
+            <CardHeader className="bg-gradient-to-r from-purple-50 dark:from-purple-950/20 to-purple-50/30 dark:to-purple-900/10 border-b border-purple-100/50 dark:border-purple-900/30 px-6 pt-6 pb-5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/30">
                     <Receipt className="h-5 w-5 text-white" />
                   </div>
                   <div>
-                    <CardTitle className="text-sm md:text-lg font-bold text-zinc-900 flex items-center gap-2">
+                    <CardTitle className="text-sm md:text-lg font-bold text-zinc-900 dark:text-zinc-100 flex items-center gap-2">
                       Invoice Terbaru
-                      <Badge className="bg-purple-100 text-purple-700 text-[8px] font-bold px-2 py-0.5">
+                      <Badge className="bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-none text-[8px] font-bold px-2 py-0.5">
                         NEW
                       </Badge>
                     </CardTitle>
-                    <p className="text-zinc-500 text-xs font-medium mt-0.5 flex items-center gap-1">
+                    <p className="text-zinc-500 dark:text-zinc-400 text-xs font-medium mt-0.5 flex items-center gap-1">
                       <LayoutDashboard className="h-3 w-3 text-purple-500" />
                       {stats.recentInvoices.length} data terakhir
                     </p>
@@ -902,7 +914,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                 >
                   <Button
                     variant="ghost"
-                    className="text-xs font-semibold text-zinc-600 hover:text-purple-700 px-4 h-9 rounded-xl hover:bg-purple-50 transition-all cursor-pointer"
+                    className="text-xs font-semibold text-zinc-600 dark:text-zinc-400 hover:text-purple-700 dark:hover:text-purple-300 px-4 h-9 rounded-xl hover:bg-purple-50 dark:hover:bg-purple-950/20 transition-all cursor-pointer"
                   >
                     Lihat Semua
                     <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -911,24 +923,24 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
               </div>
             </CardHeader>
             <CardContent className="p-0">
-              <div className="divide-y divide-zinc-100">
+              <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
                 {stats.recentInvoices.slice(0, 5).map((invoice) => (
                   <Link
                     key={invoice.id}
                     href={`/customer/invoices/${invoice.id}/print`}
-                    className="block p-5 hover:bg-gradient-to-r hover:from-purple-50/50 hover:to-transparent transition-all duration-200 group cursor-pointer"
+                    className="block p-5 hover:bg-gradient-to-r hover:from-purple-50/50 dark:hover:from-purple-950/20 hover:to-transparent transition-all duration-200 group cursor-pointer"
                   >
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex items-center gap-3 flex-1 min-w-0">
-                        <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all flex-shrink-0 border border-purple-200/50">
-                          <Receipt className="h-6 w-6 text-purple-600" />
+                        <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-purple-100 dark:from-purple-950/20 to-purple-50 dark:to-purple-900/10 flex items-center justify-center shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all flex-shrink-0 border border-purple-200/50 dark:border-purple-900/30">
+                          <Receipt className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                         </div>
                         <div className="space-y-1 min-w-0">
-                          <p className="text-sm font-bold text-zinc-900 group-hover:text-purple-700 transition-colors truncate uppercase tracking-tight flex items-center gap-2">
+                          <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 group-hover:text-purple-700 dark:group-hover:text-purple-400 transition-colors truncate uppercase tracking-tight flex items-center gap-2">
                             {invoice.invoice_number}
-                            <ChevronRight className="h-3.5 w-3.5 text-zinc-400 group-hover:text-purple-500 group-hover:translate-x-1 transition-all" />
+                            <ChevronRight className="h-3.5 w-3.5 text-zinc-400 dark:text-zinc-550 group-hover:text-purple-500 dark:group-hover:text-purple-400 group-hover:translate-x-1 transition-all" />
                           </p>
-                          <p className="text-xs font-medium text-zinc-600 truncate flex items-center gap-1.5">
+                          <p className="text-xs font-medium text-zinc-600 dark:text-zinc-400 truncate flex items-center gap-1.5">
                             <CalendarIcon className="h-3 w-3 text-zinc-400" />
                             {invoice.due_date
                               ? `Tempo: ${new Date(
@@ -945,7 +957,7 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                         </div>
                       </div>
                       <div className="text-right space-y-1.5 flex-shrink-0">
-                        <p className="text-sm font-bold text-zinc-900 tabular-nums">
+                        <p className="text-sm font-bold text-zinc-900 dark:text-zinc-100 tabular-nums">
                           Rp{" "}
                           {new Intl.NumberFormat("id-ID").format(
                             invoice.amount,
@@ -954,8 +966,8 @@ export function AdminDashboard({ profile, stats }: AdminDashboardProps) {
                         <Badge
                           className={`px-3 py-0.5 text-[9px] font-bold uppercase rounded-full border shadow-sm ${
                             invoice.status === "paid"
-                              ? "bg-emerald-50 border-emerald-200 text-emerald-700 shadow-emerald-100"
-                              : "bg-orange-50 border-orange-200 text-orange-700 shadow-orange-100"
+                              ? "bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-900/30 text-emerald-700 dark:text-emerald-300 shadow-emerald-100/10"
+                              : "bg-orange-50 dark:bg-orange-950/50 border-orange-200 dark:border-orange-900/30 text-orange-700 dark:text-orange-300 shadow-orange-100/10"
                           }`}
                         >
                           {invoice.status === "paid" ? (

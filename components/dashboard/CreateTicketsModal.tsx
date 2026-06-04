@@ -80,17 +80,17 @@ export default function CreateTicketModal({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-zinc-900 text-white font-medium rounded-xl text-xs px-6 py-5 shadow-sm hover:bg-zinc-800 transition-all cursor-pointer">
+        <Button className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-medium rounded-xl text-xs px-6 py-5 shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all cursor-pointer">
           <Plus className="h-4 w-4 mr-2" />
           Buat Tiket Baru
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] rounded-2xl border-none shadow-2xl bg-white">
+      <DialogContent className="sm:max-w-[425px] rounded-2xl border-none dark:border dark:border-zinc-800 shadow-2xl bg-white dark:bg-zinc-950">
         <DialogHeader>
-          <DialogTitle className="text-xl tracking-tighter  text-zinc-900">
+          <DialogTitle className="text-xl tracking-tighter text-zinc-900 dark:text-zinc-100">
             Support Ticket
           </DialogTitle>
-          <DialogDescription className="text-xs text-zinc-500 font-medium italic">
+          <DialogDescription className="text-xs text-zinc-500 dark:text-zinc-400 font-medium italic">
             Jelaskan kendala atau permintaan proyek Anda.
           </DialogDescription>
         </DialogHeader>
@@ -109,15 +109,15 @@ export default function CreateTicketModal({
                   name="user_id"
                   required
                   defaultValue={userId}
-                  className="flex h-11 w-full rounded-xl border border-zinc-100 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-200 transition-all appearance-none cursor-pointer"
+                  className="flex h-11 w-full rounded-xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-200 transition-all appearance-none cursor-pointer"
                 >
                   {clients.map((client) => (
-                    <option key={client.id} value={client.id}>
+                    <option key={client.id} value={client.id} className="dark:bg-zinc-900">
                       {client.full_name || client.email}
                     </option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-3 top-3.5 h-4 w-4 text-zinc-400 pointer-events-none" />
+                <ChevronDown className="absolute right-3 top-3.5 h-4 w-4 text-zinc-400 pointer-events-none group-hover:text-zinc-900 dark:group-hover:text-zinc-100 transition-colors" />
               </div>
             </div>
           )}
@@ -134,7 +134,7 @@ export default function CreateTicketModal({
               name="subject"
               placeholder="Cth: Slicing Landing Page"
               required
-              className="rounded-xl border-zinc-100 h-11 focus-visible:ring-zinc-200"
+              className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 h-11 focus-visible:ring-zinc-200"
             />
           </div>
 
@@ -150,7 +150,7 @@ export default function CreateTicketModal({
               name="description"
               placeholder="Jelaskan detail kendala Anda..."
               required
-              className="rounded-xl border-zinc-100 min-h-[120px] resize-none focus-visible:ring-zinc-200 text-sm"
+              className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 min-h-[120px] resize-none focus-visible:ring-zinc-200 text-sm"
             />
           </div>
 
@@ -158,7 +158,7 @@ export default function CreateTicketModal({
             <Button
               type="submit"
               disabled={loading}
-              className="w-full bg-zinc-900 text-white rounded-xl py-6 font-bold uppercase tracking-widest text-[10px] shadow-lg hover:bg-zinc-800 transition-all cursor-pointer"
+              className="w-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl py-6 font-bold uppercase tracking-widest text-[10px] shadow-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all cursor-pointer"
             >
               {loading ? "MENGIRIM..." : "KIRIM TIKET"}
             </Button>

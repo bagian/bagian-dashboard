@@ -37,9 +37,9 @@ export function PasswordForm() {
   };
 
   return (
-    <Card className="border-zinc-100 shadow-sm rounded-2xl overflow-hidden bg-white">
-      <CardHeader className="bg-zinc-50/50 border-b border-zinc-100 py-4 px-8">
-        <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400">
+    <Card className="border-zinc-100 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-white dark:bg-zinc-950">
+      <CardHeader className="bg-zinc-50/50 dark:bg-zinc-900/50 border-b border-zinc-100 dark:border-zinc-800 py-4 px-8">
+        <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 dark:text-zinc-500">
           Ubah Password
         </CardTitle>
       </CardHeader>
@@ -48,7 +48,7 @@ export function PasswordForm() {
           <div className="space-y-2">
             <Label
               htmlFor="current_password"
-              className="text-xs font-medium text-zinc-700"
+              className="text-xs font-medium text-zinc-700 dark:text-zinc-300"
             >
               Password Lama
             </Label>
@@ -59,12 +59,12 @@ export function PasswordForm() {
                 type={showCurrentPassword ? "text" : "password"}
                 required
                 disabled={loading}
-                className="rounded-lg h-11 pr-10"
+                className="rounded-lg h-11 pr-10 border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
               />
               <button
                 type="button"
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
               >
                 {showCurrentPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -78,7 +78,7 @@ export function PasswordForm() {
           <div className="space-y-2">
             <Label
               htmlFor="new_password"
-              className="text-xs font-medium text-zinc-700"
+              className="text-xs font-medium text-zinc-700 dark:text-zinc-300"
             >
               Password Baru
             </Label>
@@ -89,12 +89,12 @@ export function PasswordForm() {
                 type={showNewPassword ? "text" : "password"}
                 required
                 disabled={loading}
-                className="rounded-lg h-11 pr-10"
+                className="rounded-lg h-11 pr-10 border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
               />
               <button
                 type="button"
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
               >
                 {showNewPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -103,13 +103,13 @@ export function PasswordForm() {
                 )}
               </button>
             </div>
-            <p className="text-xs text-zinc-400 italic">Minimal 6 karakter</p>
+            <p className="text-xs text-zinc-400 dark:text-zinc-550 italic">Minimal 6 karakter</p>
           </div>
 
           <div className="space-y-2">
             <Label
               htmlFor="confirm_password"
-              className="text-xs font-medium text-zinc-700"
+              className="text-xs font-medium text-zinc-700 dark:text-zinc-300"
             >
               Konfirmasi Password Baru
             </Label>
@@ -120,12 +120,12 @@ export function PasswordForm() {
                 type={showConfirmPassword ? "text" : "password"}
                 required
                 disabled={loading}
-                className="rounded-lg h-11 pr-10"
+                className="rounded-lg h-11 pr-10 border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
               />
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
               >
                 {showConfirmPassword ? (
                   <EyeOff className="h-4 w-4" />
@@ -139,7 +139,7 @@ export function PasswordForm() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-zinc-900 hover:bg-zinc-800 text-white rounded-lg h-11 font-medium cursor-pointer"
+            className="w-full bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 rounded-lg h-11 font-medium cursor-pointer"
           >
             {loading ? (
               <>

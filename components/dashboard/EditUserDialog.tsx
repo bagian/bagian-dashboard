@@ -41,9 +41,9 @@ export function EditUserDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px] rounded-3xl bg-white border-none shadow-2xl">
+      <DialogContent className="sm:max-w-[425px] rounded-3xl bg-white dark:bg-zinc-950 border-none dark:border dark:border-zinc-800 shadow-2xl">
         <DialogHeader>
-          <DialogTitle className="font-bold text-xl tracking-tight">
+          <DialogTitle className="font-bold text-xl tracking-tight text-zinc-900 dark:text-zinc-100">
             Edit Profil User
           </DialogTitle>
         </DialogHeader>
@@ -55,7 +55,7 @@ export function EditUserDialog({
             <Input
               name="full_name"
               defaultValue={userData.full_name}
-              className="rounded-xl border-zinc-100"
+              className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
               required
             />
           </div>
@@ -67,7 +67,7 @@ export function EditUserDialog({
               name="email"
               type="email"
               defaultValue={userData.email}
-              className="rounded-xl border-zinc-100"
+              className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
               required
             />
           </div>
@@ -78,14 +78,14 @@ export function EditUserDialog({
             <Input
               name="company_name"
               defaultValue={userData.company_name}
-              className="rounded-xl border-zinc-100"
+              className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
             />
           </div>
           <DialogFooter className="pt-4">
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-zinc-900 text-white rounded-xl py-6 font-bold uppercase text-[10px] tracking-widest"
+              className="w-full bg-zinc-900 dark:bg-zinc-100 hover:bg-zinc-800 dark:hover:bg-zinc-200 text-white dark:text-zinc-900 rounded-xl py-6 font-bold uppercase text-[10px] tracking-widest cursor-pointer"
             >
               {isLoading ? "Menyimpan..." : "Simpan Perubahan"}
             </Button>

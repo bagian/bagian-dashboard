@@ -38,55 +38,55 @@ export default async function ProfilePage() {
     <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-8 space-y-8">
       {/* Header */}
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold uppercase leading-none">Akun User</h1>
-        <p className="text-xs text-zinc-400 font-medium">
+        <h1 className="text-2xl font-bold uppercase leading-none text-zinc-900 dark:text-zinc-100">Akun User</h1>
+        <p className="text-xs text-zinc-400 dark:text-zinc-500 font-medium">
           Kelola informasi profil dan keamanan akun Anda.
         </p>
       </div>
 
       {/* Profile Overview Card */}
-      <Card className="border-zinc-100 shadow-sm rounded-2xl overflow-hidden bg-white">
-        <CardHeader className="bg-black border-b border-zinc-100 py-6 px-8 text-white">
+      <Card className="border-zinc-100 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-white dark:bg-zinc-950">
+        <CardHeader className="bg-black dark:bg-zinc-900 border-b border-zinc-100 dark:border-zinc-800 py-6 px-8 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="h-12 w-12 rounded-full bg-white flex items-center justify-center">
-                <UserCircle className="h-6 w-6 text-black" />
+              <div className="h-12 w-12 rounded-full bg-white dark:bg-zinc-800 flex items-center justify-center">
+                <UserCircle className="h-6 w-6 text-black dark:text-white" />
               </div>
               <div>
                 <CardTitle className="text-lg font-bold">
                   {profile.full_name || "No Name"}
                 </CardTitle>
-                <p className="text-xs text-zinc-400 font-mono">
+                <p className="text-xs text-zinc-400 dark:text-zinc-500 font-mono">
                   {profile.email}
                 </p>
               </div>
             </div>
             {/* Badge sekarang menampilkan Nomor Telepon */}
-            <Badge className="rounded-full px-4 py-1 text-[10px] font-bold uppercase bg-zinc-100 text-zinc-500 border-none hidden md:*">
+            <Badge className="rounded-full px-4 py-1 text-[10px] font-bold uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border-none hidden md:*">
               {profile.phone || "No Phone Number"}
             </Badge>
           </div>
         </CardHeader>
         <CardContent className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="flex items-start gap-3">
-            <Mail className="h-5 w-5 text-zinc-400 mt-0.5" />
+            <Mail className="h-5 w-5 text-zinc-400 dark:text-zinc-500 mt-0.5" />
             <div>
-              <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider mb-1">
+              <p className="text-[10px] uppercase font-bold text-zinc-400 dark:text-zinc-500 tracking-wider mb-1">
                 Email
               </p>
-              <p className="text-sm font-medium text-zinc-900">
+              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                 {profile.email}
               </p>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <Building2 className="h-5 w-5 text-zinc-400 mt-0.5" />
+            <Building2 className="h-5 w-5 text-zinc-400 dark:text-zinc-500 mt-0.5" />
             <div>
-              <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider mb-1">
+              <p className="text-[10px] uppercase font-bold text-zinc-400 dark:text-zinc-500 tracking-wider mb-1">
                 Perusahaan
               </p>
-              <p className="text-sm font-medium text-zinc-900">
+              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                 {profile.company_name || "-"}
               </p>
             </div>
@@ -94,24 +94,24 @@ export default async function ProfilePage() {
 
           {/* Bagian Role diganti menjadi Nomor Telepon */}
           <div className="flex items-start gap-3">
-            <Phone className="h-5 w-5 text-zinc-400 mt-0.5" />
+            <Phone className="h-5 w-5 text-zinc-400 dark:text-zinc-500 mt-0.5" />
             <div>
-              <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider mb-1">
+              <p className="text-[10px] uppercase font-bold text-zinc-400 dark:text-zinc-500 tracking-wider mb-1">
                 Nomor Telepon
               </p>
-              <p className="text-sm font-medium text-zinc-900">
+              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                 {profile.phone || "-"}
               </p>
             </div>
           </div>
 
           <div className="flex items-start gap-3">
-            <Calendar className="h-5 w-5 text-zinc-400 mt-0.5" />
+            <Calendar className="h-5 w-5 text-zinc-400 dark:text-zinc-500 mt-0.5" />
             <div>
-              <p className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider mb-1">
+              <p className="text-[10px] uppercase font-bold text-zinc-400 dark:text-zinc-500 tracking-wider mb-1">
                 Bergabung
               </p>
-              <p className="text-sm font-medium text-zinc-900">
+              <p className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
                 {new Date(profile.created_at).toLocaleDateString("id-ID", {
                   day: "numeric",
                   month: "long",

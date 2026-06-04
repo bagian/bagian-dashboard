@@ -40,32 +40,32 @@ export default async function UsersManagementPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 space-y-8">
       <div className="space-y-1">
-        <h1 className="text-2xl font-bold uppercase">User Management</h1>
-        <p className="text-xs text-zinc-400 font-medium text-zinc-400">
+        <h1 className="text-2xl font-bold uppercase text-zinc-900 dark:text-zinc-100">User Management</h1>
+        <p className="text-xs text-zinc-400 dark:text-zinc-500 font-medium">
           Kelola akses dan role pengguna Bagian Projects.
         </p>
       </div>
 
-      <Card className="border-zinc-100 shadow-sm rounded-2xl overflow-hidden bg-white">
-        <CardHeader className="bg-zinc-50/50 border-b border-zinc-100 py-4 px-8">
-          <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 pt-4">
+      <Card className="border-zinc-100 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-white dark:bg-zinc-950">
+        <CardHeader className="bg-zinc-50/50 dark:bg-zinc-900/50 border-b border-zinc-100 dark:border-zinc-800 py-4 px-8">
+          <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-400 dark:text-zinc-500 pt-4">
             Daftar Pengguna
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="bg-zinc-50/30">
-                <TableHead className="pl-8 text-[10px] uppercase font-bold text-zinc-500 h-12">
+              <TableRow className="bg-zinc-50/30 dark:bg-zinc-900/20 border-zinc-100 dark:border-zinc-800">
+                <TableHead className="pl-8 text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455 h-12">
                   Nama / Email
                 </TableHead>
-                <TableHead className="text-[10px] uppercase font-bold text-zinc-500">
+                <TableHead className="text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                   Perusahaan
                 </TableHead>
-                <TableHead className="text-[10px] uppercase font-bold text-zinc-500">
+                <TableHead className="text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                   Role
                 </TableHead>
-                <TableHead className="pr-8 text-right text-[10px] uppercase font-bold text-zinc-500">
+                <TableHead className="pr-8 text-right text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                   Aksi
                 </TableHead>
               </TableRow>
@@ -74,27 +74,27 @@ export default async function UsersManagementPage() {
               {allUsers?.map((u) => (
                 <TableRow
                   key={u.id}
-                  className="border-zinc-50 hover:bg-zinc-50/50 transition-all"
+                  className="border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-all"
                 >
                   <TableCell className="pl-8 py-5">
                     <div className="flex flex-col">
-                      <span className="font-bold text-zinc-900">
+                      <span className="font-bold text-zinc-900 dark:text-zinc-100">
                         {u.full_name || "No Name"}
                       </span>
-                      <span className="text-[10px] text-zinc-400 font-mono italic">
+                      <span className="text-[10px] text-zinc-400 dark:text-zinc-505 font-mono italic">
                         {u.email}
                       </span>
                     </div>
                   </TableCell>
-                  <TableCell className="text-xs text-zinc-500 font-medium">
+                  <TableCell className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
                     {u.company_name || "-"}
                   </TableCell>
                   <TableCell>
                     <Badge
                       className={`rounded-full px-3 text-[9px] font-bold uppercase border-none shadow-none ${
                         u.role === "admin" || u.role === "superadmin"
-                          ? "bg-zinc-900 text-white"
-                          : "bg-zinc-100 text-zinc-500"
+                          ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900"
+                          : "bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400"
                       }`}
                     >
                       {u.role}

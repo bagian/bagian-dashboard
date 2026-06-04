@@ -56,6 +56,8 @@ export default async function DashboardPage() {
       totalRevenue: invoices.reduce((sum, inv) => sum + Number(inv.amount), 0),
       paidInvoices: invoices.filter((inv) => inv.status === "paid").length,
       unpaidInvoices: invoices.filter((inv) => inv.status === "unpaid").length,
+      paidRevenue: invoices.filter((inv) => inv.status === "paid").reduce((sum, inv) => sum + Number(inv.amount), 0),
+      unpaidRevenue: invoices.filter((inv) => inv.status === "unpaid").reduce((sum, inv) => sum + Number(inv.amount), 0),
       openTickets: tickets.filter((t) => t.status === "open").length,
       closedTickets: tickets.filter((t) => t.status === "closed").length,
       recentClients: clients

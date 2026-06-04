@@ -45,36 +45,36 @@ export default async function ClientsPage() {
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 space-y-8">
       <header className="space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 uppercase">
+        <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 uppercase">
           Daftar Klien
         </h1>
-        <p className="text-sm text-zinc-500 mt-1">
+        <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
           Kelola informasi dan akses semua klien Bagian Corps.
         </p>
       </header>
 
       {/* Stats Mini */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="shadow-sm rounded-2xl p-6 flex items-center gap-4 flex-row bg-zinc-900 border-0">
-          <div className="h-12 w-12 rounded-xl bg-white flex items-center justify-center">
-            <Users className="h-6 w-6 text-zinc-900" />
+        <Card className="shadow-sm rounded-2xl p-6 flex items-center gap-4 flex-row bg-zinc-900 dark:bg-zinc-950 border-0 dark:border dark:border-zinc-800">
+          <div className="h-12 w-12 rounded-xl bg-white dark:bg-zinc-900 flex items-center justify-center">
+            <Users className="h-6 w-6 text-zinc-900 dark:text-zinc-100" />
           </div>
           <div>
             <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
               Total Klien
             </p>
-            <p className="text-2xl font-bold text-zinc-200">
+            <p className="text-2xl font-bold text-zinc-200 dark:text-zinc-100">
               {clients?.length || 0}
             </p>
           </div>
         </Card>
       </div>
 
-      <Card className="border-zinc-100 shadow-sm rounded-2xl overflow-hidden bg-white">
-        <CardHeader className="bg-zinc-50/50 border-b border-zinc-100 py-4 px-6">
+      <Card className="border-zinc-100 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-white dark:bg-zinc-950">
+        <CardHeader className="bg-zinc-50/50 dark:bg-zinc-900/50 border-b border-zinc-100 dark:border-zinc-800 py-4 px-6">
           <div className="flex items-center gap-2 pt-4">
-            <Building2 className="h-4 w-4 text-zinc-400" />
-            <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">
+            <Building2 className="h-4 w-4 text-zinc-400 dark:text-zinc-500" />
+            <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-405">
               Database Klien Aktif
             </CardTitle>
           </div>
@@ -82,17 +82,17 @@ export default async function ClientsPage() {
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="hover:bg-transparent border-zinc-50 bg-zinc-50/30">
-                <TableHead className="pl-8 text-[10px] uppercase font-bold text-zinc-500 h-12">
+              <TableRow className="hover:bg-transparent border-zinc-100 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-900/20">
+                <TableHead className="pl-8 text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455 h-12">
                   Nama & Email
                 </TableHead>
-                <TableHead className="text-[10px] uppercase font-bold text-zinc-500">
+                <TableHead className="text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                   Perusahaan
                 </TableHead>
-                <TableHead className="text-[10px] uppercase font-bold text-zinc-500">
+                <TableHead className="text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                   Status
                 </TableHead>
-                <TableHead className="pr-8 text-right text-[10px] uppercase font-bold text-zinc-500">
+                <TableHead className="pr-8 text-right text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                   Kelola
                 </TableHead>
               </TableRow>
@@ -102,7 +102,7 @@ export default async function ClientsPage() {
                 <TableRow>
                   <TableCell
                     colSpan={4}
-                    className="h-48 text-center italic text-zinc-400 text-sm"
+                    className="h-48 text-center italic text-zinc-400 dark:text-zinc-500 text-sm"
                   >
                     Belum ada klien yang terdaftar.
                   </TableCell>
@@ -111,14 +111,14 @@ export default async function ClientsPage() {
                 clients?.map((client) => (
                   <TableRow
                     key={client.id}
-                    className="border-zinc-50 hover:bg-zinc-50/50 transition-all"
+                    className="border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-all"
                   >
                     <TableCell className="pl-8 py-5">
                       <div className="flex flex-col">
-                        <span className="font-bold text-zinc-900">
+                        <span className="font-bold text-zinc-900 dark:text-zinc-100">
                           {client.full_name || "Tanpa Nama"}
                         </span>
-                        <div className="flex items-center gap-1 text-zinc-400">
+                        <div className="flex items-center gap-1 text-zinc-400 dark:text-zinc-500">
                           <Mail className="h-3 w-3" />
                           <span className="text-[10px] font-mono italic">
                             {client.email}
@@ -126,13 +126,13 @@ export default async function ClientsPage() {
                         </div>
                       </div>
                     </TableCell>
-                    <TableCell className="text-xs text-zinc-500 font-medium">
+                    <TableCell className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
                       {client.company_name || "Personal"}
                     </TableCell>
                     <TableCell>
                       <Badge
                         variant="outline"
-                        className="rounded-full px-3 text-[9px] font-bold uppercase bg-zinc-50 text-zinc-500 border-none"
+                        className="rounded-full px-3 text-[9px] font-bold uppercase bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 border-none"
                       >
                         {client.role || "Client"}
                       </Badge>

@@ -127,12 +127,12 @@ export function Sidebar({
   return (
     <div
       className={cn(
-        "flex flex-col h-full bg-white border-r border-zinc-200 w-64",
+        "flex flex-col h-full bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 w-64",
         className
       )}
     >
-      <div className="p-6 h-16 flex items-center border-b border-zinc-50">
-        <h1 className="text-xl font-black tracking-tighter italic text-black">
+      <div className="p-6 h-16 flex items-center border-b border-zinc-50 dark:border-zinc-900">
+        <h1 className="text-xl font-black tracking-tighter italic text-black dark:text-white">
           BAGIAN.
         </h1>
       </div>
@@ -141,9 +141,9 @@ export function Sidebar({
         {/* Opsional: Render kerangka/loading state kecil saat mengecek akses agar tidak tiba-tiba muncul */}
         {isInitializing ? (
           <div className="animate-pulse space-y-3">
-            <div className="h-8 bg-zinc-100 rounded w-full"></div>
-            <div className="h-8 bg-zinc-100 rounded w-full"></div>
-            <div className="h-8 bg-zinc-100 rounded w-full"></div>
+            <div className="h-8 bg-zinc-100 dark:bg-zinc-800 rounded w-full"></div>
+            <div className="h-8 bg-zinc-100 dark:bg-zinc-800 rounded w-full"></div>
+            <div className="h-8 bg-zinc-100 dark:bg-zinc-800 rounded w-full"></div>
           </div>
         ) : (
           routes.map((route) => {
@@ -174,8 +174,8 @@ export function Sidebar({
                   className={cn(
                     "w-full justify-between group px-3 h-10 transition-all cursor-pointer",
                     isActive
-                      ? "bg-zinc-900 text-white hover:bg-zinc-800 hover:text-white"
-                      : "text-zinc-500 hover:text-zinc-900"
+                      ? "bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 hover:bg-zinc-800 dark:hover:bg-zinc-200 hover:text-white dark:hover:text-zinc-900"
+                      : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-900/50"
                   )}
                   onClick={onNavigate}
                 >
@@ -184,8 +184,8 @@ export function Sidebar({
                       className={cn(
                         "h-4 w-4",
                         isActive
-                          ? "text-white"
-                          : "text-zinc-400 group-hover:text-zinc-900"
+                          ? "text-white dark:text-zinc-900"
+                          : "text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-zinc-100"
                       )}
                     />
                     <span className="text-sm font-medium">{route.label}</span>
@@ -198,10 +198,10 @@ export function Sidebar({
         )}
       </div>
 
-      <div className="p-4 border-t border-zinc-100 mt-auto">
+      <div className="p-4 border-t border-zinc-100 dark:border-zinc-900 mt-auto">
         <Button
           variant="ghost"
-          className="w-full justify-start text-zinc-500 hover:text-red-600 hover:bg-red-50 transition-all group cursor-pointer"
+          className="w-full justify-start text-zinc-500 dark:text-zinc-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/25 transition-all group cursor-pointer"
           onClick={onLogout}
         >
           <LogOut className="h-4 w-4 mr-3 group-hover:translate-x-1 transition-transform" />

@@ -22,8 +22,8 @@ import { Pagination } from "@/components/dashboard/Pagination";
 export const revalidate = 0;
 
 const statusVariant = {
-  open: "bg-emerald-100 text-emerald-700 border border-emerald-200",
-  closed: "bg-zinc-100 text-zinc-600 border border-zinc-200",
+  open: "bg-emerald-100 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/30",
+  closed: "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-450 border border-zinc-200 dark:border-zinc-700",
 };
 
 export default async function TicketsPage({
@@ -87,10 +87,10 @@ export default async function TicketsPage({
       {/* HEADER SECTION */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 uppercase">
+          <h1 className="text-2xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100 uppercase">
             Support Tickets
           </h1>
-          <p className="text-sm text-zinc-500 mt-1">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
             Track and manage your project requests.
           </p>
         </div>
@@ -103,9 +103,9 @@ export default async function TicketsPage({
       </div>
 
       {/* TABLE SECTION */}
-      <Card className="border-zinc-200 shadow-sm rounded-2xl overflow-hidden bg-white">
-        <CardHeader className="border-b bg-zinc-50/60 py-4 px-6">
-          <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">
+      <Card className="border-zinc-200 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-white dark:bg-zinc-950">
+        <CardHeader className="border-b border-zinc-100 dark:border-zinc-800 bg-zinc-50/60 dark:bg-zinc-900/50 py-4 px-6">
+          <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400">
             Active Requests
           </CardTitle>
           <CardDescription className="text-xs ">
@@ -115,28 +115,28 @@ export default async function TicketsPage({
 
         <CardContent className="p-0">
           {allTickets.length === 0 ? (
-            <div className="py-24 text-center text-sm text-zinc-400 ">
+            <div className="py-24 text-center text-sm text-zinc-400 dark:text-zinc-550">
               No tickets yet. Create one to get started 🚀
             </div>
           ) : (
             <>
               <Table>
                 <TableHeader>
-                  <TableRow className="bg-zinc-50/50 hover:bg-zinc-50/50">
-                    <TableHead className="pl-6 text-[10px] uppercase font-bold text-zinc-500 h-12">
+                  <TableRow className="bg-zinc-50/50 dark:bg-zinc-900/20 hover:bg-zinc-50/50 dark:hover:bg-zinc-900/20 border-zinc-100 dark:border-zinc-800">
+                    <TableHead className="pl-6 text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455 h-12">
                       Subject
                     </TableHead>
-                    <TableHead className="text-[10px] uppercase font-bold text-zinc-500">
+                    <TableHead className="text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                       Status
                     </TableHead>
-                    <TableHead className="text-[10px] uppercase font-bold text-zinc-500">
+                    <TableHead className="text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                       Created
                     </TableHead>
-                    <TableHead className="text-[10px] uppercase font-bold text-zinc-500">
+                    <TableHead className="text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                       Deskripsi
                     </TableHead>
                     {isAdmin && (
-                      <TableHead className="text-right pr-6 text-[10px] uppercase font-bold text-zinc-500">
+                      <TableHead className="text-right pr-6 text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                         Aksi
                       </TableHead>
                     )}
@@ -147,14 +147,14 @@ export default async function TicketsPage({
                   {allTickets.map((ticket) => (
                     <TableRow
                       key={ticket.id}
-                      className="transition hover:bg-zinc-50/30 border-zinc-50"
+                      className="transition hover:bg-zinc-50/30 dark:hover:bg-zinc-900/20 border-zinc-100 dark:border-zinc-800"
                     >
                       <TableCell className="pl-6 py-4">
                         <div className="flex flex-col">
-                          <span className="font-bold text-zinc-900 text-sm">
+                          <span className="font-bold text-zinc-900 dark:text-zinc-100 text-sm">
                             {ticket.subject}
                           </span>
-                          <span className="text-[10px] text-zinc-400 uppercase tracking-widest mt-0.5">
+                          <span className="text-[10px] text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mt-0.5">
                             ID: {ticket.id.substring(0, 8)}
                           </span>
                         </div>
@@ -171,7 +171,7 @@ export default async function TicketsPage({
                         </span>
                       </TableCell>
 
-                      <TableCell className="text-sm text-zinc-500 font-medium">
+                      <TableCell className="text-sm text-zinc-500 dark:text-zinc-400 font-medium">
                         {new Date(ticket.created_at).toLocaleDateString(
                           "id-ID"
                         )}
@@ -179,7 +179,7 @@ export default async function TicketsPage({
 
                       {/* DATA DESKRIPSI BARU */}
                       <TableCell className="max-w-[300px]">
-                        <p className="text-xs text-zinc-600 line-clamp-2 font-medium">
+                        <p className="text-xs text-zinc-600 dark:text-zinc-350 line-clamp-2 font-medium">
                           {ticket.description || "-"}
                         </p>
                       </TableCell>

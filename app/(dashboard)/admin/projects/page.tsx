@@ -82,10 +82,10 @@ export default async function ProjectsPage() {
       {/* HEADER */}
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="space-y-1">
-          <h1 className="text-2xl font-black tracking-tight text-zinc-900 uppercase">
+          <h1 className="text-2xl font-black tracking-tight text-zinc-900 dark:text-zinc-100 uppercase">
             Projects
           </h1>
-          <p className="text-sm text-zinc-500 mt-1">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
             Manajemen proyek, klien, dan rincian pekerjaan.
           </p>
         </div>
@@ -95,11 +95,11 @@ export default async function ProjectsPage() {
       </header>
 
       {/* TABEL PROYEK */}
-      <Card className="border-zinc-100 shadow-sm rounded-2xl overflow-hidden bg-white">
-        <CardHeader className="bg-zinc-50/50 border-b border-zinc-100 py-4 px-6">
+      <Card className="border-zinc-100 dark:border-zinc-800 shadow-sm rounded-2xl overflow-hidden bg-white dark:bg-zinc-950">
+        <CardHeader className="bg-zinc-50/50 dark:bg-zinc-900/50 border-b border-zinc-100 dark:border-zinc-800 py-4 px-6">
           <div className="flex items-center gap-2 pt-4">
-            <FolderKanban className="h-4 w-4 text-zinc-400" />
-            <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500">
+            <FolderKanban className="h-4 w-4 text-zinc-400 dark:text-zinc-500" />
+            <CardTitle className="text-[10px] font-bold uppercase tracking-[0.3em] text-zinc-500 dark:text-zinc-400">
               Active Projects
             </CardTitle>
           </div>
@@ -107,20 +107,20 @@ export default async function ProjectsPage() {
         <CardContent className="p-0">
           <Table>
             <TableHeader>
-              <TableRow className="hover:bg-transparent border-zinc-50 bg-zinc-50/30">
-                <TableHead className="pl-8 text-[10px] uppercase font-bold text-zinc-500 h-12">
+              <TableRow className="hover:bg-transparent border-zinc-100 dark:border-zinc-800 bg-zinc-50/30 dark:bg-zinc-900/20">
+                <TableHead className="pl-8 text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455 h-12">
                   Project Name
                 </TableHead>
-                <TableHead className="text-[10px] uppercase font-bold text-zinc-500">
+                <TableHead className="text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                   Client
                 </TableHead>
-                <TableHead className="text-[10px] uppercase font-bold text-zinc-500">
+                <TableHead className="text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                   Status
                 </TableHead>
-                <TableHead className="text-right text-[10px] uppercase font-bold text-zinc-500">
+                <TableHead className="text-right text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455">
                   Deadline
                 </TableHead>
-                <TableHead className="pr-8 text-right text-[10px] uppercase font-bold text-zinc-500 h-12">
+                <TableHead className="pr-8 text-right text-[10px] uppercase font-bold text-zinc-500 dark:text-zinc-455 h-12">
                   Aksi
                 </TableHead>
               </TableRow>
@@ -130,7 +130,7 @@ export default async function ProjectsPage() {
                 <TableRow>
                   <TableCell
                     colSpan={5}
-                    className="h-48 text-center italic text-zinc-400 text-sm"
+                    className="h-48 text-center italic text-zinc-400 dark:text-zinc-500 text-sm"
                   >
                     Belum ada proyek. Silahkan buat proyek baru.
                   </TableCell>
@@ -139,19 +139,19 @@ export default async function ProjectsPage() {
                 displayData.map((proj) => (
                   <TableRow
                     key={proj.id}
-                    className="border-zinc-50 hover:bg-zinc-50/50 transition-all cursor-pointer"
+                    className="border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50/50 dark:hover:bg-zinc-900/30 transition-all cursor-pointer"
                   >
                     <TableCell className="pl-8 py-5">
-                      <p className="font-bold text-zinc-900">{proj.name}</p>
-                      <p className="text-[10px] text-zinc-400 uppercase tracking-widest mt-1">
+                      <p className="font-bold text-zinc-900 dark:text-zinc-100">{proj.name}</p>
+                      <p className="text-[10px] text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mt-1">
                         ID: {proj.id.substring(0, 8)}
                       </p>
                     </TableCell>
                     <TableCell>
-                      <p className="font-bold text-zinc-700 text-xs">
+                      <p className="font-bold text-zinc-700 dark:text-zinc-300 text-xs">
                         {proj.client_name}
                       </p>
-                      <p className="text-zinc-400 text-[10px]">
+                      <p className="text-zinc-400 dark:text-zinc-500 text-[10px]">
                         {proj.client_email}
                       </p>
                     </TableCell>
@@ -161,16 +161,16 @@ export default async function ProjectsPage() {
                         className={cn(
                           "rounded-full px-3 py-1 text-[9px] font-bold uppercase border-none shadow-none",
                           proj.status === "completed"
-                            ? "bg-emerald-50 text-emerald-600"
+                            ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400"
                             : proj.status === "in_progress"
-                              ? "bg-blue-50 text-blue-600"
-                              : "bg-zinc-100 text-zinc-600",
+                              ? "bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400"
+                              : "bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400",
                         )}
                       >
                         {proj.status?.replace("_", " ") || "Draft"}
                       </Badge>
                     </TableCell>
-                    <TableCell className="text-right font-bold text-zinc-900 text-xs">
+                    <TableCell className="text-right font-bold text-zinc-900 dark:text-zinc-100 text-xs">
                       {proj.deadline
                         ? new Date(proj.deadline).toLocaleDateString("id-ID")
                         : "-"}

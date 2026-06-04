@@ -169,16 +169,16 @@ export function GlobalActions({
             <Button
               variant="ghost"
               size="sm"
-              className="h-8 w-8 p-0 hover:bg-zinc-100 rounded-lg cursor-pointer"
+              className="h-8 w-8 p-0 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg cursor-pointer"
               disabled={loading}
             >
-              <MoreVertical className="h-4 w-4 text-zinc-400" />
+              <MoreVertical className="h-4 w-4 text-zinc-400 dark:text-zinc-500" />
             </Button>
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-48 rounded-xl bg-white border border-zinc-200 shadow-lg"
+          className="w-48 rounded-xl bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 shadow-lg"
         >
           {type === "invoice" && (
             <>
@@ -186,7 +186,7 @@ export function GlobalActions({
                 onClick={() => router.push(`/customer/invoices/${id}/print`)}
                 className="cursor-pointer rounded-lg"
               >
-                <Printer className="h-4 w-4 mr-2 text-zinc-600" />
+                <Printer className="h-4 w-4 mr-2 text-zinc-600 dark:text-zinc-400" />
                 <span className="text-sm">Cetak Invoice</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
@@ -219,7 +219,7 @@ export function GlobalActions({
                 className="cursor-pointer rounded-lg"
                 disabled={loading}
               >
-                <Pencil className="h-4 w-4 mr-2 text-zinc-600" />
+                <Pencil className="h-4 w-4 mr-2 text-zinc-600 dark:text-zinc-400" />
                 <span className="text-sm">Edit Data</span>
               </DropdownMenuItem>
               {status !== "completed" ? (
@@ -251,7 +251,7 @@ export function GlobalActions({
                 className="cursor-pointer rounded-lg"
                 disabled={loading}
               >
-                <Pencil className="h-4 w-4 mr-2 text-zinc-600" />
+                <Pencil className="h-4 w-4 mr-2 text-zinc-600 dark:text-zinc-400" />
                 <span className="text-sm">Edit Tiket</span>
               </DropdownMenuItem>
               {status === "open" ? (
@@ -280,7 +280,7 @@ export function GlobalActions({
 
           <DropdownMenuItem
             onClick={() => setShowDeleteDialog(true)}
-            className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50 rounded-lg"
+            className="cursor-pointer text-red-600 focus:text-red-600 focus:bg-red-50 dark:focus:bg-red-950/30 rounded-lg"
             disabled={loading}
           >
             <Trash2 className="h-4 w-4 mr-2" />
@@ -291,12 +291,12 @@ export function GlobalActions({
 
       {(type === "project" || type === "ticket") && editPayload && (
         <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
-          <DialogContent className="sm:max-w-[425px] rounded-2xl border-none shadow-2xl bg-white">
+          <DialogContent className="sm:max-w-[425px] rounded-2xl border-none dark:border dark:border-zinc-800 shadow-2xl bg-white dark:bg-zinc-950">
             <DialogHeader>
-              <DialogTitle className="font-semibold text-xl tracking-tight text-zinc-900 italic uppercase">
+              <DialogTitle className="font-semibold text-xl tracking-tight text-zinc-900 dark:text-zinc-100 italic uppercase">
                 {type === "project" ? "Edit Proyek" : "Edit Tiket"}
               </DialogTitle>
-              <DialogDescription className="text-xs text-zinc-500 font-medium italic">
+              <DialogDescription className="text-xs text-zinc-500 dark:text-zinc-400 font-medium italic">
                 Ubah rincian {type === "project" ? "proyek" : "tiket"}.
               </DialogDescription>
             </DialogHeader>
@@ -322,7 +322,7 @@ export function GlobalActions({
                     "Client tidak ditemukan"
                   }
                   readOnly
-                  className="rounded-xl border-zinc-100 bg-zinc-50 h-11 cursor-default text-zinc-400 select-none focus-visible:ring-0 focus-visible:outline-none"
+                  className="rounded-xl border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 h-11 cursor-default text-zinc-400 dark:text-zinc-550 select-none focus-visible:ring-0 focus-visible:outline-none"
                   tabIndex={-1}
                 />
               </div>
@@ -341,7 +341,7 @@ export function GlobalActions({
                     (editPayload.name || editPayload.subject) as string
                   }
                   required
-                  className="rounded-xl border-zinc-100 h-11"
+                  className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 h-11"
                 />
               </div>
 
@@ -358,7 +358,7 @@ export function GlobalActions({
                     name="deadline"
                     type="date"
                     defaultValue={(editPayload.deadline as string) || ""}
-                    className="rounded-xl border-zinc-100 h-11 cursor-pointer"
+                    className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 h-11 cursor-pointer"
                     onClick={(e) => e.currentTarget.showPicker()}
                   />
                 </div>
@@ -368,7 +368,7 @@ export function GlobalActions({
                 <Button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-zinc-900 text-white rounded-xl py-6 font-bold uppercase tracking-widest text-[10px] shadow-lg hover:bg-zinc-800 transition-all cursor-pointer"
+                  className="w-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl py-6 font-bold uppercase tracking-widest text-[10px] shadow-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all cursor-pointer"
                 >
                   {loading ? "MEMPERBARUI..." : "SIMPAN PERUBAHAN"}
                 </Button>
@@ -379,18 +379,18 @@ export function GlobalActions({
       )}
 
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent className="rounded-2xl border-none">
+        <AlertDialogContent className="rounded-2xl border-none dark:border dark:border-zinc-800 bg-white dark:bg-zinc-950">
           <AlertDialogHeader>
-            <AlertDialogTitle className="text-xl font-bold uppercase tracking-tight">
+            <AlertDialogTitle className="text-xl font-bold uppercase tracking-tight text-zinc-900 dark:text-zinc-100">
               Hapus Data?
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-sm text-zinc-500">
+            <AlertDialogDescription className="text-sm text-zinc-500 dark:text-zinc-400">
               Tindakan ini bersifat permanen dan tidak dapat dibatalkan.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel
-              className="rounded-xl border-zinc-200"
+              className="rounded-xl border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer"
               disabled={loading}
             >
               Batal
@@ -398,7 +398,7 @@ export function GlobalActions({
             <AlertDialogAction
               onClick={handleDelete}
               disabled={loading}
-              className="bg-red-600 hover:bg-red-700 text-white rounded-xl border-none shadow-lg shadow-red-100"
+              className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 text-white rounded-xl border-none shadow-lg dark:shadow-none cursor-pointer"
             >
               Ya, Hapus
             </AlertDialogAction>

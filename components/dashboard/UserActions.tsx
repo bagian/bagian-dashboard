@@ -117,7 +117,7 @@ export function UserActions({
           disabled={loading}
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-all cursor-pointer"
+          className="h-8 w-8 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
           title="Edit data user"
         >
           {loading && editDialogOpen ? (
@@ -132,7 +132,7 @@ export function UserActions({
           disabled={loading}
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100 transition-all cursor-pointer"
+          className="h-8 w-8 text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all cursor-pointer"
           title={`Toggle role: ${currentRole === "admin" ? "Customer" : "Admin"}`}
         >
           {loading && roleDialogOpen ? (
@@ -147,7 +147,7 @@ export function UserActions({
           disabled={loading}
           variant="ghost"
           size="icon"
-          className="h-8 w-8 text-zinc-400 hover:text-rose-600 hover:bg-rose-50 transition-all cursor-pointer"
+          className="h-8 w-8 text-zinc-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-all cursor-pointer"
           title="Hapus user"
         >
           {loading && deleteDialogOpen ? (

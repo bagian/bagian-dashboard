@@ -1,6 +1,6 @@
 "use client";
 
-import {useState, ChangeEvent, FormEvent} from "react";
+import {useState, useEffect, ChangeEvent, FormEvent} from "react";
 import {supabase} from "@/lib/supabase/client";
 import {Button} from "@/components/ui/button";
 import {
@@ -62,6 +62,52 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
       client.role?.toLowerCase() !== "admin" &&
       client.role?.toLowerCase() !== "superadmin",
   );
+
+  const fetchNextInvoiceNumber = async () => {
+    try {
+      const currentYear = new Date().getFullYear();
+      
+      const {data, error} = await supabase
+        .from("invoices")
+        .select("invoice_number")
+        .like("invoice_number", `INV/${currentYear}/%`)
+        .order("created_at", {ascending: false})
+        .limit(1);
+
+      if (error) throw error;
+
+      let nextNumber = 1;
+      if (data && data.length > 0) {
+        const lastInvoiceNumber = data[0].invoice_number;
+        const parts = lastInvoiceNumber.split("/");
+        if (parts.length === 3) {
+          const lastNum = parseInt(parts[2], 10);
+          if (!isNaN(lastNum)) {
+            nextNumber = lastNum + 1;
+          }
+        }
+      }
+
+      const paddedNum = String(nextNumber).padStart(3, "0");
+      setFormData((prev) => ({
+        ...prev,
+        invoice_number: `INV/${currentYear}/${paddedNum}`,
+      }));
+    } catch (err) {
+      console.error("Gagal mengambil nomor invoice berikutnya:", err);
+      const currentYear = new Date().getFullYear();
+      setFormData((prev) => ({
+        ...prev,
+        invoice_number: `INV/${currentYear}/001`,
+      }));
+    }
+  };
+
+  useEffect(() => {
+    if (open) {
+      fetchNextInvoiceNumber();
+    }
+  }, [open]);
 
   const addItem = () => {
     setItems([...items, {description: "", quantity: 1, unit_price: 0}]);
@@ -179,17 +225,17 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-zinc-900 text-white font-medium rounded-xl text-xs px-6 py-5 shadow-sm hover:bg-zinc-800 transition-all cursor-pointer">
+        <Button className="bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 font-medium rounded-xl text-xs px-6 py-5 shadow-sm hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all cursor-pointer">
           <Plus className="h-4 w-4 mr-2" />
           Buat Tagihan Baru
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[550px] max-h-[85vh] overflow-y-auto rounded-2xl border-none shadow-2xl bg-white">
+      <DialogContent className="sm:max-w-[550px] max-h-[85vh] overflow-y-auto rounded-2xl border-none dark:border dark:border-zinc-800 shadow-2xl bg-white dark:bg-zinc-950">
         <DialogHeader>
-          <DialogTitle className="font-semibold text-xl tracking-tight">
+          <DialogTitle className="font-semibold text-xl tracking-tight text-zinc-900 dark:text-zinc-100">
             Kirim Tagihan
           </DialogTitle>
-          <DialogDescription className="text-xs text-zinc-500 font-medium">
+          <DialogDescription className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
             Pilih client dan masukkan detail tagihan beserta rincian item.
           </DialogDescription>
         </DialogHeader>
@@ -210,16 +256,16 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
                 onChange={(e) =>
                   setFormData({...formData, client_id: e.target.value})
                 }
-                className="flex h-11 w-full rounded-xl border border-zinc-100 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-200 transition-all appearance-none cursor-pointer"
+                className="flex h-11 w-full rounded-xl border border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-zinc-200 transition-all appearance-none cursor-pointer"
               >
-                <option value="" disabled>
+                <option value="" disabled className="dark:bg-zinc-900">
                   -- Pilih Client --
                 </option>
                 {customerOnly.length === 0 ? (
-                  <option disabled>Tidak ada client tersedia</option>
+                  <option disabled className="dark:bg-zinc-900">Tidak ada client tersedia</option>
                 ) : (
                   customerOnly.map((client) => (
-                    <option key={client.id} value={client.id}>
+                    <option key={client.id} value={client.id} className="dark:bg-zinc-900">
                       {client.email}
                     </option>
                   ))
@@ -238,11 +284,10 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
                 id="invoice_number"
                 placeholder="INV/2026/001"
                 required
+                readOnly
                 value={formData.invoice_number}
-                onChange={(e) =>
-                  setFormData({...formData, invoice_number: e.target.value})
-                }
-                className="rounded-xl border-zinc-100 h-11"
+                className="rounded-xl border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 text-zinc-400 dark:text-zinc-500 h-11 cursor-default select-none focus-visible:ring-0 focus-visible:outline-none"
+                tabIndex={-1}
               />
             </div>
           </div>
@@ -262,12 +307,13 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
               onChange={(e) =>
                 setFormData({...formData, due_date: e.target.value})
               }
-              className="rounded-xl border-zinc-100 h-11"
+              className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 h-11 cursor-pointer"
+              onClick={(e) => e.currentTarget.showPicker()}
             />
           </div>
 
           {/* Bagian Dinamis Rincian Item */}
-          <div className="pt-4 pb-2 border-t border-zinc-100">
+          <div className="pt-4 pb-2 border-t border-zinc-100 dark:border-zinc-800">
             <div className="flex items-center justify-between mb-4">
               <Label className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
                 Rincian Item
@@ -277,7 +323,7 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
                 variant="outline"
                 size="sm"
                 onClick={addItem}
-                className="h-8 text-[10px] font-bold uppercase tracking-widest rounded-lg"
+                className="h-8 text-[10px] font-bold uppercase tracking-widest rounded-lg border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100 dark:hover:bg-zinc-900"
               >
                 <Plus className="h-3 w-3 mr-1" /> Tambah Item
               </Button>
@@ -287,7 +333,7 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
               {items.map((item, index) => (
                 <div
                   key={index}
-                  className="flex items-start gap-2 bg-zinc-50 p-3 rounded-xl border border-zinc-100"
+                  className="flex items-start gap-2 bg-zinc-50 dark:bg-zinc-900/50 p-3 rounded-xl border border-zinc-100 dark:border-zinc-800"
                 >
                   <div className="grid grid-cols-12 gap-2 flex-1">
                     <div className="col-span-12 sm:col-span-6">
@@ -298,7 +344,7 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
                         onChange={(e) =>
                           updateItem(index, "description", e.target.value)
                         }
-                        className="rounded-lg border-zinc-200 h-9 text-sm bg-white"
+                        className="rounded-lg border-zinc-200 dark:border-zinc-800 h-9 text-sm bg-white dark:bg-zinc-900 dark:text-zinc-100"
                       />
                     </div>
                     <div className="col-span-4 sm:col-span-2">
@@ -315,7 +361,7 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
                             parseInt(e.target.value) || 1,
                           )
                         }
-                        className="rounded-lg border-zinc-200 h-9 text-sm bg-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        className="rounded-lg border-zinc-200 dark:border-zinc-800 h-9 text-sm bg-white dark:bg-zinc-900 dark:text-zinc-100 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                       />
                     </div>
                     <div className="col-span-8 sm:col-span-4">
@@ -332,7 +378,7 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
                           const value = parseFormattedNumber(e.target.value);
                           updateItem(index, "unit_price", value);
                         }}
-                        className="rounded-lg border-zinc-200 h-9 text-sm bg-white"
+                        className="rounded-lg border-zinc-200 dark:border-zinc-800 h-9 text-sm bg-white dark:bg-zinc-900 dark:text-zinc-100"
                       />
                     </div>
                   </div>
@@ -341,7 +387,7 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
                       type="button"
                       variant="ghost"
                       onClick={() => removeItem(index)}
-                      className="h-9 w-9 p-0 text-red-500 hover:bg-red-50 hover:text-red-600 rounded-lg"
+                      className="h-9 w-9 p-0 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 rounded-lg cursor-pointer"
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>
@@ -352,7 +398,7 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
           </div>
 
           {/* Pajak, Diskon, Catatan */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-zinc-100">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
             <div className="space-y-2">
               <Label className="text-[10px] font-bold uppercase tracking-widest text-zinc-400">
                 Pajak (%)
@@ -366,7 +412,7 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
                     : ""
                 }
                 onChange={(e) => handleNumberInput(e, "tax_percentage")}
-                className="rounded-xl border-zinc-100 h-11"
+                className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 h-11"
               />
             </div>
             <div className="space-y-2">
@@ -380,7 +426,7 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
                   formData.discount > 0 ? formatNumber(formData.discount) : ""
                 }
                 onChange={(e) => handleNumberInput(e, "discount")}
-                className="rounded-xl border-zinc-100 h-11"
+                className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 h-11"
               />
             </div>
           </div>
@@ -395,15 +441,15 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
               onChange={(e) =>
                 setFormData({...formData, notes: e.target.value})
               }
-              className="rounded-xl border-zinc-100 h-11"
+              className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 h-11"
             />
           </div>
 
-          <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-100 flex justify-between items-center">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">
+          <div className="bg-zinc-50 dark:bg-zinc-900/50 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800 flex justify-between items-center">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 dark:text-zinc-400">
               Total Akhir
             </span>
-            <span className="text-xl font-bold text-zinc-900">
+            <span className="text-xl font-bold text-zinc-900 dark:text-zinc-100">
               Rp {formatNumber(calculateTotal())}
             </span>
           </div>
@@ -412,7 +458,7 @@ export function CreateInvoiceModal({clients}: {clients: Client[]}) {
             <Button
               type="submit"
               disabled={loading || customerOnly.length === 0}
-              className="w-full bg-zinc-900 text-white rounded-xl py-6 font-bold uppercase tracking-widest text-[10px] shadow-lg hover:bg-zinc-800 transition-all cursor-pointer disabled:bg-zinc-300 disabled:text-zinc-500"
+              className="w-full bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 rounded-xl py-6 font-bold uppercase tracking-widest text-[10px] shadow-lg hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all cursor-pointer disabled:bg-zinc-300 dark:disabled:bg-zinc-800 disabled:text-zinc-500 dark:disabled:text-zinc-400"
             >
               {loading ? "MENGIRIM..." : "KONFIRMASI & KIRIM"}
             </Button>

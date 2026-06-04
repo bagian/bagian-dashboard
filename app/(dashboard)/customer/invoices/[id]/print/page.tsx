@@ -19,10 +19,10 @@ export default async function InvoiceDetailPage({params}: PageProps) {
   // 3. Pencegahan agar tidak hit database jika ID-nya "undefined"
   if (!id || id === "undefined") {
     return (
-      <div className="p-8 text-center text-red-500 font-bold">
+      <div className="p-8 text-center text-red-500 dark:text-red-400 font-bold">
         <h1>Error: URL Tidak Valid</h1>
         <p>URL saat ini mengarah ke ID &quot;ndefined&quot;.</p>
-        <p className="text-zinc-500 font-normal mt-2">
+        <p className="text-zinc-500 dark:text-zinc-400 font-normal mt-2">
           Silakan kembali ke halaman Daftar Invoice dan pastikan tombol link-nya
           memuat ID yang benar.
         </p>
@@ -37,7 +37,7 @@ export default async function InvoiceDetailPage({params}: PageProps) {
 
   if (!user) {
     return (
-      <div className="p-8 text-center font-medium">Silahkan login kembali.</div>
+      <div className="p-8 text-center font-medium text-zinc-900 dark:text-zinc-100">Silahkan login kembali.</div>
     );
   }
 
@@ -59,10 +59,10 @@ export default async function InvoiceDetailPage({params}: PageProps) {
 
   if (error) {
     return (
-      <div className="p-8 text-center text-red-500 font-bold">
+      <div className="p-8 text-center text-red-500 dark:text-red-400 font-bold">
         <h1>Terjadi Kesalahan Query Supabase:</h1>
         <p>{error.message}</p>
-        <p className="text-sm font-normal text-zinc-500 mt-2">
+        <p className="text-sm font-normal text-zinc-500 dark:text-zinc-450 mt-2">
           Detail: {error.details || error.hint}
         </p>
       </div>
@@ -71,7 +71,7 @@ export default async function InvoiceDetailPage({params}: PageProps) {
 
   if (!invoice) {
     return (
-      <div className="p-8 text-center text-zinc-500 font-bold">
+      <div className="p-8 text-center text-zinc-500 dark:text-zinc-400 font-bold">
         Data invoice dengan ID tersebut tidak ditemukan di database.
       </div>
     );
