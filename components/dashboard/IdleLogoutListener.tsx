@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase/client";
 
-// Durasi idle timeout: 5 menit (300.000 ms)
-const IDLE_TIMEOUT_MS = 5 * 60 * 1000;
+// Durasi idle timeout: 3 menit (180.000 ms)
+const IDLE_TIMEOUT_MS = 3 * 60 * 1000;
 
 export function IdleLogoutListener() {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -27,10 +27,8 @@ export function IdleLogoutListener() {
       timeoutRef.current = setTimeout(handleLogout, IDLE_TIMEOUT_MS);
     };
 
-    // Inisialisasi timer pada mount
     resetTimer();
 
-    // Deteksi aktivitas user
     const events = ["mousemove", "keydown", "click", "scroll", "touchstart"];
     events.forEach((event) => {
       window.addEventListener(event, resetTimer);
