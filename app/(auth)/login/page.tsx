@@ -25,10 +25,47 @@ export default function LoginPage() {
     }
     return false;
   });
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+  const [loginError, setLoginError] = useState("");
   const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoginError("");
+
+    // Reset errors
+    const newErrors = {
+      email: "",
+      password: "",
+    };
+
+    let hasError = false;
+
+    if (!email.trim()) {
+      newErrors.email = "Email wajib diisi";
+      hasError = true;
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        newErrors.email = "Format email tidak valid";
+        hasError = true;
+      }
+    }
+
+    if (!password) {
+      newErrors.password = "Password wajib diisi";
+      hasError = true;
+    }
+
+    setErrors(newErrors);
+
+    if (hasError) {
+      return;
+    }
+
     setLoading(true);
 
     // 2. Logika Simpan: Simpan email jika checkbox dicentang, hapus jika tidak
@@ -44,7 +81,12 @@ export default function LoginPage() {
     });
 
     if (error) {
-      toast.error("Login gagal!", { description: error.message });
+      let customError = error.message;
+      if (error.message === "Invalid login credentials") {
+        customError = "Email atau password salah. Silakan coba lagi.";
+      }
+      setLoginError(customError);
+      toast.error("Login gagal!", { description: customError });
       setLoading(false);
     } else {
       toast.success("Login berhasil!", {
@@ -139,7 +181,7 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-8">
+          <form onSubmit={handleLogin} noValidate className="space-y-8">
             <div className="space-y-2">
               <label className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold">
                 Email Address
@@ -147,11 +189,32 @@ export default function LoginPage() {
               <input
                 type="email"
                 required
-                className="w-full border-b border-zinc-100 py-3 text-sm focus:border-zinc-900 focus:outline-none transition-all placeholder:text-zinc-200 font-medium"
+                className={`w-full border-b border-zinc-100 py-3 text-sm text-zinc-700 focus:border-zinc-900 focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
+                bg-transparent 
+                [&:-webkit-autofill]:bg-transparent 
+                [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
+                [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
+                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46]  ${errors.email || loginError
+                    ? "border-red-500 text-red-900 focus:border-red-500"
+                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                  }`}
                 placeholder="johndoe@gmail.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (errors.email) {
+                    setErrors((prev) => ({ ...prev, email: "" }));
+                  }
+                  if (loginError) {
+                    setLoginError("");
+                  }
+                }}
               />
+              {errors.email && (
+                <p className="text-red-500 text-[11px] font-semibold tracking-wide mt-1">
+                  {errors.email}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -170,10 +233,26 @@ export default function LoginPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   required
-                  className="w-full border-b border-zinc-100 py-3 pr-10 text-sm focus:border-zinc-900 focus:outline-none transition-all font-medium "
+                  className={`w-full border-b py-3 pr-10 text-sm focus:outline-none transition-all font-medium 
+                  bg-transparent 
+                  [&:-webkit-autofill]:bg-transparent 
+                  [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
+                  [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
+                  dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] ${errors.password || loginError
+                      ? "border-red-500 text-red-900 focus:border-red-500"
+                      : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                    }`}
                   placeholder="••••••••"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (errors.password) {
+                      setErrors((prev) => ({ ...prev, password: "" }));
+                    }
+                    if (loginError) {
+                      setLoginError("");
+                    }
+                  }}
                 />
                 <button
                   type="button"
@@ -187,14 +266,19 @@ export default function LoginPage() {
                   )}
                 </button>
               </div>
+              {errors.password && (
+                <p className="text-red-500 text-[11px] font-semibold tracking-wide mt-1">
+                  {errors.password}
+                </p>
+              )}
             </div>
 
             <div className="flex items-center gap-3 pt-2">
               <input
                 type="checkbox"
                 id="remember"
-                checked={rememberMe} // Hubungkan ke state
-                onChange={(e) => setRememberMe(e.target.checked)} // Update state saat diklik
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
                 className="h-4 w-4 rounded border-zinc-200 text-zinc-950 focus:ring-zinc-950 cursor-pointer"
               />
               <label
@@ -204,6 +288,12 @@ export default function LoginPage() {
                 Remember sign in details
               </label>
             </div>
+
+            {loginError && (
+              <div className="bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/30 text-red-600 dark:text-red-400 p-4 rounded-xl text-center text-xs font-semibold tracking-wide uppercase italic">
+                {loginError}
+              </div>
+            )}
 
             <button
               type="submit"

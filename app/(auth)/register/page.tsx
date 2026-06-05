@@ -16,6 +16,14 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [errors, setErrors] = useState({
+    fullName: "",
+    companyName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -24,35 +32,69 @@ export default function RegisterPage() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      toast.error("Password tidak cocok!", {
-        description: "Pastikan kedua password yang Anda masukkan sama.",
-      });
-      return;
+    // Reset errors
+    const newErrors = {
+      fullName: "",
+      companyName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
+
+    let hasError = false;
+
+    if (!fullName.trim()) {
+      newErrors.fullName = "Nama Lengkap wajib diisi";
+      hasError = true;
     }
 
-    if (password.length < 8) {
-      toast.error("Password terlalu pendek!", {
-        description: "Password minimal harus 8 karakter.",
-      });
-      return;
+    if (!companyName.trim()) {
+      newErrors.companyName = "Nama Perusahaan wajib diisi";
+      hasError = true;
     }
 
-    const strongPasswordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#^()_\-+=]).{8,}$/;
-
-    if (!strongPasswordRegex.test(password)) {
-      toast.error("Password belum cukup kuat!", {
-        description:
-          "Gunakan minimal 8 karakter dengan kombinasi huruf besar, huruf kecil, angka, dan simbol.",
-      });
-      return;
+    if (!email.trim()) {
+      newErrors.email = "Email wajib diisi";
+      hasError = true;
+    } else {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        newErrors.email = "Format email tidak valid";
+        hasError = true;
+      }
     }
 
-    if (password.toLowerCase().includes(email.toLowerCase())) {
-      toast.error("Password tidak boleh mengandung email!", {
-        description: "Gunakan password yang berbeda dari email Anda.",
-      });
+    if (!password) {
+      newErrors.password = "Password wajib diisi";
+      hasError = true;
+    } else {
+      if (password.length < 8) {
+        newErrors.password = "Password minimal harus 8 karakter";
+        hasError = true;
+      } else {
+        const strongPasswordRegex =
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#^()_\-+=]).{8,}$/;
+        if (!strongPasswordRegex.test(password)) {
+          newErrors.password = "Password minimal 8 karakter dengan kombinasi huruf besar, huruf kecil, angka, dan simbol";
+          hasError = true;
+        } else if (password.toLowerCase().includes(email.toLowerCase())) {
+          newErrors.password = "Password tidak boleh mengandung email Anda";
+          hasError = true;
+        }
+      }
+    }
+
+    if (!confirmPassword) {
+      newErrors.confirmPassword = "Konfirmasi Password wajib diisi";
+      hasError = true;
+    } else if (password !== confirmPassword) {
+      newErrors.confirmPassword = "Password tidak cocok";
+      hasError = true;
+    }
+
+    setErrors(newErrors);
+
+    if (hasError) {
       return;
     }
 
@@ -87,7 +129,6 @@ export default function RegisterPage() {
 
   return (
     <div className="flex min-h-screen bg-white font-sans">
-      {/* SISI KIRI: VISUAL BRANDING - TIDAK DIUBAH */}
       <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-16 overflow-hidden">
         <Image
           src="/img/banner/bn-mcp.webp"
@@ -129,20 +170,18 @@ export default function RegisterPage() {
           </div>
         </div>
       </div>
-
-      {/* SISI KANAN: FORM REGISTER - TIDAK DIUBAH */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-white">
         <div className="w-full max-w-[400px] space-y-10">
           <div className="space-y-3">
             <h2 className="text-4xl font-black tracking-tighter text-zinc-900 uppercase">
               Join Us
             </h2>
-            <p className="text-zinc-400 text-xs tracking-widest">
+            <p className="text-zinc-700 text-xs tracking-widest">
               Daftar sebagai Client Baru Bagian Projects.
             </p>
           </div>
 
-          <form onSubmit={handleRegister} className="space-y-6">
+          <form onSubmit={handleRegister} noValidate className="space-y-6">
             <div className="space-y-2">
               <label className="text-[11px] uppercase tracking-[0.3em] text-zinc-400 font-bold">
                 Nama Lengkap
@@ -150,11 +189,30 @@ export default function RegisterPage() {
               <input
                 type="text"
                 required
-                className="w-full border-b border-zinc-100 py-3 text-sm focus:border-zinc-900 focus:outline-none transition-all placeholder:text-zinc-200 font-medium"
+                className={`w-full border-b py-3 text-sm focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
+                bg-transparent 
+                [&:-webkit-autofill]:bg-transparent 
+                [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
+                [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
+                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46]
+                  ${errors.fullName
+                    ? "border-red-500 text-red-900 focus:border-red-500"
+                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                  }`}
                 placeholder="John Doe"
                 value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
+                onChange={(e) => {
+                  setFullName(e.target.value);
+                  if (errors.fullName) {
+                    setErrors((prev) => ({ ...prev, fullName: "" }));
+                  }
+                }}
               />
+              {errors.fullName && (
+                <p className="text-red-500 text-[11px] font-semibold tracking-wide mt-1">
+                  {errors.fullName}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -164,11 +222,30 @@ export default function RegisterPage() {
               <input
                 type="text"
                 required
-                className="w-full border-b border-zinc-100 py-3 text-sm focus:border-zinc-900 focus:outline-none transition-all placeholder:text-zinc-200 font-medium"
+                className={`w-full border-b py-3 text-sm focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
+                bg-transparent 
+                [&:-webkit-autofill]:bg-transparent 
+                [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
+                [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
+                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46]
+                  ${errors.companyName
+                    ? "border-red-500 text-red-900 focus:border-red-500"
+                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                  }`}
                 placeholder="PT. Contoh Indonesia"
                 value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
+                onChange={(e) => {
+                  setCompanyName(e.target.value);
+                  if (errors.companyName) {
+                    setErrors((prev) => ({ ...prev, companyName: "" }));
+                  }
+                }}
               />
+              {errors.companyName && (
+                <p className="text-red-500 text-[11px] font-semibold tracking-wide mt-1">
+                  {errors.companyName}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -178,11 +255,30 @@ export default function RegisterPage() {
               <input
                 type="email"
                 required
-                className="w-full border-b border-zinc-100 py-3 text-sm focus:border-zinc-900 focus:outline-none transition-all placeholder:text-zinc-200 font-medium"
+                className={`w-full border-b py-3 text-sm focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
+                bg-transparent 
+                [&:-webkit-autofill]:bg-transparent 
+                [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
+                [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
+                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46]
+                  ${errors.email
+                    ? "border-red-500 text-red-900 focus:border-red-500"
+                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                  }`}
                 placeholder="nama@perusahaan.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  if (errors.email) {
+                    setErrors((prev) => ({ ...prev, email: "" }));
+                  }
+                }}
               />
+              {errors.email && (
+                <p className="text-red-500 text-[11px] font-semibold tracking-wide mt-1">
+                  {errors.email}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -193,10 +289,23 @@ export default function RegisterPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   required
-                  className="w-full border-b border-zinc-100 py-3 pr-10 text-sm focus:border-zinc-900 focus:outline-none transition-all font-medium"
+                  className={`w-full border-b py-3 pr-10 text-sm focus:outline-none transition-all font-medium
+                  bg-transparent 
+                  [&:-webkit-autofill]:bg-transparent 
+                  [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
+                  [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
+                  dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] ${errors.password
+                      ? "border-red-500 text-red-900 focus:border-red-500"
+                      : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                    }`}
                   placeholder="••••••••"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    if (errors.password) {
+                      setErrors((prev) => ({ ...prev, password: "" }));
+                    }
+                  }}
                 />
                 <button
                   type="button"
@@ -210,6 +319,11 @@ export default function RegisterPage() {
                   )}
                 </button>
               </div>
+              {errors.password && (
+                <p className="text-red-500 text-[11px] font-semibold tracking-wide mt-1">
+                  {errors.password}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -220,10 +334,24 @@ export default function RegisterPage() {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   required
-                  className="w-full border-b border-zinc-100 py-3 pr-10 text-sm focus:border-zinc-900 focus:outline-none transition-all font-medium"
+                  className={`w-full border-b py-3 pr-10 text-sm focus:outline-none transition-all font-medium 
+                  bg-transparent 
+                  [&:-webkit-autofill]:bg-transparent 
+                  [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
+                  [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
+                  dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46]
+                    ${errors.confirmPassword
+                      ? "border-red-500 text-red-900 focus:border-red-500"
+                      : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                    }`}
                   placeholder="Ulangi password"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    if (errors.confirmPassword) {
+                      setErrors((prev) => ({ ...prev, confirmPassword: "" }));
+                    }
+                  }}
                 />
                 <button
                   type="button"
@@ -237,6 +365,11 @@ export default function RegisterPage() {
                   )}
                 </button>
               </div>
+              {errors.confirmPassword && (
+                <p className="text-red-500 text-[11px] font-semibold tracking-wide mt-1">
+                  {errors.confirmPassword}
+                </p>
+              )}
             </div>
 
             <button

@@ -1,9 +1,10 @@
 "use client";
 
-import {useState} from "react";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,9 +40,9 @@ import {
   Pencil,
   ChevronDown,
 } from "lucide-react";
-import {useRouter} from "next/navigation";
-import {toast} from "sonner";
-import {supabase} from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { supabase } from "@/lib/supabase/client";
 
 interface Client {
   id: string;
@@ -53,6 +54,7 @@ interface Client {
 interface EditPayload {
   name?: string;
   subject?: string;
+  description?: string;
   client_id?: string;
   user_id?: string;
   deadline?: string | null;
@@ -64,6 +66,7 @@ interface UpdateDatabasePayload {
   name?: string;
   subject?: string;
   deadline?: string | null;
+  description?: string;
 }
 
 interface GlobalActionsProps {
@@ -92,9 +95,9 @@ export function GlobalActions({
     if (loading) return;
     setLoading(true);
     try {
-      const {error} = await supabase
+      const { error } = await supabase
         .from(tableName)
-        .update({status: newStatus})
+        .update({ status: newStatus })
         .eq("id", id);
       if (error) throw error;
       toast.success("Status berhasil diperbarui! 🎉");
@@ -102,7 +105,7 @@ export function GlobalActions({
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "Terjadi kesalahan";
-      toast.error("Gagal update status!", {description: errorMessage});
+      toast.error("Gagal update status!", { description: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -111,7 +114,7 @@ export function GlobalActions({
   const handleDelete = async () => {
     setLoading(true);
     try {
-      const {error} = await supabase.from(tableName).delete().eq("id", id);
+      const { error } = await supabase.from(tableName).delete().eq("id", id);
       if (error) throw error;
       toast.success("Data berhasil dihapus!");
       setShowDeleteDialog(false);
@@ -119,7 +122,7 @@ export function GlobalActions({
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "Terjadi kesalahan";
-      toast.error("Gagal menghapus data!", {description: errorMessage});
+      toast.error("Gagal menghapus data!", { description: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -139,10 +142,11 @@ export function GlobalActions({
       updateData.deadline = (formData.get("deadline") as string) || null;
     } else if (type === "ticket") {
       updateData.subject = formData.get("name") as string;
+      updateData.description = formData.get("description") as string;
     }
 
     try {
-      const {error} = await supabase
+      const { error } = await supabase
         .from(tableName)
         .update(updateData)
         .eq("id", id);
@@ -155,7 +159,7 @@ export function GlobalActions({
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "Terjadi kesalahan";
-      toast.error("Gagal memperbarui data!", {description: errorMessage});
+      toast.error("Gagal memperbarui data!", { description: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -293,10 +297,10 @@ export function GlobalActions({
         <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
           <DialogContent className="sm:max-w-[425px] rounded-2xl border-none dark:border dark:border-zinc-800 shadow-2xl bg-white dark:bg-zinc-950">
             <DialogHeader>
-              <DialogTitle className="font-semibold text-xl tracking-tight text-zinc-900 dark:text-zinc-100 italic uppercase">
+              <DialogTitle className="font-semibold text-xl tracking-tight text-zinc-900 dark:text-zinc-100 uppercase">
                 {type === "project" ? "Edit Proyek" : "Edit Tiket"}
               </DialogTitle>
-              <DialogDescription className="text-xs text-zinc-500 dark:text-zinc-400 font-medium italic">
+              <DialogDescription className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
                 Ubah rincian {type === "project" ? "proyek" : "tiket"}.
               </DialogDescription>
             </DialogHeader>
@@ -344,6 +348,24 @@ export function GlobalActions({
                   className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 h-11"
                 />
               </div>
+
+              {type === "ticket" && (
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="description"
+                    className="text-[10px] font-bold uppercase tracking-widest text-zinc-400"
+                  >
+                    Deskripsi Tiket
+                  </Label>
+                  <Textarea
+                    id="description"
+                    name="description"
+                    defaultValue={(editPayload.description as string) || ""}
+                    required
+                    className="rounded-xl border-zinc-100 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100 min-h-[100px] resize-none focus-visible:ring-zinc-200 text-sm"
+                  />
+                </div>
+              )}
 
               {type === "project" && (
                 <div className="space-y-2">
