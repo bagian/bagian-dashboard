@@ -18,6 +18,7 @@ import {
 import CreateTicketModal from "@/components/dashboard/CreateTicketsModal";
 import { GlobalActions } from "@/components/dashboard/GlobalActions";
 import { Pagination } from "@/components/dashboard/Pagination";
+import { DescriptionCell } from "@/components/dashboard/DescriptionCell";
 
 export const revalidate = 0;
 
@@ -162,10 +163,9 @@ export default async function TicketsPage({
 
                       <TableCell>
                         <span
-                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase ${
-                            statusVariant[ticket.status as "open" | "closed"] ||
+                          className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase ${statusVariant[ticket.status as "open" | "closed"] ||
                             statusVariant.open
-                          }`}
+                            }`}
                         >
                           {ticket.status}
                         </span>
@@ -179,9 +179,7 @@ export default async function TicketsPage({
 
                       {/* DATA DESKRIPSI BARU */}
                       <TableCell className="max-w-[300px]">
-                        <p className="text-xs text-zinc-600 dark:text-zinc-350 line-clamp-2 font-medium">
-                          {ticket.description || "-"}
-                        </p>
+                        <DescriptionCell description={ticket.description} />
                       </TableCell>
 
                       {isAdmin && (

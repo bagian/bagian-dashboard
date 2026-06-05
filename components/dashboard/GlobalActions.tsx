@@ -295,7 +295,7 @@ export function GlobalActions({
 
       {(type === "project" || type === "ticket") && editPayload && (
         <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
-          <DialogContent className="sm:max-w-[425px] rounded-2xl border-none dark:border dark:border-zinc-800 shadow-2xl bg-white dark:bg-zinc-950">
+          <DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className="sm:max-w-[425px] rounded-2xl border-none dark:border dark:border-zinc-800 shadow-2xl bg-white dark:bg-zinc-950">
             <DialogHeader>
               <DialogTitle className="font-semibold text-xl tracking-tight text-zinc-900 dark:text-zinc-100 uppercase">
                 {type === "project" ? "Edit Proyek" : "Edit Tiket"}
