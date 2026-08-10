@@ -176,7 +176,7 @@ export default function RegisterPage() {
             <h2 className="text-4xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100 uppercase">
               Join Us
             </h2>
-            <p className="text-zinc-700 text-xs tracking-widest">
+            <p className="text-zinc-700 dark:text-zinc-400 text-xs tracking-widest">
               Daftar sebagai Client Baru Bagian Projects.
             </p>
           </div>
@@ -189,7 +189,7 @@ export default function RegisterPage() {
               <input
                 type="text"
                 required
-                className={`w-full border-b py-3 text-sm focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
+                className={`w-full border-b py-3 px-1 text-sm focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
                 bg-transparent 
                 [&:-webkit-autofill]:bg-transparent 
                 [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
@@ -222,7 +222,7 @@ export default function RegisterPage() {
               <input
                 type="text"
                 required
-                className={`w-full border-b py-3 text-sm focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
+                className={`w-full border-b py-3 px-1 text-sm focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
                 bg-transparent 
                 [&:-webkit-autofill]:bg-transparent 
                 [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
@@ -255,7 +255,7 @@ export default function RegisterPage() {
               <input
                 type="email"
                 required
-                className={`w-full border-b py-3 text-sm focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
+                className={`w-full border-b py-3 px-1 text-sm focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
                 bg-transparent 
                 [&:-webkit-autofill]:bg-transparent 
                 [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
@@ -289,7 +289,7 @@ export default function RegisterPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   required
-                  className={`w-full border-b py-3 pr-10 text-sm focus:outline-none transition-all font-medium
+                  className={`w-full border-b py-3 pr-10 pl-1 text-sm focus:outline-none transition-all font-medium
                   bg-transparent 
                   [&:-webkit-autofill]:bg-transparent 
                   [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
@@ -334,7 +334,7 @@ export default function RegisterPage() {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   required
-                  className={`w-full border-b py-3 pr-10 text-sm focus:outline-none transition-all font-medium 
+                  className={`w-full border-b py-3 pr-10 pl-1 text-sm focus:outline-none transition-all font-medium 
                   bg-transparent 
                   [&:-webkit-autofill]:bg-transparent 
                   [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
@@ -386,7 +386,7 @@ export default function RegisterPage() {
               Sudah punya akun?{" "}
               <Link
                 href="/login"
-                className="text-zinc-950 border-b border-zinc-950 pb-0.5 ml-2 cursor-pointer"
+                className="text-zinc-950 dark:text-zinc-100 border-b border-zinc-950 dark:border-zinc-100 pb-0.5 ml-2 cursor-pointer"
               >
                 Login di sini
               </Link>

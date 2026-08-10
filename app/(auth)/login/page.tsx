@@ -189,7 +189,7 @@ export default function LoginPage() {
               <input
                 type="email"
                 required
-                className={`w-full border-b border-zinc-100 py-3 text-sm text-zinc-700 focus:border-zinc-900 focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
+                className={`w-full border-b border-zinc-100 py-3 px-1 text-sm text-zinc-700 focus:border-zinc-900 focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
                 bg-transparent 
                 [&:-webkit-autofill]:bg-transparent 
                 [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
@@ -233,7 +233,7 @@ export default function LoginPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   required
-                  className={`w-full border-b py-3 pr-10 text-sm focus:outline-none transition-all font-medium 
+                  className={`w-full border-b py-3 pr-10 pl-1 text-sm focus:outline-none transition-all font-medium 
                   bg-transparent 
                   [&:-webkit-autofill]:bg-transparent 
                   [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
@@ -309,7 +309,7 @@ export default function LoginPage() {
               Belum memiliki akun?{" "}
               <Link
                 href="/register"
-                className="text-zinc-950 border-b border-zinc-950 pb-0.5 ml-2 transition-all cursor-pointer"
+                className="text-zinc-950 dark:text-zinc-100 border-b border-zinc-950 dark:border-zinc-100 pb-0.5 ml-2 transition-all cursor-pointer"
               >
                 Daftar Sekarang
               </Link>
