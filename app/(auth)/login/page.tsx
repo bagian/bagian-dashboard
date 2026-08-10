@@ -124,7 +124,7 @@ export default function LoginPage() {
   }, []);
 
   return (
-    <div className="flex min-h-screen bg-white font-sans">
+    <div className="flex min-h-screen bg-white dark:bg-zinc-950 font-sans">
       <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-16 overflow-hidden">
         <Image
           src="/img/banner/bn-mcp.webp"
@@ -170,10 +170,10 @@ export default function LoginPage() {
         </div>
       </div>
 
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-white">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-white dark:bg-zinc-950">
         <div className="w-full max-w-[400px] space-y-12">
           <div className="space-y-3">
-            <h2 className="text-4xl font-black tracking-tighter text-zinc-900">
+            <h2 className="text-4xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100">
               Welcome Back !
             </h2>
             <p className="text-zinc-400 text-xs">
@@ -183,7 +183,7 @@ export default function LoginPage() {
 
           <form onSubmit={handleLogin} noValidate className="space-y-8">
             <div className="space-y-2">
-              <label className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold">
+              <label className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold dark:text-zinc-400">
                 Email Address
               </label>
               <input
@@ -194,9 +194,9 @@ export default function LoginPage() {
                 [&:-webkit-autofill]:bg-transparent 
                 [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
                 [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
-                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46]  ${errors.email || loginError
+                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#f4f4f5] dark:[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_#18181b_inset]  ${errors.email || loginError
                     ? "border-red-500 text-red-900 focus:border-red-500"
-                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900 dark:border-zinc-700 dark:text-zinc-100 dark:focus:border-zinc-300"
                   }`}
                 placeholder="johndoe@gmail.com"
                 value={email}
@@ -219,12 +219,12 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold">
+                <label className="text-[11px] uppercase tracking-widest text-zinc-500 font-bold dark:text-zinc-400">
                   Password
                 </label>
                 <Link
                   href="/forgot-password"
-                  className="text-[12px]  text-zinc-900 hover:underline"
+                  className="text-[12px] text-zinc-900 dark:text-zinc-100 dark:text-zinc-100 hover:underline"
                 >
                   Forgot password?
                 </Link>
@@ -238,9 +238,9 @@ export default function LoginPage() {
                   [&:-webkit-autofill]:bg-transparent 
                   [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
                   [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
-                  dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] ${errors.password || loginError
+                  dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#f4f4f5] dark:[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_#18181b_inset] ${errors.password || loginError
                       ? "border-red-500 text-red-900 focus:border-red-500"
-                      : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                      : "border-zinc-100 text-zinc-700 focus:border-zinc-900 dark:border-zinc-700 dark:text-zinc-100 dark:focus:border-zinc-300"
                     }`}
                   placeholder="••••••••"
                   value={password}
@@ -257,7 +257,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-zinc-300 hover:text-zinc-900 transition-colors cursor-pointer"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-zinc-300 hover:text-zinc-900 dark:text-zinc-100 transition-colors cursor-pointer"
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4" />
@@ -283,7 +283,7 @@ export default function LoginPage() {
               />
               <label
                 htmlFor="remember"
-                className="text-[12px]  text-zinc-900 tracking-wider cursor-pointer"
+                className="text-[12px]  text-zinc-900 dark:text-zinc-100 tracking-wider cursor-pointer"
               >
                 Remember sign in details
               </label>
@@ -298,7 +298,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-zinc-950 py-5 text-[11px] font-bold tracking-[0.4em] text-white transition-all hover:bg-zinc-800 disabled:bg-zinc-200 disabled:cursor-not-allowed uppercase shadow-2xl shadow-zinc-200 cursor-pointer"
+              className="w-full bg-zinc-950 py-5 text-[11px] font-bold tracking-[0.4em] text-white transition-all hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-300 disabled:bg-zinc-200 disabled:cursor-not-allowed uppercase shadow-2xl shadow-zinc-200 dark:shadow-none cursor-pointer"
             >
               {loading ? "Authenticating..." : "Sign In Now"}
             </button>

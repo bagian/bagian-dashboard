@@ -128,7 +128,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex min-h-screen bg-white font-sans">
+    <div className="flex min-h-screen bg-white dark:bg-zinc-950 font-sans">
       <div className="hidden lg:flex lg:w-1/2 relative flex-col justify-between p-16 overflow-hidden">
         <Image
           src="/img/banner/bn-mcp.webp"
@@ -170,10 +170,10 @@ export default function RegisterPage() {
           </div>
         </div>
       </div>
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-white">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 md:p-12 bg-white dark:bg-zinc-950">
         <div className="w-full max-w-[400px] space-y-10">
           <div className="space-y-3">
-            <h2 className="text-4xl font-black tracking-tighter text-zinc-900 uppercase">
+            <h2 className="text-4xl font-black tracking-tighter text-zinc-900 dark:text-zinc-100 uppercase">
               Join Us
             </h2>
             <p className="text-zinc-700 text-xs tracking-widest">
@@ -194,10 +194,10 @@ export default function RegisterPage() {
                 [&:-webkit-autofill]:bg-transparent 
                 [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
                 [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
-                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46]
+                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#f4f4f5] dark:[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_#18181b_inset]
                   ${errors.fullName
                     ? "border-red-500 text-red-900 focus:border-red-500"
-                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900 dark:border-zinc-700 dark:text-zinc-100 dark:focus:border-zinc-300"
                   }`}
                 placeholder="John Doe"
                 value={fullName}
@@ -227,10 +227,10 @@ export default function RegisterPage() {
                 [&:-webkit-autofill]:bg-transparent 
                 [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
                 [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
-                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46]
+                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#f4f4f5] dark:[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_#18181b_inset]
                   ${errors.companyName
                     ? "border-red-500 text-red-900 focus:border-red-500"
-                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900 dark:border-zinc-700 dark:text-zinc-100 dark:focus:border-zinc-300"
                   }`}
                 placeholder="PT. Contoh Indonesia"
                 value={companyName}
@@ -260,10 +260,10 @@ export default function RegisterPage() {
                 [&:-webkit-autofill]:bg-transparent 
                 [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
                 [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
-                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46]
+                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#f4f4f5] dark:[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_#18181b_inset]
                   ${errors.email
                     ? "border-red-500 text-red-900 focus:border-red-500"
-                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                    : "border-zinc-100 text-zinc-700 focus:border-zinc-900 dark:border-zinc-700 dark:text-zinc-100 dark:focus:border-zinc-300"
                   }`}
                 placeholder="nama@perusahaan.com"
                 value={email}
@@ -294,9 +294,9 @@ export default function RegisterPage() {
                   [&:-webkit-autofill]:bg-transparent 
                   [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
                   [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
-                  dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] ${errors.password
+                  dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#f4f4f5] dark:[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_#18181b_inset] ${errors.password
                       ? "border-red-500 text-red-900 focus:border-red-500"
-                      : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                      : "border-zinc-100 text-zinc-700 focus:border-zinc-900 dark:border-zinc-700 dark:text-zinc-100 dark:focus:border-zinc-300"
                     }`}
                   placeholder="••••••••"
                   value={password}
@@ -310,7 +310,7 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-zinc-300 hover:text-zinc-900 transition-colors cursor-pointer"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-zinc-300 hover:text-zinc-900 dark:text-zinc-100 transition-colors cursor-pointer"
                 >
                   {showPassword ? (
                     <EyeOff className="h-4 w-4" />
@@ -339,10 +339,10 @@ export default function RegisterPage() {
                   [&:-webkit-autofill]:bg-transparent 
                   [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
                   [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
-                  dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46]
+                  dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#f4f4f5] dark:[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_#18181b_inset]
                     ${errors.confirmPassword
                       ? "border-red-500 text-red-900 focus:border-red-500"
-                      : "border-zinc-100 text-zinc-700 focus:border-zinc-900"
+                      : "border-zinc-100 text-zinc-700 focus:border-zinc-900 dark:border-zinc-700 dark:text-zinc-100 dark:focus:border-zinc-300"
                     }`}
                   placeholder="Ulangi password"
                   value={confirmPassword}
@@ -356,7 +356,7 @@ export default function RegisterPage() {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-zinc-300 hover:text-zinc-900 transition-colors cursor-pointer"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-zinc-300 hover:text-zinc-900 dark:text-zinc-100 transition-colors cursor-pointer"
                 >
                   {showConfirmPassword ? (
                     <EyeOff className="h-4 w-4" />
@@ -375,7 +375,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-zinc-950 py-5 text-[11px] font-bold tracking-[0.4em] text-white transition-all hover:bg-zinc-800 disabled:bg-zinc-200 disabled:cursor-not-allowed uppercase shadow-2xl shadow-zinc-200 cursor-pointer"
+              className="w-full bg-zinc-950 py-5 text-[11px] font-bold tracking-[0.4em] text-white transition-all hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-300 disabled:bg-zinc-200 disabled:cursor-not-allowed uppercase shadow-2xl shadow-zinc-200 dark:shadow-none cursor-pointer"
             >
               {loading ? "MENDAFTAR..." : "DAFTAR SEKARANG"}
             </button>
