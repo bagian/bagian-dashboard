@@ -125,6 +125,14 @@
   }
 }
 
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: currentColor;
+}
+
 @layer components {
   [data-radix-dialog-close] {
     cursor: pointer;
