@@ -190,11 +190,8 @@ export default function LoginPage() {
                 type="email"
                 required
                 className={`w-full border-b border-zinc-100 py-3 px-1 text-sm text-zinc-700 focus:border-zinc-900 focus:outline-none transition-all placeholder:text-zinc-200 font-medium 
-                bg-transparent 
-                [&:-webkit-autofill]:bg-transparent 
-                [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
-                [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
-                dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#f4f4f5] dark:[&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_#18181b_inset]  ${errors.email || loginError
+                bg-transparent autofill:bg-transparent [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s] 
+ ${errors.email || loginError
                     ? "border-red-500 text-red-900 focus:border-red-500"
                     : "border-zinc-100 text-zinc-700 focus:border-zinc-900 dark:border-zinc-700 dark:text-zinc-100 dark:focus:border-zinc-300"
                   }`}
@@ -234,7 +231,7 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   required
                   className={`w-full border-b py-3 pr-10 pl-1 text-sm focus:outline-none transition-all font-medium 
-                  bg-transparent 
+                  bg-transparent autofill:bg-transparent [&:-webkit-autofill]:[transition:background-color_9999s_ease-in-out_0s] 
                   [&:-webkit-autofill]:bg-transparent 
                   [&:-webkit-autofill]:[-webkit-text-fill-color:#3f3f46] 
                   [&:-webkit-autofill]:[-webkit-box-shadow:0_0_0_50px_white_inset] 
